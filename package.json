@@ -1,0 +1,28 @@
+{
+  "name": "svelte-reactive-table",
+  "version": "1.0.0",
+  "description": "Monorepo for svelte-reactive-table",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": {
+    "name": "George Daskalakis",
+    "email": "george.dask97@gmail.com",
+    "url": "https://github.com/geodask"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/geodask/svelte-reactive-table.git",
+    "directory": "packages/svelte-reactive-table"
+  },
+  "license": "MIT",
+  "packageManager": "pnpm@10.6.4",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}
