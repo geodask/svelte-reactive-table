@@ -1,5 +1,11 @@
 # svelte-reactive-table
 
+## 0.0.3
+
+### Patch Changes
+
+- 8d6dd61: chore: add MIT License
+
 ## 0.0.2
 
 ### Patch Changes
