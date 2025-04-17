@@ -41,6 +41,7 @@
 		"type": "git",
 		"url": "https://github.com/gdaskalakis/svelte-reactive-table.git"
 	},
+	"license": "MIT",
 	"peerDependencies": {
 		"svelte": "^5.0.0"
 	},
