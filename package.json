@@ -24,5 +24,8 @@
     "onlyBuiltDependencies": [
       "esbuild"
     ]
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1"
   }
 }
