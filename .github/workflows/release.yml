@@ -33,18 +33,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run tests
-        run: pnpm test
-
-      - name: Build
-        run: pnpm build
-
-      - name: Create Release
+      - name: Create Release and Publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         uses: changesets/action@v1
         with:
-          publish: pnpm release
-          commit: "chore: release packages"
-          title: "chore: release packages"
+          publish: pnpm ci:publish

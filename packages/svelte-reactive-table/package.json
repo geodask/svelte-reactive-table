@@ -15,8 +15,7 @@
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run",
 		"size": "size-limit",
-		"analyze": "size-limit --why",
-		"release": "pnpm run build && changeset publish"
+		"analyze": "size-limit --why"
 	},
 	"files": [
 		"dist",

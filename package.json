@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"private": true,
 	"scripts": {
-		"release": "pnpm --filter svelte-reactive-table release",
+		"ci:publish": "pnpm --filter svelte-reactive-table build && changeset publish",
 		"build": "pnpm --filter svelte-reactive-table build",
 		"test": "pnpm --filter svelte-reactive-table test",
 		"format": "pnpm -r format",
