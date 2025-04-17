@@ -1,5 +1,5 @@
 ---
-"svelte-reactive-table": major
+"svelte-reactive-table": patch
 ---
 
 Initial release of svelte-reactive-table
