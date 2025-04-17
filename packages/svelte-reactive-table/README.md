@@ -1,58 +1,99 @@
-# Svelte library
+# Svelte Reactive Table
 
-Everything you need to build a Svelte library, powered by [`sv`](https://npmjs.com/package/sv).
+A headless, fully reactive table library for Svelte applications. This project provides a flexible, customizable table solution without imposing any styling constraints.
 
-Read more about creating a library [in the docs](https://svelte.dev/docs/kit/packaging).
+## What is Svelte Reactive Table?
 
-## Creating a project
+Svelte Reactive Table is designed to give you complete control over your data tables while handling all the complex state management and interactions. As a headless UI library, it provides the functionality but leaves the styling and UI decisions entirely up to you.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Basic Usage
 
-```bash
-# create a new project in the current directory
-npx sv create
+```svelte
+<script lang="ts">
+  import { reactiveTable } from 'svelte-reactive-table';
 
-# create a new project in my-app
-npx sv create my-app
+  // Your data array
+  const data = [
+    { name: 'John Doe', age: 30, city: 'New York' },
+    { name: 'Jane Smith', age: 25, city: 'Los Angeles' },
+  ];
+
+  // Define your columns
+  const columns = [
+    { accessor: 'name', header: 'Name' },
+    { accessor: 'age', header: 'Age' },
+    { accessor: 'city', header: 'City' }
+  ];
+
+  const table = reactiveTable(data, columns);
+</script>
+
+<table>
+  <thead>
+    <tr>
+      {#each table.headers as header}
+        <th>{header}</th>
+      {/each}
+    </tr>
+  </thead>
+  <tbody>
+    {#each table.rows as row}
+      <tr>
+        {#each row.cells as cell}
+          <td>{cell.value}</td>
+        {/each}
+      </tr>
+    {/each}
+  </tbody>
+</table>
 ```
 
-## Developing
+## Features and Implementation Status
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+- ✅ **Basic Table Structure**
+  - ✅ Column definitions
+  - ✅ Row rendering
+  - ✅ Reactive data updates
+- 🧠 **Headless Design**
+  - ✅ No predefined styles
+  - ⬜ Customizable cell rendering
+  - ⬜ Custom header rendering
+- ⚡ **Reactive Core**
+  - ✅ Reactive data binding
+  - ⬜ Dynamic column updates
+  - ⬜ Computed columns
+- 🔄 **Sorting**
+  - ⬜ Column-based sorting
+  - ⬜ Multi-column sort
+  - ⬜ Custom comparators
+- 🔍 **Filtering**
+  - ⬜ Global search
+  - ⬜ Column filters
+  - ⬜ Custom filter functions
+- 📊 **Pagination**
+  - ⬜ Page size control
+  - ⬜ Page navigation
+  - ⬜ Load more functionality
+- 🔢 **Row Selection**
+  - ⬜ Single selection
+  - ⬜ Multiple selection
+  - ⬜ Range selection
+- 🔗 **Column Management**
+  - ⬜ Column resizing
+  - ⬜ Column reordering
+  - ⬜ Column visibility toggle
 
-```bash
-npm run dev
+## Project Structure
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+This project is structured as a monorepo:
+
+```
+packages/
+  svelte-reactive-table/  # The main library package
+sites/
+  docs/                   # Documentation website
 ```
 
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
+## License
 
-## Building
-
-To build your library:
-
-```bash
-npm run package
-```
-
-To create a production version of your showcase app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
-
-## Publishing
-
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
-
-To publish your library to [npm](https://www.npmjs.com):
-
-```bash
-npm publish
-```
+This project is licensed under the MIT License - see the LICENSE file for details.
