@@ -5,6 +5,8 @@
   "main": "index.js",
   "private": true,
   "scripts": {
+    "release": "pnpm --filter svelte-reactive-table release",
+    "build": "pnpm --filter svelte-reactive-table build",
     "test": "pnpm --filter svelte-reactive-table test"
   },
   "keywords": [],
