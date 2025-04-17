@@ -28,6 +28,7 @@ A template for quickly bootstrapping SvelteKit projects with Shadcn UI component
 ## Overview
 
 This template provides a pre-configured SvelteKit project that combines:
+
 - SvelteKit as the framework
 - Shadcn UI components for Svelte
 - Feature-Sliced Design (FSD) architecture for project structure
@@ -89,6 +90,7 @@ Each layer can import from any layer below it, but only through the public API (
 ## Getting Started
 
 1. Clone this repository
+
    ```bash
    git clone https://github.com/yourusername/sveltekit-shadcn-fsd-template.git my-project
    cd my-project
@@ -105,6 +107,7 @@ Here's a quick example of how to add a new slice following the FSD structure:
 ### Example: Adding Authentication Functionality
 
 1. **Create the feature slice structure**:
+
    ```
    src/lib/features/auth/
    ├── ui/
@@ -118,6 +121,7 @@ Here's a quick example of how to add a new slice following the FSD structure:
    ```
 
 2. **Create public API in index.ts**:
+
    ```typescript
    // src/lib/features/auth/index.ts
    export { default as LoginForm } from './ui/login-form.svelte';
@@ -126,15 +130,16 @@ Here's a quick example of how to add a new slice following the FSD structure:
    ```
 
 3. **Use in a page slice**:
+
    ```svelte
    <!-- src/lib/pages/login/ui/page.svelte -->
    <script>
-     import { LoginForm } from '$lib/features/auth';
+   	import { LoginForm } from '$lib/features/auth';
    </script>
 
    <div class="container">
-     <h1>Login</h1>
-     <LoginForm />
+   	<h1>Login</h1>
+   	<LoginForm />
    </div>
    ```
 
@@ -143,6 +148,7 @@ Here's a quick example of how to add a new slice following the FSD structure:
 The template uses [Shadcn UI for Svelte](https://www.shadcn-svelte.com/), a collection of beautifully designed, accessible UI components built with Tailwind CSS. These components are not a component library, but rather a collection of reusable components you can copy and paste into your projects.
 
 Shadcn configuration:
+
 - **Style**: "New York" theme
 - **Base Color**: Neutral
 - **Components location**: `$lib/shared/ui/`
@@ -164,6 +170,7 @@ The project follows strict layer boundaries:
 - The dependency flow follows: `pages -> widgets -> features -> entities -> shared`
 
 Example of correct imports:
+
 ```ts
 // ✅ Correct: Using public API
 import { UserCard } from '$lib/entities/user';
@@ -196,10 +203,11 @@ This template integrates FSD with SvelteKit in the following ways:
 - Page-specific layouts can be created in the `routes` directory
 
 Example:
+
 ```svelte
 <!-- src/routes/dashboard/+page.svelte -->
 <script>
-  import { DashboardPage } from '$lib/pages/dashboard';
+	import { DashboardPage } from '$lib/pages/dashboard';
 </script>
 
 <DashboardPage />

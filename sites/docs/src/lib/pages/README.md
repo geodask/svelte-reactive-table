@@ -33,7 +33,7 @@ pages/
 
 ```svelte
 <script>
-  // Import through the public API
-  import { DashboardPage } from '$lib/pages/dashboard';
+	// Import through the public API
+	import { DashboardPage } from '$lib/pages/dashboard';
 </script>
 ```

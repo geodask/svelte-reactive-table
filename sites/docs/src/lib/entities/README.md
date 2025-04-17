@@ -33,8 +33,8 @@ entities/
 
 ```svelte
 <script>
-  // Import through the public API
-  import { UserCard, type User } from '$lib/entities/user';
+	// Import through the public API
+	import { UserCard, type User } from '$lib/entities/user';
 </script>
 
 <UserCard />

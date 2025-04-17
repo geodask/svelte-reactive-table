@@ -35,8 +35,8 @@ features/
 
 ```svelte
 <script>
-  // Import through the public API
-  import { LoginForm, type LoginData } from '$lib/features/auth';
+	// Import through the public API
+	import { LoginForm, type LoginData } from '$lib/features/auth';
 </script>
 
 <LoginForm />

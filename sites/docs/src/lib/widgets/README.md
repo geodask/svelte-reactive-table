@@ -33,7 +33,7 @@ widgets/
 
 ```svelte
 <script>
-  // Import through the public API
-  import { UserDashboard } from '$lib/widgets/dashboard';
+	// Import through the public API
+	import { UserDashboard } from '$lib/widgets/dashboard';
 </script>
 ```
