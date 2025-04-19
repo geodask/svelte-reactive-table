@@ -1,5 +1,11 @@
 # svelte-reactive-table
 
+## 0.1.1
+
+### Patch Changes
+
+- 2c6254b: refactor: remove examples from lib directory
+
 ## 0.1.0
 
 ### Minor Changes
