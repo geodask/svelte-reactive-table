@@ -1,7 +1,7 @@
 <script lang="ts">
-	import BasicTable from '$lib/components/BasicTable.svelte';
-	import ColumnVisibility from '$lib/components/ColumnVisibility.svelte';
-	import Pagination from '$lib/components/Pagination.svelte';
+	import BasicTable from './components/BasicTable.svelte'
+	import ColumnVisibility from './components/ColumnVisibility.svelte';
+	import Pagination from './components/Pagination.svelte';
 	import { onMount } from 'svelte';
 
 	let activeTab = 'basic';
