@@ -14,8 +14,7 @@
 		"lint": "prettier --config ../../.prettierrc --check .",
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run",
-		"size": "size-limit",
-		"analyze": "size-limit --why"
+		"size": "pnpm build && size-limit"
 	},
 	"files": [
 		"dist",
