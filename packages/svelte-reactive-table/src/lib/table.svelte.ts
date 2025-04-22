@@ -172,12 +172,12 @@ export function reactiveTable<T, Options extends TableOptions<T> = {}>(
 		}))
 	);
 
-	const identifierColumn = $derived(_columnDefs.find((col) => col.isIdentifier));
-
-	$effect(() => {
-		if (!identifierColumn) {
+	const identifierColumn = $derived.by(() => {
+		const identifier = _columnDefs.find((col) => col.isIdentifier);
+		if (!identifier) {
 			log.warn(messages.no_identifier_column());
 		}
+		return identifier;
 	});
 
 	const items = $derived(_data);
