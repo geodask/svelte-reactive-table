@@ -1,5 +1,3 @@
-import { log } from './logger.js';
-
 /**
  * Error and warning message constants for consistent messaging
  * @internal

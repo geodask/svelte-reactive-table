@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { reactiveTable } from '$lib/index.js';
-	import { initialData, type Person } from './data.js';
+	import { reactivePagination, reactiveTable } from '$lib/index.js';
+	import { initialData } from './data.js';
 
 	// Pagination example
-	const paginationTable = reactiveTable(
+	const table = reactiveTable(
 		initialData,
 		[
 			{ accessor: 'id', header: 'ID', isIdentifier: true },
@@ -11,14 +11,14 @@
 			{ accessor: 'age', header: 'Age' },
 			{ accessor: 'city', header: 'City' }
 		],
-		{ page: 0, pageSize: 3 } // Initialize with 3 items per page
+		reactivePagination({ page: 0, pageSize: 3 })
 	);
 
 	// Page size options
 	const pageSizeOptions = [3, 5, 10];
 
 	function setPageSize(size: number) {
-		paginationTable.setPageSize(size);
+		table.pagination.setPageSize(size);
 	}
 </script>
 
@@ -35,7 +35,7 @@
 					{#each pageSizeOptions as size}
 						<button
 							class="px-3 py-1.5 text-sm font-medium
-                {paginationTable.pageSize === size
+                {table.pagination.pageSize === size
 								? 'bg-emerald-600 text-white border-emerald-600 z-10'
 								: 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}
                 {pageSizeOptions.indexOf(size) === 0 ? 'rounded-l-md' : ''}
@@ -50,8 +50,8 @@
 			</div>
 
 			<div class="text-sm text-gray-600">
-				Showing <span class="font-medium">{paginationTable.rows.length}</span> of
-				<span class="font-medium">{paginationTable.allRows.length}</span> items
+				Showing <span class="font-medium">{table.pagination.rows.length}</span> of
+				<span class="font-medium">{table.allRows.length}</span> items
 			</div>
 		</div>
 
@@ -59,7 +59,7 @@
 			<table class="w-full">
 				<thead>
 					<tr class="bg-gray-50 border-b border-gray-200">
-						{#each paginationTable.headers as header}
+						{#each table.headers as header}
 							<th
 								class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
 								>{header}</th
@@ -68,17 +68,17 @@
 					</tr>
 				</thead>
 				<tbody class="divide-y divide-gray-200">
-					{#each paginationTable.rows as row, i}
+					{#each table.pagination.rows as row, i}
 						<tr class="hover:bg-gray-50 transition-colors duration-150 ease-in-out">
 							{#each row.cells as cell}
 								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{cell.value}</td>
 							{/each}
 						</tr>
 					{/each}
-					{#if paginationTable.rows.length === 0}
+					{#if table.pagination.rows.length === 0}
 						<tr>
 							<td
-								colspan={paginationTable.headers.length}
+								colspan={table.headers.length}
 								class="px-6 py-8 text-center text-sm text-gray-500"
 							>
 								No data available
@@ -94,19 +94,19 @@
 			class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex flex-wrap items-center justify-between gap-4"
 		>
 			<div class="text-sm text-gray-600">
-				Page <span class="font-medium">{paginationTable.page + 1}</span> of
-				<span class="font-medium">{paginationTable.pageCount}</span>
+				Page <span class="font-medium">{table.pagination.page + 1}</span> of
+				<span class="font-medium">{table.pagination.pageCount}</span>
 			</div>
 
 			<div class="inline-flex rounded-md shadow-sm" role="group">
 				<button
 					class="relative inline-flex items-center px-3 py-2 text-sm font-medium rounded-l-md border
-            {paginationTable.page === 0
+            {table.pagination.page === 0
 						? 'bg-gray-50 text-gray-400 cursor-not-allowed'
 						: 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'}
             focus:z-10 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 transition-colors"
-					on:click={paginationTable.firstPage}
-					disabled={paginationTable.page === 0}
+					on:click={table.pagination.firstPage}
+					disabled={table.pagination.page === 0}
 					aria-label="First page"
 				>
 					<svg
@@ -124,12 +124,12 @@
 				</button>
 				<button
 					class="relative inline-flex items-center px-3 py-2 text-sm font-medium border-t border-b
-            {paginationTable.page === 0
+            {table.pagination.page === 0
 						? 'bg-gray-50 text-gray-400 cursor-not-allowed'
 						: 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'}
             focus:z-10 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 transition-colors"
-					on:click={paginationTable.previousPage}
-					disabled={paginationTable.page === 0}
+					on:click={table.pagination.previousPage}
+					disabled={table.pagination.page === 0}
 					aria-label="Previous page"
 				>
 					<svg
@@ -147,12 +147,12 @@
 				</button>
 				<button
 					class="relative inline-flex items-center px-3 py-2 text-sm font-medium border-t border-b
-            {paginationTable.page === paginationTable.pageCount - 1
+            {table.pagination.page === table.pagination.pageCount - 1
 						? 'bg-gray-50 text-gray-400 cursor-not-allowed'
 						: 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'}
             focus:z-10 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 transition-colors"
-					on:click={paginationTable.nextPage}
-					disabled={paginationTable.page === paginationTable.pageCount - 1}
+					on:click={table.pagination.nextPage}
+					disabled={table.pagination.page === table.pagination.pageCount - 1}
 					aria-label="Next page"
 				>
 					<svg
@@ -170,12 +170,12 @@
 				</button>
 				<button
 					class="relative inline-flex items-center px-3 py-2 text-sm font-medium rounded-r-md border
-            {paginationTable.page === paginationTable.pageCount - 1
+            {table.pagination.page === table.pagination.pageCount - 1
 						? 'bg-gray-50 text-gray-400 cursor-not-allowed'
 						: 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'}
             focus:z-10 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 transition-colors"
-					on:click={paginationTable.lastPage}
-					disabled={paginationTable.page === paginationTable.pageCount - 1}
+					on:click={table.pagination.lastPage}
+					disabled={table.pagination.page === table.pagination.pageCount - 1}
 					aria-label="Last page"
 				>
 					<svg

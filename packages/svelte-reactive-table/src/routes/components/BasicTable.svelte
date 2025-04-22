@@ -1,14 +1,18 @@
 <script lang="ts">
-	import { reactiveTable } from '$lib/index.js';
+	import { reactivePagination, reactiveTable } from '$lib/index.js';
 	import { initialData } from './data.js';
 
 	// Basic table example
-	const basicTable = reactiveTable(initialData, [
-		{ accessor: 'id', header: 'ID', isIdentifier: true },
-		{ accessor: 'name', header: 'Name' },
-		{ accessor: 'age', header: 'Age' },
-		{ accessor: 'city', header: 'City' }
-	]);
+	const basicTable = reactiveTable(
+		initialData,
+		[
+			{ accessor: 'id', header: 'ID', isIdentifier: true },
+			{ accessor: 'name', header: 'Name' },
+			{ accessor: 'age', header: 'Age' },
+			{ accessor: 'city', header: 'City' }
+		],
+		reactivePagination({ page: 0, pageSize: 3 })
+	);
 
 	function addNewRow() {
 		basicTable.data.push({

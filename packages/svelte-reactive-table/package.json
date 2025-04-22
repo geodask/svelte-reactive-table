@@ -38,7 +38,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/gdaskalakis/svelte-reactive-table.git"
+		"url": "https://github.com/geodask/svelte-reactive-table.git"
 	},
 	"license": "MIT",
 	"peerDependencies": {

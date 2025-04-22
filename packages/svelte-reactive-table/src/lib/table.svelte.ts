@@ -1,4 +1,5 @@
 import { log, messages } from './internal/logger/index.js';
+import { type ReactivePagination, type ReactivePaginationFactory } from './pagination.svelte.js';
 
 export type ReactiveTable<T> = {
 	/**
@@ -16,11 +17,6 @@ export type ReactiveTable<T> = {
 	 */
 	headers: string[];
 	/**
-	 * The current rows of the table after applying pagination
-	 * This is a subset of the allRows array, based on the current pagination settings.
-	 */
-	rows: Row<T>[];
-	/**
 	 * The current columns of the table
 	 */
 	columns: Column<T>[];
@@ -34,21 +30,10 @@ export type ReactiveTable<T> = {
 	 */
 	visibleColumns: ColumnDef<T>[];
 	/**
-	 * The current pagination state
+	 * The pagination object that manages the current page, page size, and the rows that are currently visible.
 	 */
-	pagination: Pagination;
-	/**
-	 * The total number of pages based on the current pagination settings
-	 */
-	pageCount: number;
-	/**
-	 * The current page index (0-based)
-	 */
-	page: number;
-	/**
-	 * The number of rows per page
-	 */
-	pageSize: number;
+	pagination: ReactivePagination<T>;
+
 	/**
 	 * Set the visibility of a specific column
 	 * @param accessor - The column accessor key
@@ -60,35 +45,6 @@ export type ReactiveTable<T> = {
 	 * @param accessor - The column accessor key
 	 */
 	toggleColumnVisibility(accessor: keyof T): void;
-	/**
-	 * Set the current page index
-	 * @param page - The new page index (0-based)
-	 */
-	setpage(page: number): void;
-	/**
-	 * Set the page size and optionally reset to the first page
-	 * @param pageSize - The new page size
-	 * @param resetpage - Whether to reset to the first page (default: true)
-	 */
-	setPageSize(pageSize: number, resetpage?: boolean): void;
-	/**
-	 * Go to the next page
-	 * @returns Whether the page was changed
-	 */
-	nextPage(): boolean;
-	/**
-	 * Go to the previous page
-	 * @returns Whether the page was changed
-	 */
-	previousPage(): boolean;
-	/**
-	 * Go to the first page
-	 */
-	firstPage(): void;
-	/**
-	 * Go to the last page
-	 */
-	lastPage(): void;
 };
 
 /**
@@ -154,17 +110,6 @@ export type Cell<T> = {
 	value: T[keyof T];
 };
 
-export type Pagination = {
-	/**
-	 * Current page index (0-based)
-	 */
-	page: number;
-	/**
-	 * Number of rows per page
-	 */
-	pageSize: number;
-};
-
 /**
  * Creates a reactive table that automatically updates with data changes.
  *
@@ -176,14 +121,10 @@ export type Pagination = {
 export function reactiveTable<T>(
 	initialData: T[],
 	columnDefs: ColumnDef<T>[],
-	initialPagination?: Partial<Pagination>
+	paginationFactory: ReactivePaginationFactory<T>
 ): ReactiveTable<T> {
 	let _data = $state(initialData);
 	let _columnDefs = $state(columnDefs);
-	let _pagination = $state<Pagination>({
-		page: initialPagination?.page ?? 0,
-		pageSize: initialPagination?.pageSize ?? 10
-	});
 
 	let columns: Column<T>[] = $derived(
 		columnDefs.map((col) => ({
@@ -230,15 +171,6 @@ export function reactiveTable<T>(
 		});
 	});
 
-	// Pagination derived values
-	const pageCount = $derived(Math.ceil(allRows.length / _pagination.pageSize));
-	const startRowIndex = $derived(_pagination.page * _pagination.pageSize);
-	const endRowIndex = $derived(
-		Math.min((_pagination.page + 1) * _pagination.pageSize, allRows.length)
-	);
-
-	const rows = $derived(allRows.slice(startRowIndex, endRowIndex));
-
 	function setColumnVisibility(accessor: keyof T, isVisible: boolean) {
 		columns = columns.map((col) => {
 			if (col.accessor === accessor) {
@@ -257,51 +189,6 @@ export function reactiveTable<T>(
 		});
 	}
 
-	function setPage(page: number) {
-		if (page < 0 || page >= pageCount) {
-			log.warn(messages.invalid_page(page, pageCount));
-			return;
-		}
-		_pagination = { ..._pagination, page: page };
-	}
-
-	function nextPage(): boolean {
-		if (_pagination.page < pageCount - 1) {
-			_pagination = { ..._pagination, page: _pagination.page + 1 };
-			return true;
-		}
-		return false;
-	}
-
-	function previousPage(): boolean {
-		if (_pagination.page > 0) {
-			_pagination = { ..._pagination, page: _pagination.page - 1 };
-			return true;
-		}
-		return false;
-	}
-
-	function firstPage() {
-		_pagination = { ..._pagination, page: 0 };
-	}
-
-	function lastPage() {
-		_pagination = { ..._pagination, page: Math.max(0, pageCount - 1) };
-	}
-
-	function setPageSize(pageSize: number, resetpage = true) {
-		if (pageSize < 1) {
-			log.warn(messages.invalid_page_size(pageSize));
-			return;
-		}
-
-		_pagination = {
-			..._pagination,
-			pageSize,
-			page: resetpage ? 0 : _pagination.page
-		};
-	}
-
 	return {
 		set data(value: T[]) {
 			_data = value;
@@ -318,17 +205,8 @@ export function reactiveTable<T>(
 		get columns() {
 			return columns;
 		},
-		get pagination() {
-			return _pagination;
-		},
-		set pagination(value: Pagination) {
-			_pagination = value;
-		},
 		get headers() {
 			return headers;
-		},
-		get rows() {
-			return rows;
 		},
 		get allRows() {
 			return allRows;
@@ -336,24 +214,9 @@ export function reactiveTable<T>(
 		get visibleColumns() {
 			return visibleColumns;
 		},
-		get pageCount() {
-			return pageCount;
-		},
-		get page() {
-			return _pagination.page;
-		},
-		get pageSize() {
-			return _pagination.pageSize;
-		},
 		// Column visibility methods
 		setColumnVisibility,
 		toggleColumnVisibility,
-		// Pagination methods
-		setpage: setPage,
-		setPageSize,
-		nextPage,
-		previousPage,
-		firstPage,
-		lastPage
+		pagination: paginationFactory(() => allRows)
 	};
 }

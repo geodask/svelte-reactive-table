@@ -1,14 +1,18 @@
 <script lang="ts">
-	import { reactiveTable } from '$lib/index.js';
+	import { reactivePagination, reactiveTable } from '$lib/index.js';
 	import { initialData, type Person } from './data.js';
 
 	// Toggle column visibility example
-	const visibilityTable = reactiveTable(initialData, [
-		{ accessor: 'id', header: 'ID', isIdentifier: true },
-		{ accessor: 'name', header: 'Name' },
-		{ accessor: 'age', header: 'Age' },
-		{ accessor: 'city', header: 'City' }
-	]);
+	const visibilityTable = reactiveTable(
+		initialData,
+		[
+			{ accessor: 'id', header: 'ID', isIdentifier: true },
+			{ accessor: 'name', header: 'Name' },
+			{ accessor: 'age', header: 'Age' },
+			{ accessor: 'city', header: 'City' }
+		],
+		reactivePagination({ page: 0, pageSize: 3 })
+	);
 
 	function toggleColumn(accessor: keyof Person) {
 		visibilityTable.toggleColumnVisibility(accessor);
@@ -78,14 +82,14 @@
 					</tr>
 				</thead>
 				<tbody class="divide-y divide-gray-200">
-					{#each visibilityTable.rows as row}
+					{#each visibilityTable.allRows as row}
 						<tr class="hover:bg-gray-50 transition-colors duration-150 ease-in-out">
 							{#each row.cells as cell}
 								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{cell.value}</td>
 							{/each}
 						</tr>
 					{/each}
-					{#if visibilityTable.rows.length === 0}
+					{#if visibilityTable.allRows.length === 0}
 						<tr>
 							<td
 								colspan={visibilityTable.headers.length}
