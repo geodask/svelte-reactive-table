@@ -80,7 +80,7 @@ export type TableOptions<T> = {
 
 /**
  * Feature type for pagination in a reactive table.
- * 
+ *
  * @internal
  */
 type PaginationFeature<T> = {
@@ -94,7 +94,7 @@ type PaginationFeature<T> = {
 
 /**
  * Base type for a reactive table.
- * 
+ *
  * @internal
  */
 type ReactiveTableBase<T> = {
@@ -141,7 +141,7 @@ type ReactiveTableBase<T> = {
 
 /**
  * Type representing a `Reactive Table` with optional features.
- * 
+ *
  * @template T - The type of data items in the table
  * @template Options - Configuration options for the table, defaults to empty object
  */
@@ -258,7 +258,7 @@ export function reactiveTable<T, Options extends TableOptions<T> = {}>(
 	};
 
 	// Add features based on options
-	const tableWithFeatures = { ...table } as unknown as ReactiveTable<T, Options>;
+	const tableWithFeatures = table as unknown as ReactiveTable<T, Options>;
 
 	// Add pagination if option is provided
 	if (options.pagination) {
