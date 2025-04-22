@@ -10,41 +10,41 @@ Svelte Reactive Table is designed to give you complete control over your data ta
 
 ```svelte
 <script lang="ts">
-  import { reactiveTable } from 'svelte-reactive-table';
+	import { reactiveTable } from 'svelte-reactive-table';
 
-  // Your data array
-  const data = [
-    { name: 'John Doe', age: 30, city: 'New York' },
-    { name: 'Jane Smith', age: 25, city: 'Los Angeles' },
-  ];
+	// Your data array
+	const data = [
+		{ name: 'John Doe', age: 30, city: 'New York' },
+		{ name: 'Jane Smith', age: 25, city: 'Los Angeles' }
+	];
 
-  // Define your columns
-  const columns = [
-    { accessor: 'name', header: 'Name' },
-    { accessor: 'age', header: 'Age' },
-    { accessor: 'city', header: 'City' }
-  ];
+	// Define your columns
+	const columns = [
+		{ accessor: 'name', header: 'Name' },
+		{ accessor: 'age', header: 'Age' },
+		{ accessor: 'city', header: 'City' }
+	];
 
-  const table = reactiveTable(data, columns);
+	const table = reactiveTable(data, columns);
 </script>
 
 <table>
-  <thead>
-    <tr>
-      {#each table.headers as header}
-        <th>{header}</th>
-      {/each}
-    </tr>
-  </thead>
-  <tbody>
-    {#each table.rows as row}
-      <tr>
-        {#each row.cells as cell}
-          <td>{cell.value}</td>
-        {/each}
-      </tr>
-    {/each}
-  </tbody>
+	<thead>
+		<tr>
+			{#each table.headers as header}
+				<th>{header}</th>
+			{/each}
+		</tr>
+	</thead>
+	<tbody>
+		{#each table.rows as row}
+			<tr>
+				{#each row.cells as cell}
+					<td>{cell.value}</td>
+				{/each}
+			</tr>
+		{/each}
+	</tbody>
 </table>
 ```
 

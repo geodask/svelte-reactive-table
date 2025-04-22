@@ -1,5 +1,5 @@
 <script lang="ts">
-	import BasicTable from './components/BasicTable.svelte'
+	import BasicTable from './components/BasicTable.svelte';
 	import ColumnVisibility from './components/ColumnVisibility.svelte';
 	import Pagination from './components/Pagination.svelte';
 	import { onMount } from 'svelte';
