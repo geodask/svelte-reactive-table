@@ -1,5 +1,11 @@
 # svelte-reactive-table
 
+## 0.2.1
+
+### Patch Changes
+
+- ecaa473: fix: small issue with reactivity
+
 ## 0.2.0
 
 ### Minor Changes
