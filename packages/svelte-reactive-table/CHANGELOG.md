@@ -1,5 +1,11 @@
 # svelte-reactive-table
 
+## 0.2.2
+
+### Patch Changes
+
+- 656f74a: fix: remove `$effect` from `reactiveTable` function
+
 ## 0.2.1
 
 ### Patch Changes
