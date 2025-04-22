@@ -1,5 +1,29 @@
 # svelte-reactive-table
 
+## 0.2.0
+
+### Minor Changes
+
+- bd6bb1b: refactor: make pagination optional with improved TypeScript API
+
+  - Make pagination completely optional through a new options-based API
+  - Add TypeScript generics to provide proper type safety with or without pagination
+  - Introduce `TableOptions` interface for configuring table features
+  - Improve public type exports for better developer experience
+  - Update examples to demonstrate both basic tables and tables with pagination
+  - Enhance type organization for better code documentation
+
+  BREAKING CHANGE: Introduced new options-based API for table configuration that changes how tables are initialized and configured.
+
+- f4ba175: feat: add modular pagination support
+
+  - Add new `reactivePagination` API for configurable table pagination
+  - Change table API to use composition pattern for pagination
+  - Export pagination types and functions in public API
+  - Update examples to demonstrate the new pagination approach
+
+  BREAKING CHANGE: The table API signature has changed. Pagination is now provided through a factory function instead of configuration options directly on the table.
+
 ## 0.1.1
 
 ### Patch Changes
