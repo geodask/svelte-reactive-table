@@ -165,18 +165,20 @@ export function reactiveTable<T, Options extends TableOptions<T> = {}>(
 	let _columnDefs = $state(columnDefs);
 
 	let columns: Column<T>[] = $derived(
-		columnDefs.map((col) => ({
+		_columnDefs.map((col) => ({
 			...col,
 			visible: col.visible ?? true,
 			isIdentifier: col.isIdentifier ?? false
 		}))
 	);
 
-	const identifierColumn = columnDefs.find((col) => col.isIdentifier);
+	const identifierColumn = $derived(_columnDefs.find((col) => col.isIdentifier));
 
-	if (!identifierColumn) {
-		log.warn(messages.no_identifier_column());
-	}
+	$effect(() => {
+		if (!identifierColumn) {
+			log.warn(messages.no_identifier_column());
+		}
+	});
 
 	const items = $derived(_data);
 

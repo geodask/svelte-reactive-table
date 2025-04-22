@@ -33,10 +33,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Create Release and Publish
+      - name: Create Release PR or Publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         uses: changesets/action@v1
         with:
           publish: pnpm ci:publish
+          # The following ensures the PR created can't be merged
+          # until it passes the test workflow
+          title: "chore: version packages"
+          commit: "chore: version packages"

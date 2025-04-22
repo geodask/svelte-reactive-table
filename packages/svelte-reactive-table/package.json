@@ -13,7 +13,9 @@
 		"format": "prettier --config ../../.prettierrc --write .",
 		"lint": "prettier --config ../../.prettierrc --check .",
 		"test:unit": "vitest",
-		"test": "npm run test:unit -- --run",
+		"test": "pnpm run test:unit -- --run",
+		"test:coverage": "vitest --coverage",
+		"typecheck": "svelte-check --tsconfig ./tsconfig.json",
 		"size": "pnpm build && size-limit"
 	},
 	"files": [
@@ -53,6 +55,7 @@
 		"@tailwindcss/vite": "^4.0.0",
 		"@testing-library/jest-dom": "^6.6.3",
 		"@testing-library/svelte": "^5.2.4",
+		"@vitest/coverage-v8": "3.1.1",
 		"jsdom": "^26.0.0",
 		"publint": "^0.3.2",
 		"size-limit": "^11.2.0",

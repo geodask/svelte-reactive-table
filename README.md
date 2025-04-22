@@ -1,5 +1,8 @@
 # Svelte Reactive Table
 
+[![NPM version](https://img.shields.io/npm/v/svelte-reactive-table.svg?style=flat)](https://www.npmjs.com/package/svelte-reactive-table)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 A headless, fully reactive table library for Svelte applications. This project provides a flexible, customizable table solution without imposing any styling constraints.
 
 ## What is Svelte Reactive Table?

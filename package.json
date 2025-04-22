@@ -8,6 +8,8 @@
 		"ci:publish": "pnpm --filter svelte-reactive-table build && changeset publish",
 		"build": "pnpm --filter svelte-reactive-table build",
 		"test": "pnpm --filter svelte-reactive-table test",
+		 "test:coverage": "pnpm --filter svelte-reactive-table test:coverage",
+		"typecheck": "pnpm --filter svelte-reactive-table typecheck",
 		"format": "pnpm -r format",
 		"lint": "pnpm -r lint"
 	},
