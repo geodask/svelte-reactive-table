@@ -11,7 +11,12 @@
 			{ accessor: 'age', header: 'Age' },
 			{ accessor: 'city', header: 'City' }
 		],
-		reactivePagination({ page: 0, pageSize: 3 })
+		{
+			pagination: reactivePagination({
+				pageSize: 3,
+				page: 0
+			})
+		}
 	);
 
 	// Page size options

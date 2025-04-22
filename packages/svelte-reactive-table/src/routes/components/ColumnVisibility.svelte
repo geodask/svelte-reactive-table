@@ -1,18 +1,14 @@
 <script lang="ts">
-	import { reactivePagination, reactiveTable } from '$lib/index.js';
+	import { reactiveTable } from '$lib/index.js';
 	import { initialData, type Person } from './data.js';
 
 	// Toggle column visibility example
-	const visibilityTable = reactiveTable(
-		initialData,
-		[
-			{ accessor: 'id', header: 'ID', isIdentifier: true },
-			{ accessor: 'name', header: 'Name' },
-			{ accessor: 'age', header: 'Age' },
-			{ accessor: 'city', header: 'City' }
-		],
-		reactivePagination({ page: 0, pageSize: 3 })
-	);
+	const visibilityTable = reactiveTable(initialData, [
+		{ accessor: 'id', header: 'ID', isIdentifier: true },
+		{ accessor: 'name', header: 'Name' },
+		{ accessor: 'age', header: 'Age' },
+		{ accessor: 'city', header: 'City' }
+	]);
 
 	function toggleColumn(accessor: keyof Person) {
 		visibilityTable.toggleColumnVisibility(accessor);

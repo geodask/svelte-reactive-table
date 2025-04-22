@@ -2,6 +2,20 @@ import { log, messages } from './internal/logger/index.js';
 import type { Row } from './table.svelte.js';
 
 /**
+ * Pagination state
+ */
+export type Pagination = {
+	/**
+	 * Current page index (0-based)
+	 */
+	page: number;
+	/**
+	 * Number of rows per page
+	 */
+	pageSize: number;
+};
+
+/**
  * The type of the pagination object
  * @template T - The type of the data in the table
  */
@@ -54,33 +68,23 @@ export type ReactivePagination<T> = {
 };
 
 /**
- * Pagination options for the table
+ * Factory function for creating a reactive pagination object
  */
-export type Pagination = {
-	/**
-	 * Current page index (0-based)
-	 */
-	page: number;
-	/**
-	 * Number of rows per page
-	 */
-	pageSize: number;
-};
+export type ReactivePaginationFactory<T> = (getAllRows: () => Row<T>[]) => ReactivePagination<T>;
 
 /**
  * Creates a pagination object that manages the current page, page size, and the rows that are currently visible
- * 
+ *
  * @internal
  * @template T - The type of the data in the table
  * @param getAllRows - A function that returns all rows in the table
- * @param initialPagination - Initial pagination options
+ * @param initialPagination - Initial pagination state
  * @returns A pagination object that manages the current page, page size, and the rows that are currently visible
  */
 function createPagination<T>(
 	getAllRows: () => Row<T>[],
 	initialPagination: Partial<Pagination>
 ): ReactivePagination<T> {
-	//Move row into a separate file
 	let _pagination = $state<Pagination>({
 		page: initialPagination?.page ?? 0,
 		pageSize: initialPagination?.pageSize ?? 10
@@ -163,23 +167,18 @@ function createPagination<T>(
 }
 
 /**
- * Factory function for creating a reactive pagination object
- */
-export type ReactivePaginationFactory<T> = (getAllRows: () => Row<T>[]) => ReactivePagination<T>;
-
-/**
  * Creates pagination functionality for a reactive table
  *
  * @template T - The type of the data in the table
- * @param initialOptions - Initial pagination options including page and pageSize
+ * @param initialPagination - Initial pagination state
  * @returns A factory function that creates a reactive pagination object
  */
 export function reactivePagination<T>(
-	initialOptions?: Partial<Pagination>
+	initialPagination?: Partial<Pagination>
 ): ReactivePaginationFactory<T> {
 	const options = {
-		page: initialOptions?.page ?? 0,
-		pageSize: initialOptions?.pageSize ?? 10
+		page: initialPagination?.page ?? 0,
+		pageSize: initialPagination?.pageSize ?? 10
 	};
 
 	return (getAllRows: () => Row<T>[]) => createPagination(getAllRows, options);

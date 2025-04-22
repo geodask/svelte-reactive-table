@@ -1,51 +1,7 @@
 import { log, messages } from './internal/logger/index.js';
 import { type ReactivePagination, type ReactivePaginationFactory } from './pagination.svelte.js';
 
-export type ReactiveTable<T> = {
-	/**
-	 * The current data array. This is the source of truth for the table.
-	 * It is reactive, meaning that any changes to this array will automatically update the table.
-	 */
-	data: T[];
-	/**
-	 * The current column definitions. These define how the data is displayed in the table.
-	 * It is reactive, meaning that any changes to this array will automatically update the table.
-	 */
-	columnDefs: ColumnDef<T>[];
-	/**
-	 * The current headers for the table
-	 */
-	headers: string[];
-	/**
-	 * The current columns of the table
-	 */
-	columns: Column<T>[];
-	/**
-	 * All rows of the table, including those that are not currently visible due to pagination
-	 */
-	allRows: Row<T>[];
-	/**
-	 * The currently visible columns.
-	 * This is a subset of the columns array, based on the current visibility settings.
-	 */
-	visibleColumns: ColumnDef<T>[];
-	/**
-	 * The pagination object that manages the current page, page size, and the rows that are currently visible.
-	 */
-	pagination: ReactivePagination<T>;
-
-	/**
-	 * Set the visibility of a specific column
-	 * @param accessor - The column accessor key
-	 * @param isVisible - Whether the column should be visible
-	 */
-	setColumnVisibility(accessor: keyof T, isVisible: boolean): void;
-	/**
-	 * Toggle the visibility of a specific column
-	 * @param accessor - The column accessor key
-	 */
-	toggleColumnVisibility(accessor: keyof T): void;
-};
+// --------- Basic Data Types ---------
 
 /**
  * Represents the definition of a column in the table.
@@ -79,6 +35,20 @@ export type Column<T> = {
 };
 
 /**
+ * Represents a cell in the table.
+ */
+export type Cell<T> = {
+	/**
+	 * The accessor key for this cell's column
+	 */
+	key: keyof T;
+	/**
+	 * The data value for this cell
+	 */
+	value: T[keyof T];
+};
+
+/**
  * Represents a row in the table.
  */
 export type Row<T> = {
@@ -96,33 +66,101 @@ export type Row<T> = {
 	cells: Cell<T>[];
 };
 
+// --------- Configuration Types ---------
+
 /**
- * Represents a cell in the table.
+ * Configuration options for the table
  */
-export type Cell<T> = {
-	/**
-	 * The accessor key for this cell's column
-	 */
-	key: keyof T;
-	/**
-	 * The data value for this cell
-	 */
-	value: T[keyof T];
+export type TableOptions<T> = {
+	pagination?: ReactivePaginationFactory<T>;
+	// Future options can be added here
 };
+
+// --------- Feature Types ---------
+
+/**
+ * Feature type for pagination in a reactive table.
+ * 
+ * @internal
+ */
+type PaginationFeature<T> = {
+	/**
+	 * The pagination object that returns the current state of pagination and provides methods to control it.
+	 */
+	pagination: ReactivePagination<T>;
+};
+
+// --------- Core Table Types ---------
+
+/**
+ * Base type for a reactive table.
+ * 
+ * @internal
+ */
+type ReactiveTableBase<T> = {
+	/**
+	 * The current data array. This is the source of truth for the table.
+	 * It is reactive, meaning that any changes to this array will automatically update the table.
+	 */
+	data: T[];
+	/**
+	 * The current column definitions. These define how the data is displayed in the table.
+	 * It is reactive, meaning that any changes to this array will automatically update the table.
+	 */
+	columnDefs: ColumnDef<T>[];
+	/**
+	 * The current headers for the table
+	 */
+	headers: string[];
+	/**
+	 * The current columns of the table
+	 */
+	columns: Column<T>[];
+	/**
+	 * All rows of the table, including those that are not currently visible due to pagination
+	 */
+	allRows: Row<T>[];
+	/**
+	 * The currently visible columns.
+	 * This is a subset of the columns array, based on the current visibility settings.
+	 */
+	visibleColumns: ColumnDef<T>[];
+
+	/**
+	 * Set the visibility of a specific column
+	 * @param accessor - The column accessor key
+	 * @param isVisible - Whether the column should be visible
+	 */
+	setColumnVisibility(accessor: keyof T, isVisible: boolean): void;
+	/**
+	 * Toggle the visibility of a specific column
+	 * @param accessor - The column accessor key
+	 */
+	toggleColumnVisibility(accessor: keyof T): void;
+};
+
+/**
+ * Type representing a `Reactive Table` with optional features.
+ * 
+ * @template T - The type of data items in the table
+ * @template Options - Configuration options for the table, defaults to empty object
+ */
+export type ReactiveTable<T, Options extends TableOptions<T> = {}> = ReactiveTableBase<T> &
+	(Options['pagination'] extends ReactivePaginationFactory<T> ? PaginationFeature<T> : {});
 
 /**
  * Creates a reactive table that automatically updates with data changes.
  *
  * @param initialData - Initial array of data items to populate the table
  * @param columnDefs - Column definitions that specify how to display and interact with data
- * @param initialPagination - Optional initial pagination settings
- * @returns A fully reactive table
+ * @param options - Optional configuration settings
+ * @returns A fully reactive table with features based on provided options
  */
-export function reactiveTable<T>(
+export function reactiveTable<T, Options extends TableOptions<T> = {}>(
 	initialData: T[],
 	columnDefs: ColumnDef<T>[],
-	paginationFactory: ReactivePaginationFactory<T>
-): ReactiveTable<T> {
+	options: Options = {} as Options
+): ReactiveTable<T, Options> {
 	let _data = $state(initialData);
 	let _columnDefs = $state(columnDefs);
 
@@ -189,7 +227,7 @@ export function reactiveTable<T>(
 		});
 	}
 
-	return {
+	const table: ReactiveTableBase<T> = {
 		set data(value: T[]) {
 			_data = value;
 		},
@@ -216,7 +254,19 @@ export function reactiveTable<T>(
 		},
 		// Column visibility methods
 		setColumnVisibility,
-		toggleColumnVisibility,
-		pagination: paginationFactory(() => allRows)
+		toggleColumnVisibility
 	};
+
+	// Add features based on options
+	const tableWithFeatures = { ...table } as unknown as ReactiveTable<T, Options>;
+
+	// Add pagination if option is provided
+	if (options.pagination) {
+		(tableWithFeatures as ReactiveTableBase<T> & PaginationFeature<T>).pagination =
+			options.pagination(() => allRows);
+	}
+
+	// Future feature additions can be added here
+
+	return tableWithFeatures;
 }
