@@ -18,11 +18,11 @@
 	import Footer from './components/footer.svelte';
 	import Header from './components/header.svelte';
 
+	import { version } from '$lib/shared/config/version';
 	import * as Alert from '$lib/shared/ui/alert';
 	import { Badge } from '$shared/ui/badge';
 	import Github from '$shared/ui/github.svelte';
 	import { fade, fly } from 'svelte/transition';
-	import { version } from '$lib/shared/config/version';
 
 	const features = [
 		{
@@ -197,8 +197,7 @@
 
 		<Card.Content>
 			<p class="text-muted-foreground">
-				Built with TypeScript from the ground up, providing excellent autocompletion and type
-				checking for your data and configuration.
+				{feature.description}
 			</p>
 		</Card.Content>
 	</Card.Root>
