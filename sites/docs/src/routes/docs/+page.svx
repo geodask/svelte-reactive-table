@@ -1,0 +1,57 @@
+---
+title: Svelte Reactive Table Documentation
+---
+
+# Getting Started
+
+Svelte Reactive Table is a headless, fully reactive table library for Svelte applications. 
+It provides a flexible, customizable table solution without imposing any styling constraints.
+
+## Installation
+
+```bash
+pnpm add svelte-reactive-table
+```
+
+## Quick Start
+
+```svelte
+<script lang="ts">
+  import { reactiveTable } from 'svelte-reactive-table';
+
+  const table = reactiveTable(
+    [
+      { name: 'John Doe', age: 30 },
+      { name: 'Jane Smith', age: 25 }
+    ],
+    [
+      { accessor: 'name', header: 'Name' },
+      { accessor: 'age', header: 'Age' }
+    ]
+  );
+</script>
+
+<table>
+  <thead>
+    <tr>
+      {#each table.headers as header}
+        <th>{header}</th>
+      {/each}
+    </tr>
+  </thead>
+  <tbody>
+    {#each table.rows as row}
+      <tr>
+        {#each row.cells as cell}
+          <td>{cell.value}</td>
+        {/each}
+      </tr>
+    {/each}
+  </tbody>
+</table>
+```
+
+
+```svelte copyCode={1}
+<div>Hello</div>
+```
