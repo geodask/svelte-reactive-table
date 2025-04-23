@@ -1,5 +1,8 @@
 # Svelte Reactive Table
 
+[![NPM version](https://img.shields.io/npm/v/svelte-reactive-table.svg?style=flat)](https://www.npmjs.com/package/svelte-reactive-table)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 A headless, fully reactive table library for Svelte applications. This project provides a flexible, customizable table solution without imposing any styling constraints.
 
 ## What is Svelte Reactive Table?
@@ -60,6 +63,7 @@ Svelte Reactive Table is designed to give you complete control over your data ta
   - ⬜ Custom header rendering
 - ⚡ **Reactive Core**
   - ✅ Reactive data binding
+  - ✅ Column visibility control
   - ⬜ Dynamic column updates
   - ⬜ Computed columns
 - 🔄 **Sorting**
@@ -71,8 +75,9 @@ Svelte Reactive Table is designed to give you complete control over your data ta
   - ⬜ Column filters
   - ⬜ Custom filter functions
 - 📊 **Pagination**
-  - ⬜ Page size control
-  - ⬜ Page navigation
+  - ✅ Page size control
+  - ✅ Page navigation
+  - ✅ First/last page navigation
   - ⬜ Load more functionality
 - 🔢 **Row Selection**
   - ⬜ Single selection
@@ -81,18 +86,7 @@ Svelte Reactive Table is designed to give you complete control over your data ta
 - 🔗 **Column Management**
   - ⬜ Column resizing
   - ⬜ Column reordering
-  - ⬜ Column visibility toggle
-
-## Project Structure
-
-This project is structured as a monorepo:
-
-```
-packages/
-  svelte-reactive-table/  # The main library package
-sites/
-  docs/                   # Documentation website
-```
+  - ✅ Column visibility toggle
 
 ## License
 

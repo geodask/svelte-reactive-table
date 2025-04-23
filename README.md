@@ -63,6 +63,7 @@ Svelte Reactive Table is designed to give you complete control over your data ta
   - ⬜ Custom header rendering
 - ⚡ **Reactive Core**
   - ✅ Reactive data binding
+  - ✅ Column visibility control
   - ⬜ Dynamic column updates
   - ⬜ Computed columns
 - 🔄 **Sorting**
@@ -74,8 +75,9 @@ Svelte Reactive Table is designed to give you complete control over your data ta
   - ⬜ Column filters
   - ⬜ Custom filter functions
 - 📊 **Pagination**
-  - ⬜ Page size control
-  - ⬜ Page navigation
+  - ✅ Page size control
+  - ✅ Page navigation
+  - ✅ First/last page navigation
   - ⬜ Load more functionality
 - 🔢 **Row Selection**
   - ⬜ Single selection
@@ -84,7 +86,7 @@ Svelte Reactive Table is designed to give you complete control over your data ta
 - 🔗 **Column Management**
   - ⬜ Column resizing
   - ⬜ Column reordering
-  - ⬜ Column visibility toggle
+  - ✅ Column visibility toggle
 
 ## Project Structure
 
