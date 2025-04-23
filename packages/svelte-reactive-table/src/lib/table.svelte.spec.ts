@@ -1,4 +1,5 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { reactivePagination } from './pagination.svelte.js';
 import { reactiveTable, type ColumnDef, type ReactiveTable } from './table.svelte.js';
 
 type Person = {
@@ -25,8 +26,16 @@ const columns: ColumnDef<Person>[] = [
 describe('reactiveTable', () => {
 	let table: ReactiveTable<Person>;
 
+	// Spy on console methods
 	beforeEach(() => {
+		vi.spyOn(console, 'warn').mockImplementation(() => {});
+		vi.spyOn(console, 'error').mockImplementation(() => {});
 		table = reactiveTable(sampleData, columns);
+	});
+
+	// Restore console methods after tests
+	afterEach(() => {
+		vi.restoreAllMocks();
 	});
 
 	it('should create a table with the correct structure', () => {
@@ -192,7 +201,7 @@ describe('reactiveTable', () => {
 		expect(tableWithVisibility.allRows[0].cells[1].key).toBe('name');
 	});
 
-	it('should handle data with missing identifier values', () => {
+	it('should handle zero (0) as a valid identifier value', () => {
 		const dataWithMissingId: Person[] = [
 			{ id: 1, name: 'John Doe', age: 30, city: 'New York' },
 			{ id: 0, name: 'Jane Smith', age: 25, city: 'Los Angeles' }, // id=0 can still be valid
@@ -204,5 +213,115 @@ describe('reactiveTable', () => {
 		// Table should still work with all rows
 		expect(tableWithMissingId.allRows).toHaveLength(3);
 		expect(tableWithMissingId.allRows[1].id).toBe(0);
+	});
+
+	it('should warn when no identifier column is specified', () => {
+		// Reset warning mock first to ensure clean state
+		vi.clearAllMocks();
+
+		// Create columns without an explicit identifier
+		const columnsWithoutIdentifier: ColumnDef<Person>[] = [
+			{ accessor: 'id', header: 'ID' }, // No isIdentifier flag
+			{ accessor: 'name', header: 'Name' },
+			{ accessor: 'age', header: 'Age' }
+		];
+
+		// Create the table without identifier column
+		const tableWithoutIdentifier = reactiveTable(sampleData, columnsWithoutIdentifier);
+
+		// Force the reactive computation to run by accessing properties
+		const rows = tableWithoutIdentifier.allRows;
+		expect(rows).toHaveLength(3);
+
+		// Check that the warning was called with the exact message
+		expect(console.warn).toHaveBeenCalledWith(
+			'[svelte-reactive-table] No column is explicitly marked as identifier (isIdentifier: true). Using the first column as fallback. Consider marking an identifier column to ensure stable row identification.'
+		);
+	});
+
+	it('should log error when item is missing an identifier value', () => {
+		// Reset error mock first to ensure clean state
+		vi.clearAllMocks();
+
+		// Create data with a null identifier value
+		const dataWithNullId: Person[] = [
+			{ id: 1, name: 'John Doe', age: 30, city: 'New York' },
+			{ id: null as unknown as number, name: 'Jane Smith', age: 25, city: 'Los Angeles' }, // Null ID
+			{ id: 3, name: 'Bob Johnson', age: 40, city: 'Chicago' }
+		];
+
+		// Create the table with null identifier and force reactive computation
+		const tableWithNullId = reactiveTable(dataWithNullId, columns);
+
+		// Access rows to trigger the reactive computation
+		const rows = tableWithNullId.allRows;
+		expect(rows).toHaveLength(3);
+
+		// Verify error was logged with the exact format
+		expect(console.error).toHaveBeenCalledWith(
+			'[svelte-reactive-table] Row is missing a value for identifier property "id". Each row must have a unique, non-null identifier value.',
+			expect.any(Object) // The data snapshot
+		);
+	});
+
+	it('should add pagination feature when option is provided', () => {
+		// Test the pagination option code (lines 246-247 and 267-269)
+		const tableWithPagination = reactiveTable(sampleData, columns, {
+			pagination: reactivePagination({ pageSize: 2 })
+		});
+
+		// Verify pagination object was created and attached
+		expect(tableWithPagination.pagination).toBeDefined();
+		expect(tableWithPagination.pagination.pageSize).toBe(2);
+		expect(tableWithPagination.pagination.rows).toHaveLength(2); // First 2 rows
+		expect(tableWithPagination.pagination.pageCount).toBe(2); // 3 items with page size 2 = 2 pages
+	});
+
+	it('should handle pagination with empty data', () => {
+		const emptyTableWithPagination = reactiveTable(
+			[], // Empty data array
+			columns,
+			{ pagination: reactivePagination({ pageSize: 5 }) }
+		);
+
+		// Verify pagination object works with empty data
+		expect(emptyTableWithPagination.pagination).toBeDefined();
+		expect(emptyTableWithPagination.pagination.rows).toHaveLength(0);
+		expect(emptyTableWithPagination.pagination.pageCount).toBe(0);
+	});
+
+	it('should provide access to normalized columns with default values', () => {
+		// This test accesses the columns property to increase coverage for the columns getter
+		expect(table.columns).toBeDefined();
+		expect(table.columns).toHaveLength(4);
+
+		// Verify the column structure including default properties
+		expect(table.columns[0]).toEqual({
+			accessor: 'id',
+			header: 'ID',
+			isIdentifier: true,
+			visible: true
+		});
+
+		expect(table.columns[1]).toEqual({
+			accessor: 'name',
+			header: 'Name',
+			isIdentifier: false,
+			visible: true
+		});
+
+		// Test that changes to columnDefs are reflected in columns
+		table.columnDefs = [
+			{ accessor: 'id', header: 'ID', isIdentifier: true },
+			{ accessor: 'name', header: 'Full Name', visible: false }
+		];
+
+		expect(table.columns).toHaveLength(2);
+		expect(table.columns[1]).toEqual({
+			accessor: 'name',
+			header: 'Full Name',
+			isIdentifier: false,
+			visible: false
+		});
 	});
 });
