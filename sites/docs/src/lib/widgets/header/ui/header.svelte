@@ -1,13 +1,15 @@
 <script lang="ts">
-	import { Button } from '$shared/ui/button';
-	import Github from '$shared/ui/github.svelte';
-	import * as Sidebar from '$shared/ui/sidebar';
+	import Github from '$shared/ui/icons/github.svelte';
+	import { Button } from '$shared/ui/shadcn/button';
+	import { Separator } from '$shared/ui/shadcn/separator';
+	import * as Sidebar from '$shared/ui/shadcn/sidebar';
 	import { Moon, Search, Sun } from '@lucide/svelte';
 	import { mode, toggleMode } from 'mode-watcher';
 </script>
 
-<header class="flex h-16 shrink-0 items-center gap-2 px-4">
-	<Sidebar.Trigger class="-ml-1" />
+<header class="flex sticky border-b bg-background top-0 h-14 shrink-0 items-center gap-2 px-4">
+	<Sidebar.Trigger class=" size-9" />
+	<Separator orientation="vertical" class="min-h-0 h-6" />
 
 	<Button class="w-64 ml-auto justify-start px-2" variant="outline">
 		<Search size={16} />

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import * as Sidebar from '$shared/ui/sidebar';
+	import * as Sidebar from '$shared/ui/shadcn/sidebar';
 	import { Header } from '$widgets/header';
 	import { MenuSidebar } from '$widgets/menu-sidebar';
 
@@ -8,17 +8,10 @@
 
 <Sidebar.Provider>
 	<MenuSidebar />
-	<Sidebar.Inset>
+	<Sidebar.Inset class="overflow-hidden">
 		<Header />
-
-		{@render children()}
-		<!-- <div class="flex flex-1 flex-col gap-4 p-4">
-			<div class="grid auto-rows-min gap-4 md:grid-cols-3">
-				<div class="bg-muted/50 aspect-video rounded-xl"></div>
-				<div class="bg-muted/50 aspect-video rounded-xl"></div>
-				<div class="bg-muted/50 aspect-video rounded-xl"></div>
-			</div>
-			<div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min"></div>
-		</div> -->
+		<div class="p-8">
+			{@render children()}
+		</div>
 	</Sidebar.Inset>
 </Sidebar.Provider>

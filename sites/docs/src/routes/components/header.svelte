@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { IsMobile } from '$shared/lib/is-mobile.svelte';
-	import { Button } from '$shared/ui/button';
-	import Github from '$shared/ui/github.svelte';
+	import { Button } from '$shared/ui/shadcn/button';
+	import Github from '$shared/ui/icons/github.svelte';
 	import { Grid2x2Check, Menu, Moon, Sun, X } from '@lucide/svelte';
 	import { mode, toggleMode } from 'mode-watcher';
 
@@ -14,9 +14,7 @@
 	}
 </script>
 
-<header
-	class="w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
->
+<header class="w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 	<div class="container mx-auto px-4">
 		<div class="flex h-16 items-center justify-between">
 			<!-- Logo and Project Name -->

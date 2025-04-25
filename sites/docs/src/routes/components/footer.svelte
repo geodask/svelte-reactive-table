@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { Button } from '$shared/ui/button';
-	import Github from '$shared/ui/github.svelte';
-	import { Grid2x2Check, Info, Tag } from '@lucide/svelte';
+	import Github from '$shared/ui//icons/github.svelte';
+	import { Grid2x2Check, Tag } from '@lucide/svelte';
 
 	const currentYear = new Date().getFullYear();
 </script>

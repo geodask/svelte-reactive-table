@@ -1,0 +1,148 @@
+---
+layout: docPage
+---
+
+# reactivePagination
+
+The `reactivePagination` function creates pagination functionality for Svelte Reactive Table, enabling navigation through large datasets by dividing them into manageable pages.
+
+## Signature
+
+```ts
+function reactivePagination<T>(
+  options?: PaginationOptions
+): ReactivePaginationFactory<T>
+```
+
+## Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `options` | `PaginationOptions` | Optional configuration for the pagination behavior |
+
+### PaginationOptions
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `pageSize` | `number` | `10` | Number of items per page |
+| `page` | `number` | `0` | Initial page index (0-based) |
+
+## Return Value
+
+Returns a factory function that creates pagination functionality when passed to `reactiveTable`.
+
+## Basic Usage
+
+```svelte
+<script lang="ts">
+  import { reactiveTable, reactivePagination } from 'svelte-reactive-table';
+
+  const data = [/* Your data array */];
+  const columns = [/* Your column definitions */];
+
+  const table = reactiveTable(
+    data,
+    columns,
+    {
+      pagination: reactivePagination({
+        pageSize: 10,
+        page: 0
+      })
+    }
+  );
+</script>
+
+<table>
+  <!-- Table headers -->
+  
+  <!-- Use pagination.rows to display only the current page -->
+  <tbody>
+    {#each table.pagination.rows as row}
+      <tr>
+        {#each row.cells as cell}
+          <td>{cell.value}</td>
+        {/each}
+      </tr>
+    {/each}
+  </tbody>
+</table>
+```
+
+## Pagination Properties
+
+When pagination is enabled, these properties are available on the table's `pagination` object:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `page` | `number` | Current page index (0-based) |
+| `pageSize` | `number` | Number of items per page |
+| `pageCount` | `number` | Total number of pages |
+| `rows` | `Row<T>[]` | Rows for the current page only |
+
+## Pagination Methods
+
+These methods are available on the table's `pagination` object:
+
+| Method | Description |
+|--------|-------------|
+| `nextPage()` | Go to next page (returns false if already on last page) |
+| `previousPage()` | Go to previous page (returns false if already on first page) |
+| `firstPage()` | Go to the first page |
+| `lastPage()` | Go to the last page |
+| `setPage(page)` | Go to a specific page |
+| `setPageSize(size, resetPage)` | Change page size (resets to first page by default) |
+
+## Building Pagination Controls
+
+Here's a practical example of pagination controls:
+
+```svelte
+<div class="pagination">
+  <button 
+    on:click={table.pagination.previousPage}
+    disabled={table.pagination.page === 0}>
+    Previous
+  </button>
+  
+  <span>
+    Page {table.pagination.page + 1} of {table.pagination.pageCount}
+  </span>
+  
+  <button 
+    on:click={table.pagination.nextPage}
+    disabled={table.pagination.page === table.pagination.pageCount - 1}>
+    Next
+  </button>
+  
+  <select 
+    value={table.pagination.pageSize}
+    on:change={(e) => table.pagination.setPageSize(Number(e.target.value))}>
+    <option value="5">5 per page</option>
+    <option value="10">10 per page</option>
+    <option value="25">25 per page</option>
+  </select>
+</div>
+```
+
+## TypeScript Support
+
+The `reactivePagination` function is generic and works with your data types:
+
+```ts
+type User = {
+  id: number;
+  name: string;
+  age: number;
+};
+
+// Type-safe pagination for User data
+const pagination = reactivePagination<User>({
+  pageSize: 10
+});
+
+const table = reactiveTable<User>(
+  users,
+  columns,
+  { pagination }
+);
+```

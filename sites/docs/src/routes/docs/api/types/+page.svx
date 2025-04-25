@@ -1,0 +1,301 @@
+---
+layout: docPage
+---
+
+# Types
+
+Svelte Reactive Table exports several TypeScript types that help you build type-safe tables. This reference documents the main types you'll encounter when working with the library.
+
+## Core Types
+
+### ColumnDef
+
+Defines a column in the table.
+
+```ts
+type ColumnDef<T> = {
+  /**
+   * Key of the data property to display in this column
+   */
+  accessor: keyof T;
+  
+  /**
+   * Text to display in the column header
+   */
+  header: string;
+  
+  /**
+   * Indicates whether this column contains the unique identifier for the row
+   * @default false
+   */
+  isIdentifier?: boolean;
+  
+  /**
+   * Controls whether the column is shown in the table
+   * @default true
+   */
+  visible?: boolean;
+};
+```
+
+### Column
+
+Represents a fully resolved column with all required properties.
+
+```ts
+type Column<T> = {
+  accessor: keyof T;
+  header: string;
+  isIdentifier: boolean;
+  visible: boolean;
+};
+```
+
+### Cell
+
+Represents a cell in the table.
+
+```ts
+type Cell<T> = {
+  /**
+   * The accessor key for this cell's column
+   */
+  key: keyof T;
+  
+  /**
+   * The data value for this cell
+   */
+  value: T[keyof T];
+};
+```
+
+### Row
+
+Represents a row in the table.
+
+```ts
+type Row<T> = {
+  /**
+   * Unique identifier for the row
+   */
+  id: T[keyof T];
+  
+  /**
+   * Reference to the original data item
+   */
+  original: T;
+  
+  /**
+   * Array of cell objects for visible columns
+   */
+  cells: Cell<T>[];
+};
+```
+
+## Table Types
+
+### ReactiveTable
+
+The main type returned by the `reactiveTable` function.
+
+```ts
+type ReactiveTable<T, Options extends TableOptions<T> = {}> = {
+  /**
+   * The current data array
+   */
+  data: T[];
+  
+  /**
+   * The current column definitions
+   */
+  columnDefs: ColumnDef<T>[];
+  
+  /**
+   * The current headers for visible columns
+   */
+  headers: string[];
+  
+  /**
+   * All columns with their full configuration
+   */
+  columns: Column<T>[];
+  
+  /**
+   * All rows, including those not visible due to pagination
+   */
+  allRows: Row<T>[];
+  
+  /**
+   * Only columns that are currently visible
+   */
+  visibleColumns: ColumnDef<T>[];
+  
+  /**
+   * Show or hide a specific column
+   */
+  setColumnVisibility(accessor: keyof T, isVisible: boolean): void;
+  
+  /**
+   * Toggle visibility of a specific column
+   */
+  toggleColumnVisibility(accessor: keyof T): void;
+  
+  /**
+   * Pagination properties and methods (only when pagination is enabled)
+   */
+  pagination?: ReactivePagination<T>;
+};
+```
+
+### TableOptions
+
+Configuration options for the table.
+
+```ts
+type TableOptions<T> = {
+  /**
+   * Optional pagination factory
+   */
+  pagination?: ReactivePaginationFactory<T>;
+};
+```
+
+## Pagination Types
+
+### ReactivePagination
+
+The pagination interface that provides pagination functionality.
+
+```ts
+type ReactivePagination<T> = {
+  /**
+   * Current page index (0-based)
+   */
+  page: number;
+  
+  /**
+   * Number of items per page
+   */
+  pageSize: number;
+  
+  /**
+   * Total number of pages
+   */
+  pageCount: number;
+  
+  /**
+   * Rows for the current page only
+   */
+  rows: Row<T>[];
+  
+  /**
+   * Go to the next page
+   * @returns Whether the page was changed
+   */
+  nextPage(): boolean;
+  
+  /**
+   * Go to the previous page
+   * @returns Whether the page was changed
+   */
+  previousPage(): boolean;
+  
+  /**
+   * Go to the first page
+   */
+  firstPage(): void;
+  
+  /**
+   * Go to the last page
+   */
+  lastPage(): void;
+  
+  /**
+   * Go to a specific page
+   */
+  setPage(page: number): void;
+  
+  /**
+   * Change the page size
+   * @param resetPage If true (default), resets to first page
+   */
+  setPageSize(size: number, resetPage?: boolean): void;
+};
+```
+
+### PaginationOptions
+
+Options for configuring pagination behavior.
+
+```ts
+type PaginationOptions = {
+  /**
+   * Number of items per page
+   * @default 10
+   */
+  pageSize?: number;
+  
+  /**
+   * Initial page index (0-based)
+   * @default 0
+   */
+  page?: number;
+};
+```
+
+## Importing Types
+
+Import the types you need from the library:
+
+```ts
+import {
+  type ColumnDef,
+  type ReactiveTable,
+  type Row,
+  type Cell
+  // Other types as needed
+} from 'svelte-reactive-table';
+```
+
+## TypeScript Example
+
+```ts
+import {
+  reactiveTable,
+  reactivePagination,
+  type ColumnDef,
+  type ReactiveTable
+} from 'svelte-reactive-table';
+
+// Define your data type
+type User = {
+  id: number;
+  name: string;
+  email: string;
+};
+
+// Type-safe column definitions
+const columns: ColumnDef<User>[] = [
+  { accessor: 'id', header: 'ID', isIdentifier: true },
+  { accessor: 'name', header: 'Name' },
+  { accessor: 'email', header: 'Email' }
+];
+
+// Create a typed table with pagination
+const table: ReactiveTable<User> = reactiveTable(
+  users,
+  columns,
+  {
+    pagination: reactivePagination<User>({ pageSize: 10 })
+  }
+);
+
+// TypeScript provides full type-checking
+table.toggleColumnVisibility('email'); // Valid
+table.toggleColumnVisibility('phone'); // Error: 'phone' not in User
+
+// Pagination is properly typed
+if (table.pagination) {
+  table.pagination.nextPage();
+}
+```

@@ -1,17 +1,19 @@
 <script lang="ts">
-	import * as Sidebar from '$lib/shared/ui/sidebar/index.js';
+	import { page } from '$app/state';
+	import * as Sidebar from '$lib/shared/ui/shadcn/sidebar';
+	import { Grid2x2Check } from '@lucide/svelte';
 	import type { ComponentProps } from 'svelte';
 	import { data } from '../model';
-	import { page } from '$app/state';
 
 	let { ref = $bindable(null), ...restProps }: ComponentProps<typeof Sidebar.Root> = $props();
 </script>
 
-<Sidebar.Root {...restProps} bind:ref>
-	<Sidebar.Header>
-		<div class="h-16 flex items-center px-2 pb-2 border-b">
-			<h1 class="text-xl">Svelte Reactive Table</h1>
-		</div>
+<Sidebar.Root variant="inset" class="px-0 border-none" {...restProps} bind:ref>
+	<Sidebar.Header class="h-14 px-4">
+		<a href="/" class="text-lg font-bold h-full gap-2 flex items-center">
+			<Grid2x2Check class="text-primary size-5" />
+			Svelte Reactive Table
+		</a>
 	</Sidebar.Header>
 	<Sidebar.Content>
 		<!-- We create a Sidebar.Group for each parent. -->

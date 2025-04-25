@@ -1,0 +1,83 @@
+---
+layout: docPage
+---
+
+<script lang="ts">
+  import EarlyReleaseAlert from '$widgets/early-release-alert/ui/early-release-alert.svelte';
+</script>
+
+# Introduction to Svelte Reactive Table
+
+<EarlyReleaseAlert/>
+
+## What is Svelte Reactive Table?
+
+Svelte Reactive Table is a headless, fully reactive table library built specifically for Svelte applications. It provides essential table functionality with a clean, straightforward API that lets you focus on building great user experiences rather than managing complex table state.
+
+What makes this library different is its "headless" approach - it handles all the complex state management and table logic behind the scenes while giving you complete freedom to design your tables exactly how you want them to look and behave.
+
+## Powered by Svelte's Reactivity
+
+The library leverages Svelte's powerful reactivity system (including Svelte 5 runes) to create tables that automatically update when your data changes. This means:
+
+- Add, remove, or modify data items, and your table instantly reflects these changes
+- Toggle column visibility and see immediate UI updates
+- Change pagination settings with real-time page recalculation
+
+All of this happens automatically without you having to write extra code to sync your UI with your data state.
+
+## Modular and Flexible Design
+
+Svelte Reactive Table follows a modular design philosophy:
+
+### 1. Core Table Functionality
+
+The foundation is a simple, reactive table with column definitions and row generation. This covers your basic table needs with minimal setup.
+
+### 2. Optional Feature Extensions
+
+Add just the features you need:
+- **Pagination**: Navigate through large datasets with page size controls and navigation
+- **Column Visibility**: Show or hide columns dynamically
+- **More Coming Soon**: Sorting, filtering, row selection, and other capabilities are planned
+
+This approach keeps your bundle size small and your tables fast by only including what your application actually uses.
+
+### 3. Future Extensions
+
+The roadmap for Svelte Reactive Table includes powerful capabilities that maintain the library's commitment to reactivity and flexibility:
+
+- **Advanced Sorting**: Multi-column sorting with custom comparators and sort direction toggling
+- **Comprehensive Filtering**: Filter by multiple criteria with customizable filter functions
+- **Row Selection**: Single, multi-select, and range selection capabilities with selection events
+- **Server-Side Operations**: Support for server-driven data operations including:
+  - Server-side pagination with total count indicators
+  - Server-side filtering with custom query parameter formatting
+  - Server-side sorting with flexible API integration
+  - Request debouncing and loading states
+- **Virtual Scrolling**: Efficiently render thousands of rows with minimal performance impact
+- **Sticky Headers and Columns**: Keep important table elements visible during scrolling
+- **Expandable Rows**: Reveal additional details or nested tables with expand/collapse functionality
+- **Column Resizing and Reordering**: Let users customize their table layout
+
+Each extension will maintain the library's headless philosophy, giving you complete control over the UI while handling the complex state management behind the scenes.
+
+## Key Features
+
+- **Fully Reactive**: Your table updates automatically whenever data changes
+- **Headless by Design**: No predefined styles or components - you control the presentation
+- **Type-Safe API**: Comprehensive TypeScript support for reliable developer experience
+- **Optimized Performance**: Efficient reactivity that minimizes unnecessary re-renders
+- **Intuitive API**: Simple functions and patterns that feel natural to Svelte developers
+
+## When to Use Svelte Reactive Table
+
+Svelte Reactive Table is ideal when you need:
+
+- A table solution built specifically for Svelte with its reactivity system in mind
+- Complete styling freedom without fighting against predefined components
+- A lightweight table implementation focused on performance
+- TypeScript support for safe development
+- A flexible solution that can grow from simple tables to complex data grids
+
+If you want a table library that embraces Svelte's philosophy of simplicity and reactivity while giving you full control over your UI, Svelte Reactive Table is designed for exactly that purpose.

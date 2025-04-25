@@ -24,20 +24,20 @@ export const data = {
 			url: '/docs/core-concepts',
 			items: [
 				{
-					title: 'Table State',
-					url: '/docs/table-state'
+					title: 'Reactivity',
+					url: '/docs/reactivity'
 				},
 				{
 					title: 'Column Definition',
 					url: '/docs/column-definition'
 				},
 				{
-					title: 'Reactivity',
-					url: '/docs/reactivity'
+					title: 'Column Visibility',
+					url: '/docs/column-visibility'
 				},
 				{
-					title: 'Rendering',
-					url: '/docs/rendering'
+					title: 'Pagination',
+					url: '/docs/pagination'
 				}
 			]
 		},
@@ -48,6 +48,10 @@ export const data = {
 				{
 					title: 'reactiveTable',
 					url: '/docs/api/reactive-table'
+				},
+				{
+					title: 'reactivePagination',
+					url: '/docs/api/reactive-pagination'
 				},
 				{
 					title: 'Types',
@@ -62,10 +66,6 @@ export const data = {
 				{
 					title: 'Examples',
 					url: '/docs/examples'
-				},
-				{
-					title: 'TypeScript',
-					url: '/docs/typescript'
 				}
 			]
 		}

@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { Button } from '$lib/shared/ui/button';
-	import * as Card from '$lib/shared/ui/card';
+	import { Button } from '$lib/shared/ui/shadcn/button';
+	import * as Card from '$lib/shared/ui/shadcn/card';
 	import { cn } from '$shared/lib/shadcn';
 	import {
 		Activity,
-		AlertTriangle,
 		Check,
 		CircleCheck,
 		Clock,
@@ -19,9 +18,9 @@
 	import Header from './components/header.svelte';
 
 	import { version } from '$lib/shared/config/version';
-	import * as Alert from '$lib/shared/ui/alert';
-	import { Badge } from '$shared/ui/badge';
-	import Github from '$shared/ui/github.svelte';
+	import Github from '$shared/ui/icons/github.svelte';
+	import { Badge } from '$shared/ui/shadcn/badge';
+	import EarlyReleaseAlert from '$widgets/early-release-alert/ui/early-release-alert.svelte';
 	import { fade, fly } from 'svelte/transition';
 
 	const features = [
@@ -124,24 +123,22 @@
 			in:fly={{ y: 20, duration: 600, delay: 500 }}
 			class="flex flex-wrap gap-4 justify-center mb-8"
 		>
-			<Button href="/docs" size="lg" class="text-base">Get Started</Button>
+			<Button href="/docs/introduction" size="lg" class="text-base">Get Started</Button>
 
-			<Button href="/docs" size="lg" variant="secondary" class="text-base">
+			<Button
+				href="https://github.com/geodask/svelte-reactive-table"
+				target="_blank"
+				size="lg"
+				variant="secondary"
+				class="text-base"
+			>
 				<Github />
 				Github
 			</Button>
 		</div>
 
 		<div in:fade={{ delay: 700, duration: 400 }} class="justify-self-center">
-			<Alert.Root
-				class="text-start bg-yellow-500/10 border border-yellow-500/30 text-yellow-600 dark:text-yellow-400 rounded-md"
-			>
-				<AlertTriangle class="!text-yellow-600 dark:text-yellow-400" size={18} />
-				<Alert.Title>Early Preview Release</Alert.Title>
-				<Alert.Description>
-					The library is under active development. Expect breaking changes until v1.0!
-				</Alert.Description>
-			</Alert.Root>
+			<EarlyReleaseAlert />
 		</div>
 	</section>
 
@@ -162,7 +159,7 @@
 
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 			<!-- Implemented Features -->
-			{@render RoadmapCard('Implemented', implemented, true)}
+			{@render RoadmapCard('Available', implemented, true)}
 
 			<!-- Coming Soon Features -->
 			{@render RoadmapCard('Coming Soon', comingSoon, false)}
@@ -177,7 +174,7 @@
 				Get started with Svelte Reactive Table and take complete control of your data display.
 			</p>
 			<div class="flex flex-wrap gap-4 justify-center">
-				<Button href="/docs" size="lg">Read the Docs</Button>
+				<Button href="/docs/introduction" size="lg">Read the Docs</Button>
 			</div>
 		</Card.Root>
 	</section>

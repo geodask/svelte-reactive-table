@@ -1,0 +1,273 @@
+---
+layout: docPage
+title: Quick Start Guide
+---
+
+# Quick Start Guide
+
+This guide will show you how to use Svelte Reactive Table's core features to build flexible, reactive tables.
+
+## Basic Table
+
+First, create a simple table by providing your data and column definitions to the `reactiveTable` function:
+
+```svelte
+<script lang="ts">
+  import { reactiveTable } from 'svelte-reactive-table';
+
+  // Define your data
+  const data = [
+    { id: 1, name: 'John Doe', age: 30, city: 'New York' },
+    { id: 2, name: 'Jane Smith', age: 25, city: 'Los Angeles' }
+  ];
+
+  // Define your columns
+  const columns = [
+    { accessor: 'id', header: 'ID', isIdentifier: true },
+    { accessor: 'name', header: 'Name' },
+    { accessor: 'age', header: 'Age' },
+    { accessor: 'city', header: 'City' }
+  ];
+
+  // Create a reactive table instance
+  const table = reactiveTable(data, columns);
+</script>
+
+<!-- Render your table with complete styling freedom -->
+<table>
+  <thead>
+    <tr>
+      {#each table.headers as header}
+        <th>{header}</th>
+      {/each}
+    </tr>
+  </thead>
+  <tbody>
+    {#each table.allRows as row}
+      <tr>
+        {#each row.cells as cell}
+          <td>{cell.value}</td>
+        {/each}
+      </tr>
+    {/each}
+  </tbody>
+</table>
+```
+
+## Column Visibility
+
+Control which columns are displayed by using the column visibility methods:
+
+```svelte
+<script lang="ts">
+  // Same setup as above
+
+  function toggleAgeColumn() {
+    // Toggle visibility of the age column
+    table.toggleColumnVisibility('age');
+  }
+  
+  function hideColumn(column) {
+    // Hide a specific column
+    table.setColumnVisibility(column, false);
+  }
+  
+  function showColumn(column) {
+    // Show a specific column
+    table.setColumnVisibility(column, true);
+  }
+</script>
+
+<div>
+  <button on:click={toggleAgeColumn}>Toggle Age Column</button>
+  <button on:click={() => hideColumn('city')}>Hide City Column</button>
+  <button on:click={() => showColumn('city')}>Show City Column</button>
+</div>
+
+<!-- Table as above -->
+```
+
+## Pagination
+
+Add pagination to your table for handling larger datasets:
+
+```svelte
+<script lang="ts">
+  import { reactiveTable, reactivePagination } from 'svelte-reactive-table';
+
+  // Define your data and columns as before
+  
+  // Create a table with pagination
+  const tableWithPagination = reactiveTable(
+    data,
+    columns,
+    {
+      pagination: reactivePagination({
+        pageSize: 10,  // Number of items per page
+        page: 0        // 0-based index for the starting page
+      })
+    }
+  );
+  
+  // Optional: define page size options
+  const pageSizeOptions = [5, 10, 25, 50];
+  
+  // Function to change page size
+  function setPageSize(size) {
+    tableWithPagination.pagination.setPageSize(size);
+  }
+</script>
+
+<!-- Table with paginated rows -->
+<table>
+  <thead>
+    <!-- headers as before -->
+  </thead>
+  <tbody>
+    {#each tableWithPagination.pagination.rows as row}
+      <tr>
+        {#each row.cells as cell}
+          <td>{cell.value}</td>
+        {/each}
+      </tr>
+    {/each}
+  </tbody>
+</table>
+
+<!-- Pagination controls -->
+<div class="pagination-controls">
+  <button 
+    on:click={tableWithPagination.pagination.firstPage}
+    disabled={tableWithPagination.pagination.page === 0}
+  >
+    First
+  </button>
+  
+  <button 
+    on:click={tableWithPagination.pagination.previousPage}
+    disabled={tableWithPagination.pagination.page === 0}
+  >
+    Previous
+  </button>
+  
+  <span>
+    Page {tableWithPagination.pagination.page + 1} of {tableWithPagination.pagination.pageCount}
+  </span>
+  
+  <button 
+    on:click={tableWithPagination.pagination.nextPage}
+    disabled={tableWithPagination.pagination.page === tableWithPagination.pagination.pageCount - 1}
+  >
+    Next
+  </button>
+  
+  <button 
+    on:click={tableWithPagination.pagination.lastPage}
+    disabled={tableWithPagination.pagination.page === tableWithPagination.pagination.pageCount - 1}
+  >
+    Last
+  </button>
+  
+  <!-- Page size selector -->
+  <div>
+    <span>Rows per page:</span>
+    <select 
+      value={tableWithPagination.pagination.pageSize} 
+      on:change={(e) => setPageSize(Number(e.target.value))}
+    >
+      {#each pageSizeOptions as size}
+        <option value={size}>{size}</option>
+      {/each}
+    </select>
+  </div>
+</div>
+```
+
+## Reactive Data Updates
+
+One of the key features of Svelte Reactive Table is that it automatically reacts to data changes:
+
+```svelte
+<script lang="ts">
+  // Same table setup as before
+  
+  function addNewRow() {
+    // Simply update the data, and the table will automatically reflect the change
+    table.data.push({
+      id: table.data.length + 1,
+      name: 'New Person',
+      age: 27,
+      city: 'Chicago'
+    });
+  }
+  
+  function removeRow(id) {
+    // Remove a row by ID
+    table.data = table.data.filter(item => item.id !== id);
+  }
+</script>
+
+<button on:click={addNewRow}>Add New Row</button>
+
+<!-- Table as before, but with delete buttons -->
+<table>
+  <!-- thead as before -->
+  <tbody>
+    {#each table.allRows as row}
+      <tr>
+        {#each row.cells as cell}
+          <td>{cell.value}</td>
+        {/each}
+        <td>
+          <button on:click={() => removeRow(row.id)}>Remove</button>
+        </td>
+      </tr>
+    {/each}
+  </tbody>
+</table>
+```
+
+## TypeScript Support
+
+The library is fully typed and provides comprehensive TypeScript support:
+
+```ts
+import { 
+  reactiveTable, 
+  reactivePagination,
+  type ColumnDef,
+  type ReactiveTable,
+  type ReactivePagination 
+} from 'svelte-reactive-table';
+
+// Define your data type
+type Person = {
+  id: number;
+  name: string;
+  age: number;
+  city?: string;
+};
+
+// Define typed columns
+const columns: ColumnDef<Person>[] = [
+  { accessor: 'id', header: 'ID', isIdentifier: true },
+  { accessor: 'name', header: 'Name' },
+  { accessor: 'age', header: 'Age' },
+  { accessor: 'city', header: 'City' }
+];
+
+// Create a typed table
+const table: ReactiveTable<Person> = reactiveTable(data, columns);
+
+// Create a typed table with pagination
+const paginatedTable: ReactiveTable<Person, { pagination: ReactivePagination<Person> }> = 
+  reactiveTable(
+    data, 
+    columns, 
+    { pagination: reactivePagination<Person>({ pageSize: 10 }) }
+  );
+```
+
+## Next Steps
+
+This guide covers the basics of using Svelte Reactive Table. Explore the library's capabilities by checking the other documentation sections and API references, or by looking at the example components in the codebase.

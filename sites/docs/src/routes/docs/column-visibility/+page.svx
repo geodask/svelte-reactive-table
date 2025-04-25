@@ -1,0 +1,100 @@
+---
+layout: docPage
+---
+
+# Column Visibility
+
+One of the key features of Svelte Reactive Table is the ability to dynamically control which columns are visible in your table. This feature allows users to customize their view by showing only the information they need.
+
+## Setting Initial Visibility
+
+You can control the initial visibility of columns using the `visible` property in column definitions:
+
+```ts
+// In your Svelte component
+import { reactiveTable } from 'svelte-reactive-table';
+
+const data = [
+  { id: 1, name: 'John Doe', age: 30, email: 'john@example.com' },
+  { id: 2, name: 'Jane Smith', age: 25, email: 'jane@example.com' }
+];
+
+const columns = [
+  { accessor: 'id', header: 'ID', isIdentifier: true },
+  { accessor: 'name', header: 'Name' },
+  { accessor: 'age', header: 'Age' },
+  { accessor: 'email', header: 'Email', visible: false } // Initially hidden
+];
+
+const table = reactiveTable(data, columns);
+```
+
+## Changing Column Visibility
+
+The table instance provides two simple methods for controlling column visibility:
+
+### 1. `setColumnVisibility`
+
+Sets a column's visibility to a specific state:
+
+```js
+// Show the email column
+function showEmailColumn() {
+  table.setColumnVisibility('email', true);
+}
+
+// Hide the age column
+function hideAgeColumn() {
+  table.setColumnVisibility('age', false);
+}
+```
+
+### 2. `toggleColumnVisibility`
+
+Toggles a column's visibility between shown and hidden:
+
+```js
+function toggleEmailColumn() {
+  table.toggleColumnVisibility('email');
+}
+```
+
+## Building a Column Selector UI
+
+Here's a practical example of a column selector component:
+
+```svelte
+<div class="column-toggles">
+  {#each table.columns as column}
+    <label class="toggle">
+      <input
+        type="checkbox"
+        checked={column.visible}
+        on:change={() => table.toggleColumnVisibility(column.accessor)}
+      />
+      {column.header}
+    </label>
+  {/each}
+</div>
+```
+
+## How Reactivity Works
+
+When you change column visibility:
+
+1. The `visibleColumns` array updates automatically
+2. The `headers` array updates to include only visible column headers
+3. Each row's `cells` array updates to include only cells from visible columns
+
+Your UI will reflect these changes instantly without any manual synchronization code.
+
+## Accessing Visible Columns
+
+To see which columns are currently visible or to build UI based on visibility:
+
+```js
+// Get the number of visible columns
+const visibleColumnCount = $derived(table.visibleColumns.length);
+```
+
+Column visibility control helps you build tables that adapt to your users' needs, creating a more focused and effective data display.
