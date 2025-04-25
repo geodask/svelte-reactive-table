@@ -7,17 +7,18 @@
 	import { mode, toggleMode } from 'mode-watcher';
 </script>
 
-<header class="flex sticky border-b bg-background top-0 h-14 shrink-0 items-center gap-2 px-4">
+<header class="flex sticky border-b bg-background z-20 top-0 h-14 shrink-0 items-center gap-2 px-4">
 	<Sidebar.Trigger class=" size-9" />
 	<Separator orientation="vertical" class="min-h-0 h-6" />
 
-	<Button class="w-64 ml-auto justify-start px-2" variant="outline">
+	<!-- <Button class="w-64 ml-auto justify-start px-2" variant="outline">
 		<Search size={16} />
 		Search Docs...
-	</Button>
+	</Button> -->
 
 	<Button
 		size="icon"
+		class="ml-auto"
 		variant="ghost"
 		target="_blank"
 		href="https://github.com/geodask/svelte-reactive-table"

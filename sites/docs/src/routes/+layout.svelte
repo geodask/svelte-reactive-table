@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ScrollArea } from '$shared/ui/shadcn/scroll-area';
 	import '../app.css';
 
 	import { ModeWatcher } from 'mode-watcher';
@@ -8,4 +9,6 @@
 
 <ModeWatcher />
 
-{@render children()}
+<ScrollArea class="h-screen">
+	{@render children()}
+</ScrollArea>

@@ -11,7 +11,7 @@
 			<!-- Project Info -->
 			<div class="flex flex-col space-y-3">
 				<div class="flex items-center gap-2">
-					<Grid2x2Check class="text-primary" />
+					<Grid2x2Check class="text-primary size-5" />
 					<span class="text-base font-medium">Svelte Reactive Table</span>
 				</div>
 				<!-- <p class="text-sm text-muted-foreground">
@@ -20,6 +20,26 @@
 				<p class="text-sm text-muted-foreground">
 					&copy; {currentYear} George Daskalakis
 				</p>
+				<div class="text-xs text-muted-foreground pt-1">
+					<p>
+						Docs powered by <a
+							href="https://next.shadcn-svelte.com"
+							class="underline hover:text-primary underline-offset-2"
+							target="_blank"
+							rel="noopener noreferrer">shadcn-svelte</a
+						>.
+					</p>
+					<p>
+						Theme based on the Tangerine theme by <a
+							href="https://tweakcn.com/"
+							class="underline hover:text-primary underline-offset-2"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							tweakcn
+						</a>.
+					</p>
+				</div>
 			</div>
 
 			<!-- Quick Links -->

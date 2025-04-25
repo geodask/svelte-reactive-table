@@ -6,12 +6,14 @@
 	import { data } from '../model';
 
 	let { ref = $bindable(null), ...restProps }: ComponentProps<typeof Sidebar.Root> = $props();
+
+	const currentYear = new Date().getFullYear();
 </script>
 
-<Sidebar.Root variant="inset" class="px-0 border-none" {...restProps} bind:ref>
-	<Sidebar.Header class="h-14 px-4">
+<Sidebar.Root variant="sidebar" class="p-0 border-none" {...restProps} bind:ref>
+	<Sidebar.Header class="h-14 pl-4">
 		<a href="/" class="text-lg font-bold h-full gap-2 flex items-center">
-			<Grid2x2Check class="text-primary size-5" />
+			<Grid2x2Check class="text-primary size-6" />
 			Svelte Reactive Table
 		</a>
 	</Sidebar.Header>
@@ -36,5 +38,10 @@
 			</Sidebar.Group>
 		{/each}
 	</Sidebar.Content>
-	<Sidebar.Rail />
+
+	<Sidebar.Footer class="p-4">
+		<p class="text-sm text-muted-foreground">
+			&copy; {currentYear} George Daskalakis
+		</p>
+	</Sidebar.Footer>
 </Sidebar.Root>

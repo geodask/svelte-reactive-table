@@ -8,7 +8,7 @@
 
 <Sidebar.Provider>
 	<MenuSidebar />
-	<Sidebar.Inset class="overflow-hidden">
+	<Sidebar.Inset class="contain-inline-size sticky top-0">
 		<Header />
 		<div class="p-8">
 			{@render children()}
