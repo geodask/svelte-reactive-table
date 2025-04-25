@@ -29,5 +29,14 @@ export default ts.config(
 				extraFileExtensions: ['.svelte']
 			}
 		}
+	},
+	{
+		// Configuration for config files
+		files: ['**/*.config.js', '**/*.config.ts'],
+		languageOptions: {
+			globals: {
+				...globals.node
+			}
+		}
 	}
 );

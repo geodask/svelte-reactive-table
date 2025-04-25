@@ -27,7 +27,7 @@
 		--chart-3: 213.16 29.92% 50.2%;
 		--chart-4: 216.92 35.78% 42.75%;
 		--chart-5: 221.01 43.65% 35.49%;
-		--sidebar: 216 7.94% 87.65%;
+		--sidebar-background: 216 7.94% 87.65%;
 		--sidebar-foreground: 0 0% 20%;
 		--sidebar-primary: 13.21 73.04% 54.9%;
 		--sidebar-primary-foreground: 0 0% 100%;
@@ -75,7 +75,7 @@
 		--chart-3: 213.16 29.92% 50.2%;
 		--chart-4: 216.92 35.78% 42.75%;
 		--chart-5: 221.01 43.65% 35.49%;
-		--sidebar: 222.86 20% 20.59%;
+		--sidebar-background: 222.86 20% 20.59%;
 		--sidebar-foreground: 0 0% 89.8%;
 		--sidebar-primary: 13.21 73.04% 54.9%;
 		--sidebar-primary-foreground: 0 0% 100%;
@@ -102,7 +102,13 @@
 	* {
 		@apply border-border;
 	}
+
 	body {
 		@apply bg-background text-foreground;
 	}
+}
+
+html.dark .shiki,
+html.dark .shiki span {
+	color: var(--shiki-dark) !important;
 }
