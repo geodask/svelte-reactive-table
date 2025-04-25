@@ -1,5 +1,5 @@
 <script lang="ts">
-	import * as Sheet from '$lib/shared/ui/sheet/index.js';
+	import * as Sheet from '$lib/shared/ui/shadcn/sheet/index.js';
 	import { cn } from '$lib/shared/lib/shadcn.js';
 	import type { WithElementRef } from 'bits-ui';
 	import type { HTMLAttributes } from 'svelte/elements';

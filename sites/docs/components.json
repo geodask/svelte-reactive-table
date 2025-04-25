@@ -9,7 +9,7 @@
 	"aliases": {
 		"components": "$lib/shared",
 		"utils": "$lib/shared/lib/shadcn",
-		"ui": "$lib/shared/ui",
+		"ui": "$lib/shared/ui/shadcn",
 		"hooks": "$lib/shared/lib"
 	},
 	"typescript": true,

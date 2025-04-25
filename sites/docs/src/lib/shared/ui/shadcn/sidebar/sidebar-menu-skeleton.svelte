@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Skeleton } from '$lib/shared/ui/skeleton/index.js';
+	import { Skeleton } from '$lib/shared/ui/shadcn/skeleton/index.js';
 	import { cn } from '$lib/shared/lib/shadcn.js';
 	import type { WithElementRef } from 'bits-ui';
 	import type { HTMLAttributes } from 'svelte/elements';

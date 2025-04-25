@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Separator } from '$lib/shared/ui/separator/index.js';
+	import { Separator } from '$lib/shared/ui/shadcn/separator/index.js';
 	import { cn } from '$lib/shared/lib/shadcn.js';
 	import type { ComponentProps } from 'svelte';
 
