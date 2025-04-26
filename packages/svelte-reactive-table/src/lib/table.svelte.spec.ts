@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { reactivePagination } from './pagination.svelte.js';
 import { reactiveTable, type ColumnDef, type ReactiveTable } from './table.svelte.js';
+import { reactiveColumnVisibility } from './column-visibility.svelte.js';
 
 type Person = {
 	id: number;
@@ -98,65 +99,6 @@ describe('reactiveTable', () => {
 		expect(table.allRows[1].cells[3].value).toBe('Miami');
 	});
 
-	it('should set column visibility', () => {
-		// Initially all columns should be visible
-		expect(table.visibleColumns).toHaveLength(4);
-		expect(table.headers).toHaveLength(4);
-
-		// Hide the age column
-		table.setColumnVisibility('age', false);
-
-		// Now only 3 columns should be visible
-		expect(table.visibleColumns).toHaveLength(3);
-		expect(table.headers).toHaveLength(3);
-		expect(table.headers).toEqual(['ID', 'Name', 'City']);
-
-		// Check that rows only have cells for visible columns
-		expect(table.allRows[0].cells).toHaveLength(3);
-		expect(table.allRows[0].cells.find((cell) => cell.key === 'age')).toBeUndefined();
-
-		// Make the age column visible again
-		table.setColumnVisibility('age', true);
-
-		// Now all 4 columns should be visible again
-		expect(table.visibleColumns).toHaveLength(4);
-		expect(table.headers).toHaveLength(4);
-	});
-
-	it('should toggle column visibility', () => {
-		// Initially all columns should be visible
-		expect(table.visibleColumns).toHaveLength(4);
-
-		// Toggle the city column off
-		table.toggleColumnVisibility('city');
-
-		// Now only 3 columns should be visible
-		expect(table.visibleColumns).toHaveLength(3);
-		expect(table.headers).toEqual(['ID', 'Name', 'Age']);
-
-		// Toggle the city column back on
-		table.toggleColumnVisibility('city');
-
-		// Now all 4 columns should be visible again
-		expect(table.visibleColumns).toHaveLength(4);
-		expect(table.headers).toEqual(['ID', 'Name', 'Age', 'City']);
-	});
-
-	it('should handle multiple column visibility changes', () => {
-		// Hide two columns
-		table.setColumnVisibility('age', false);
-		table.setColumnVisibility('city', false);
-
-		// Now only 2 columns should be visible
-		expect(table.visibleColumns).toHaveLength(2);
-		expect(table.headers).toEqual(['ID', 'Name']);
-
-		// Check that row cells are updated accordingly
-		expect(table.allRows[0].cells).toHaveLength(2);
-		expect(table.allRows[0].cells[0].key).toBe('id');
-		expect(table.allRows[0].cells[1].key).toBe('name');
-	});
-
 	it('should update when column definitions are changed', () => {
 		const newColumns: ColumnDef<Person>[] = [
 			{ accessor: 'id', header: 'Identifier', isIdentifier: true },
@@ -169,7 +111,7 @@ describe('reactiveTable', () => {
 
 		// Should now have 3 columns with new headers
 		expect(table.columnDefs).toEqual(newColumns);
-		expect(table.visibleColumns).toHaveLength(3);
+		expect(table.columns).toHaveLength(3);
 		expect(table.headers).toEqual(['Identifier', 'Full Name', 'Years']);
 
 		// Check that rows are updated with the new structure
@@ -178,27 +120,6 @@ describe('reactiveTable', () => {
 		expect(table.allRows[0].cells[1].key).toBe('name');
 		expect(table.allRows[0].cells[2].key).toBe('age');
 		expect(table.allRows[0].cells.find((cell) => cell.key === 'city')).toBeUndefined();
-	});
-
-	it('should initialize with column visibility settings', () => {
-		// Create a table with some invisible columns
-		const columnsWithVisibility: ColumnDef<Person>[] = [
-			{ accessor: 'id', header: 'ID', isIdentifier: true },
-			{ accessor: 'name', header: 'Name' },
-			{ accessor: 'age', header: 'Age', visible: false },
-			{ accessor: 'city', header: 'City', visible: false }
-		];
-
-		const tableWithVisibility = reactiveTable(sampleData, columnsWithVisibility);
-
-		// Should only show two columns
-		expect(tableWithVisibility.visibleColumns).toHaveLength(2);
-		expect(tableWithVisibility.headers).toEqual(['ID', 'Name']);
-
-		// Row cells should only include visible columns
-		expect(tableWithVisibility.allRows[0].cells).toHaveLength(2);
-		expect(tableWithVisibility.allRows[0].cells[0].key).toBe('id');
-		expect(tableWithVisibility.allRows[0].cells[1].key).toBe('name');
 	});
 
 	it('should handle zero (0) as a valid identifier value', () => {
@@ -264,6 +185,31 @@ describe('reactiveTable', () => {
 		);
 	});
 
+	it('should correctly normalize columns and provide access via allColumns', () => {
+		// Create columns with mixed isIdentifier settings
+		const mixedColumns: ColumnDef<Person>[] = [
+			{ accessor: 'id', header: 'ID', isIdentifier: true },
+			{ accessor: 'name', header: 'Name' }, // No isIdentifier (should default to false)
+			{ accessor: 'age', header: 'Age', isIdentifier: false }
+		];
+
+		const tableWithMixedColumns = reactiveTable(sampleData, mixedColumns);
+
+		// Check that allColumns property contains normalized columns with defaults applied
+		expect(tableWithMixedColumns.allColumns).toHaveLength(3);
+
+		// Verify isIdentifier property is correctly set for each column
+		expect(tableWithMixedColumns.allColumns[0].isIdentifier).toBe(true);
+		expect(tableWithMixedColumns.allColumns[1].isIdentifier).toBe(false); // Default applied
+		expect(tableWithMixedColumns.allColumns[2].isIdentifier).toBe(false);
+
+		// Check accessor and header were preserved
+		expect(tableWithMixedColumns.allColumns[0].accessor).toBe('id');
+		expect(tableWithMixedColumns.allColumns[0].header).toBe('ID');
+		expect(tableWithMixedColumns.allColumns[1].accessor).toBe('name');
+		expect(tableWithMixedColumns.allColumns[1].header).toBe('Name');
+	});
+
 	it('should add pagination feature when option is provided', () => {
 		const tableWithPagination = reactiveTable(sampleData, columns, {
 			pagination: reactivePagination({ pageSize: 2 })
@@ -286,38 +232,15 @@ describe('reactiveTable', () => {
 		expect(emptyTableWithPagination.rows).toHaveLength(0);
 	});
 
-	it('should provide access to normalized columns with default values', () => {
-		// This test accesses the columns property to increase coverage for the columns getter
-		expect(table.columns).toBeDefined();
-		expect(table.columns).toHaveLength(4);
-
-		// Verify the column structure including default properties
-		expect(table.columns[0]).toEqual({
-			accessor: 'id',
-			header: 'ID',
-			isIdentifier: true,
-			visible: true
+	it('should add column visibility feature when option is provided', () => {
+		const tableWithColumnVisvibility = reactiveTable(sampleData, columns, {
+			columnVisibility: reactiveColumnVisibility({
+				hiddenColumns: ['age']
+			})
 		});
 
-		expect(table.columns[1]).toEqual({
-			accessor: 'name',
-			header: 'Name',
-			isIdentifier: false,
-			visible: true
-		});
-
-		// Test that changes to columnDefs are reflected in columns
-		table.columnDefs = [
-			{ accessor: 'id', header: 'ID', isIdentifier: true },
-			{ accessor: 'name', header: 'Full Name', visible: false }
-		];
-
-		expect(table.columns).toHaveLength(2);
-		expect(table.columns[1]).toEqual({
-			accessor: 'name',
-			header: 'Full Name',
-			isIdentifier: false,
-			visible: false
-		});
+		expect(tableWithColumnVisvibility.columnVisibility).toBeDefined();
+		expect(tableWithColumnVisvibility.columnVisibility.hiddenColumns).toEqual(['age']);
+		expect(tableWithColumnVisvibility.columns).toHaveLength(3);
 	});
 });

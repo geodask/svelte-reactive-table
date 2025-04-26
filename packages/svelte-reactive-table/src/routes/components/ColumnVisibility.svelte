@@ -1,17 +1,25 @@
 <script lang="ts">
-	import { reactiveTable } from '$lib/index.js';
+	import { reactiveColumnVisibility, reactiveTable } from '$lib/index.js';
 	import { initialData, type Person } from './data.js';
 
 	// Toggle column visibility example
-	const visibilityTable = reactiveTable(initialData, [
-		{ accessor: 'id', header: 'ID', isIdentifier: true },
-		{ accessor: 'name', header: 'Name' },
-		{ accessor: 'age', header: 'Age' },
-		{ accessor: 'city', header: 'City' }
-	]);
+	const visibilityTable = reactiveTable(
+		initialData,
+		[
+			{ accessor: 'id', header: 'ID', isIdentifier: true },
+			{ accessor: 'name', header: 'Name' },
+			{ accessor: 'age', header: 'Age' },
+			{ accessor: 'city', header: 'City' }
+		],
+		{
+			columnVisibility: reactiveColumnVisibility({
+				hiddenColumns: []
+			})
+		}
+	);
 
 	function toggleColumn(accessor: keyof Person) {
-		visibilityTable.toggleColumnVisibility(accessor);
+		visibilityTable.columnVisibility.toggleColumnVisibility(accessor);
 	}
 </script>
 
@@ -21,17 +29,17 @@
 	<div class="mb-6">
 		<p class="text-sm text-gray-600 mb-3">Select which columns to display in the table:</p>
 		<div class="flex flex-wrap gap-2">
-			{#each visibilityTable.columns as column}
+			{#each visibilityTable.allColumns as column}
 				<button
 					class="px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
-            {column.visible
+            {visibilityTable.columnVisibility.isColumnVisible(column.accessor)
 						? 'bg-emerald-100 text-emerald-800 border border-emerald-300 hover:bg-emerald-200'
 						: 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200'}"
 					onclick={() => toggleColumn(column.accessor)}
 				>
 					<div class="flex items-center gap-2">
 						<span class="w-4 h-4 flex items-center justify-center">
-							{#if column.visible}
+							{#if visibilityTable.columnVisibility.isColumnVisible(column.accessor)}
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 20 20"
@@ -78,14 +86,14 @@
 					</tr>
 				</thead>
 				<tbody class="divide-y divide-gray-200">
-					{#each visibilityTable.allRows as row}
+					{#each visibilityTable.rows as row}
 						<tr class="hover:bg-gray-50 transition-colors duration-150 ease-in-out">
 							{#each row.cells as cell}
 								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{cell.value}</td>
 							{/each}
 						</tr>
 					{/each}
-					{#if visibilityTable.allRows.length === 0}
+					{#if visibilityTable.rows.length === 0}
 						<tr>
 							<td
 								colspan={visibilityTable.headers.length}

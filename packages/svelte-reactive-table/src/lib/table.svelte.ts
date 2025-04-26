@@ -4,6 +4,11 @@ import {
 	type ReactivePaginationFactory,
 	type ReactivePaginationOutput
 } from './pagination.svelte.js';
+import {
+	type ReactiveColumnVisibility,
+	type ReactiveColumnVisibilityFactory,
+	type ReactiveColumnVisibilityOutput
+} from './column-visibility.svelte.js';
 
 // --------- Basic Data Types ---------
 
@@ -24,11 +29,6 @@ export type ColumnDef<T> = {
 	 * Text to display in the column header
 	 */
 	header: string;
-	/**
-	 * Controls whether the column is shown in the table
-	 * If not specified, defaults to `true`
-	 */
-	visible?: boolean;
 };
 
 /**
@@ -77,6 +77,7 @@ export type Row<T> = {
  */
 export type TableOptions<T> = {
 	pagination?: ReactivePaginationFactory<T>;
+	columnVisibility?: ReactiveColumnVisibilityFactory<T>;
 	// Future options can be added here
 };
 
@@ -92,6 +93,18 @@ type PaginationFeature<T> = {
 	 * The pagination object that returns the current state of pagination and provides methods to control it.
 	 */
 	pagination: ReactivePagination<T>;
+};
+
+/**
+ * Feature type for column visibility in a reactive table.
+ *
+ * @internal
+ */
+type ColumnVisibilityFeature<T> = {
+	/**
+	 * The column visibility object that returns the current state of column visibility and provides methods to control it.
+	 */
+	columnVisibility: ReactiveColumnVisibility<T>;
 };
 
 // --------- Core Table Types ---------
@@ -117,7 +130,11 @@ type ReactiveTableBase<T> = {
 	 */
 	headers: string[];
 	/**
-	 * The current columns of the table
+	 * All columns with their complete definitions
+	 */
+	allColumns: Column<T>[];
+	/**
+	 * The currently visible columns
 	 */
 	columns: Column<T>[];
 	/**
@@ -128,22 +145,6 @@ type ReactiveTableBase<T> = {
 	 * The currently visible rows of the table after applying features e.g. pagination, sorting, etc.
 	 */
 	rows: Row<T>[];
-	/**
-	 * The currently visible columns.
-	 * This is a subset of the columns array, based on the current visibility settings.
-	 */
-	visibleColumns: ColumnDef<T>[];
-	/**
-	 * Set the visibility of a specific column
-	 * @param accessor - The column accessor key
-	 * @param isVisible - Whether the column should be visible
-	 */
-	setColumnVisibility(accessor: keyof T, isVisible: boolean): void;
-	/**
-	 * Toggle the visibility of a specific column
-	 * @param accessor - The column accessor key
-	 */
-	toggleColumnVisibility(accessor: keyof T): void;
 };
 
 /**
@@ -153,7 +154,10 @@ type ReactiveTableBase<T> = {
  * @template Options - Configuration options for the table, defaults to empty object
  */
 export type ReactiveTable<T, Options extends TableOptions<T> = {}> = ReactiveTableBase<T> &
-	(Options['pagination'] extends ReactivePaginationFactory<T> ? PaginationFeature<T> : {});
+	(Options['pagination'] extends ReactivePaginationFactory<T> ? PaginationFeature<T> : {}) &
+	(Options['columnVisibility'] extends ReactiveColumnVisibilityFactory<T>
+		? ColumnVisibilityFeature<T>
+		: {});
 
 /**
  * Creates a reactive table that automatically updates with data changes.
@@ -170,11 +174,12 @@ export function reactiveTable<T, Options extends TableOptions<T> = {}>(
 ): ReactiveTable<T, Options> {
 	let _data = $state(initialData);
 	let _columnDefs = $state(columnDefs);
+	const items = $derived(_data);
 
-	let columns: Column<T>[] = $derived(
+	// Create normalized columns with defaults applied
+	const allColumns: Column<T>[] = $derived(
 		_columnDefs.map((col) => ({
 			...col,
-			visible: col.visible ?? true,
 			isIdentifier: col.isIdentifier ?? false
 		}))
 	);
@@ -187,18 +192,22 @@ export function reactiveTable<T, Options extends TableOptions<T> = {}>(
 		return identifier;
 	});
 
-	const items = $derived(_data);
+	let getVisibleColumns = () => allColumns;
 
-	// Only include visible columns (defaulting to true if not specified)
-	const visibleColumns = $derived(columns.filter((column) => column.visible !== false));
+	// Add column visibility if option is provided
+	let columnVisibilityOutput: ReactiveColumnVisibilityOutput<T> | undefined;
+	if (options.columnVisibility) {
+		columnVisibilityOutput = options.columnVisibility(() => allColumns);
+		getVisibleColumns = () => columnVisibilityOutput!.columns;
+	}
 
-	const headers = $derived<string[]>(visibleColumns.map((column) => column.header));
+	const headers = $derived<string[]>(getVisibleColumns().map((column) => column.header));
 
 	const allRows = $derived.by(() => {
 		return items.map((item) => {
-			const identifierAccessor = identifierColumn?.accessor || columns[0].accessor;
+			const identifierAccessor = identifierColumn?.accessor || allColumns[0].accessor;
 
-			if (item[identifierAccessor] === undefined || item[identifierAccessor] === null) {
+			if (!item[identifierAccessor]) {
 				log.error(
 					messages.missing_identifier_value(String(identifierAccessor)),
 					$state.snapshot(item)
@@ -208,7 +217,7 @@ export function reactiveTable<T, Options extends TableOptions<T> = {}>(
 			return {
 				id: item[identifierAccessor],
 				original: item,
-				cells: visibleColumns.map((column) => {
+				cells: getVisibleColumns().map((column) => {
 					return {
 						key: column.accessor,
 						value: item[column.accessor]
@@ -217,24 +226,6 @@ export function reactiveTable<T, Options extends TableOptions<T> = {}>(
 			};
 		});
 	});
-
-	function setColumnVisibility(accessor: keyof T, isVisible: boolean) {
-		columns = columns.map((col) => {
-			if (col.accessor === accessor) {
-				return { ...col, visible: isVisible };
-			}
-			return col;
-		});
-	}
-
-	function toggleColumnVisibility(accessor: keyof T) {
-		columns = columns.map((col) => {
-			if (col.accessor === accessor) {
-				return { ...col, visible: col.visible === false ? true : false };
-			}
-			return col;
-		});
-	}
 
 	// Apply features and get the processed rows
 	// Start with all rows
@@ -266,24 +257,21 @@ export function reactiveTable<T, Options extends TableOptions<T> = {}>(
 		get columnDefs() {
 			return _columnDefs;
 		},
-		get columns() {
-			return columns;
-		},
-		get headers() {
-			return headers;
+		get allColumns() {
+			return allColumns;
 		},
 		get allRows() {
 			return allRows;
 		},
+		get columns() {
+			return getVisibleColumns();
+		},
+		get headers() {
+			return headers;
+		},
 		get rows() {
 			return getDisplayRows();
-		},
-		get visibleColumns() {
-			return visibleColumns;
-		},
-		// Column visibility methods
-		setColumnVisibility,
-		toggleColumnVisibility
+		}
 	};
 
 	// Add features to the table
@@ -293,6 +281,12 @@ export function reactiveTable<T, Options extends TableOptions<T> = {}>(
 	if (paginationOutput) {
 		(tableWithFeatures as ReactiveTableBase<T> & PaginationFeature<T>).pagination =
 			paginationOutput.state;
+	}
+
+	// Add column visibility object to the table if it was provided
+	if (columnVisibilityOutput) {
+		(tableWithFeatures as ReactiveTableBase<T> & ColumnVisibilityFeature<T>).columnVisibility =
+			columnVisibilityOutput.state;
 	}
 
 	return tableWithFeatures;
