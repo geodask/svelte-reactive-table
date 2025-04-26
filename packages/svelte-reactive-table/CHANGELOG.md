@@ -1,5 +1,29 @@
 # svelte-reactive-table
 
+## 0.3.0
+
+### Minor Changes
+
+- 8df363c: feat: add column visibility as an opt-in feature
+
+  - Introduced new `reactiveColumnVisibility` function
+  - Added ability to manage column visibility (when enabled) through the table's `columnVisibility` property with methods for toggling, showing, and hiding columns
+
+  BREAKING: Column visibility API has changed - `visible` property has been removed from column definitions, visibility methods are now moved to the `columnVisibility` object, and some property names have been changed
+
+- 5b60ac5: refactor: simplify API by exposing paginated rows through table.rows and prepare for future features
+
+  This refactoring improves the pagination API by moving row management from the pagination component into the core table. Instead of accessing rows through `table.pagination.rows`, users now consistently use `table.rows` regardless of active features.
+
+  Key changes:
+
+  - Refactored internal pagination architecture to better separate concerns
+  - Created a more unified and intuitive API for accessing table rows
+  - Maintained all pagination functionality and state management
+  - Updated documentation and examples to reflect the new approach
+
+  **BREAKING CHANGE**: Applications using `table.pagination.rows` must now use `table.rows` instead.
+
 ## 0.2.2
 
 ### Patch Changes
