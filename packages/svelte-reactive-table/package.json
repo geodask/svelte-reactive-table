@@ -18,6 +18,12 @@
 		"typecheck": "svelte-check --tsconfig ./tsconfig.json",
 		"size": "pnpm build && size-limit"
 	},
+	"author": {
+		"name": "George Daskalakis",
+		"email": "george.dask97@gmail.com",
+		"url": "https://github.com/geodask"
+	},
+	"main": "dist/index.js",
 	"files": [
 		"dist",
 		"!dist/**/*.test.*",

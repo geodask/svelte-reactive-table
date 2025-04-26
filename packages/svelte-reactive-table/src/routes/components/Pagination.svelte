@@ -55,7 +55,7 @@
 			</div>
 
 			<div class="text-sm text-gray-600">
-				Showing <span class="font-medium">{table.pagination.rows.length}</span> of
+				Showing <span class="font-medium">{table.rows.length}</span> of
 				<span class="font-medium">{table.allRows.length}</span> items
 			</div>
 		</div>
@@ -73,14 +73,14 @@
 					</tr>
 				</thead>
 				<tbody class="divide-y divide-gray-200">
-					{#each table.pagination.rows as row, i}
+					{#each table.rows as row, i}
 						<tr class="hover:bg-gray-50 transition-colors duration-150 ease-in-out">
 							{#each row.cells as cell}
 								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{cell.value}</td>
 							{/each}
 						</tr>
 					{/each}
-					{#if table.pagination.rows.length === 0}
+					{#if table.rows.length === 0}
 						<tr>
 							<td
 								colspan={table.headers.length}

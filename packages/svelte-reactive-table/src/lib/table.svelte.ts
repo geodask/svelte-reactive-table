@@ -1,5 +1,9 @@
 import { log, messages } from './internal/logger/index.js';
-import { type ReactivePagination, type ReactivePaginationFactory } from './pagination.svelte.js';
+import {
+	type ReactivePagination,
+	type ReactivePaginationFactory,
+	type ReactivePaginationOutput
+} from './pagination.svelte.js';
 
 // --------- Basic Data Types ---------
 
@@ -121,11 +125,14 @@ type ReactiveTableBase<T> = {
 	 */
 	allRows: Row<T>[];
 	/**
+	 * The currently visible rows of the table after applying features e.g. pagination, sorting, etc.
+	 */
+	rows: Row<T>[];
+	/**
 	 * The currently visible columns.
 	 * This is a subset of the columns array, based on the current visibility settings.
 	 */
 	visibleColumns: ColumnDef<T>[];
-
 	/**
 	 * Set the visibility of a specific column
 	 * @param accessor - The column accessor key
@@ -229,6 +236,23 @@ export function reactiveTable<T, Options extends TableOptions<T> = {}>(
 		});
 	}
 
+	// Apply features and get the processed rows
+	// Start with all rows
+	let getDisplayRows = () => allRows;
+
+	// Add pagination if option is provided
+	let paginationOutput: ReactivePaginationOutput<T> | undefined;
+	if (options.pagination) {
+		paginationOutput = options.pagination(() => allRows);
+		getDisplayRows = () => paginationOutput!.rows;
+	}
+
+	// Future features would be applied here in the proper order:
+	// 1. Sorting would be applied to allRows
+	// 2. Pagination would be applied to the sorted rows
+	// 3. etc.
+
+	// Now create the table object with the proper rows getter
 	const table: ReactiveTableBase<T> = {
 		set data(value: T[]) {
 			_data = value;
@@ -251,6 +275,9 @@ export function reactiveTable<T, Options extends TableOptions<T> = {}>(
 		get allRows() {
 			return allRows;
 		},
+		get rows() {
+			return getDisplayRows();
+		},
 		get visibleColumns() {
 			return visibleColumns;
 		},
@@ -259,16 +286,14 @@ export function reactiveTable<T, Options extends TableOptions<T> = {}>(
 		toggleColumnVisibility
 	};
 
-	// Add features based on options
+	// Add features to the table
 	const tableWithFeatures = table as unknown as ReactiveTable<T, Options>;
 
-	// Add pagination if option is provided
-	if (options.pagination) {
+	// Add pagination object to the table if it was provided
+	if (paginationOutput) {
 		(tableWithFeatures as ReactiveTableBase<T> & PaginationFeature<T>).pagination =
-			options.pagination(() => allRows);
+			paginationOutput.state;
 	}
-
-	// Future feature additions can be added here
 
 	return tableWithFeatures;
 }

@@ -33,10 +33,6 @@ export type ReactivePagination<T> = {
 	 */
 	pageCount: number;
 	/**
-	 * The rows based on the current pagination settings
-	 */
-	rows: Row<T>[];
-	/**
 	 * Set the current page index
 	 * @param page - The new page index (0-based)
 	 */
@@ -68,37 +64,52 @@ export type ReactivePagination<T> = {
 };
 
 /**
+ * The type of the reactive pagination output
+ * @template T - The type of the data in the table
+ */
+export type ReactivePaginationOutput<T> = {
+	/**
+	 * The paginated rows
+	 */
+	rows: Row<T>[];
+	/**
+	 * The current pagination state
+	 */
+	state: ReactivePagination<T>;
+};
+
+/**
  * Factory function for creating a reactive pagination object
  */
-export type ReactivePaginationFactory<T> = (getAllRows: () => Row<T>[]) => ReactivePagination<T>;
+export type ReactivePaginationFactory<T> = (getRows: () => Row<T>[]) => ReactivePaginationOutput<T>;
 
 /**
  * Creates a pagination object that manages the current page, page size, and the rows that are currently visible
  *
  * @internal
  * @template T - The type of the data in the table
- * @param getAllRows - A function that returns all rows in the table
+ * @param getRows - A getter for the rows to be paginated
  * @param initialPagination - Initial pagination state
  * @returns A pagination object that manages the current page, page size, and the rows that are currently visible
  */
 function createPagination<T>(
-	getAllRows: () => Row<T>[],
+	getRows: () => Row<T>[],
 	initialPagination: Partial<Pagination>
-): ReactivePagination<T> {
+): ReactivePaginationOutput<T> {
 	let _pagination = $state<Pagination>({
 		page: initialPagination?.page ?? 0,
 		pageSize: initialPagination?.pageSize ?? 10
 	});
 
-	const allRows = $derived(getAllRows());
+	const rows = $derived(getRows());
 
-	const pageCount = $derived(Math.ceil(allRows.length / _pagination.pageSize));
+	const pageCount = $derived(Math.ceil(rows.length / _pagination.pageSize));
 	const startRowIndex = $derived(_pagination.page * _pagination.pageSize);
 	const endRowIndex = $derived(
-		Math.min((_pagination.page + 1) * _pagination.pageSize, allRows.length)
+		Math.min((_pagination.page + 1) * _pagination.pageSize, rows.length)
 	);
 
-	const rows = $derived(allRows.slice(startRowIndex, endRowIndex));
+	const paginatedRows = $derived(rows.slice(startRowIndex, endRowIndex));
 
 	function setPage(page: number) {
 		if (page < 0 || page >= pageCount) {
@@ -144,26 +155,31 @@ function createPagination<T>(
 			page: resetpage ? 0 : _pagination.page
 		};
 	}
-	return {
-		get pageCount() {
-			return pageCount;
-		},
-		get page() {
-			return _pagination.page;
-		},
-		get pageSize() {
-			return _pagination.pageSize;
-		},
+
+	const paginationOutput = {
 		get rows() {
-			return rows;
+			return paginatedRows;
 		},
-		setPage,
-		setPageSize,
-		nextPage,
-		previousPage,
-		firstPage,
-		lastPage
+		state: {
+			get pageCount() {
+				return pageCount;
+			},
+			get page() {
+				return _pagination.page;
+			},
+			get pageSize() {
+				return _pagination.pageSize;
+			},
+			setPage,
+			setPageSize,
+			nextPage,
+			previousPage,
+			firstPage,
+			lastPage
+		}
 	};
+
+	return paginationOutput;
 }
 
 /**
@@ -181,5 +197,5 @@ export function reactivePagination<T>(
 		pageSize: initialPagination?.pageSize ?? 10
 	};
 
-	return (getAllRows: () => Row<T>[]) => createPagination(getAllRows, options);
+	return (getRows: () => Row<T>[]) => createPagination(getRows, options);
 }

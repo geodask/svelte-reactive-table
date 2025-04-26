@@ -265,29 +265,25 @@ describe('reactiveTable', () => {
 	});
 
 	it('should add pagination feature when option is provided', () => {
-		// Test the pagination option code (lines 246-247 and 267-269)
 		const tableWithPagination = reactiveTable(sampleData, columns, {
 			pagination: reactivePagination({ pageSize: 2 })
 		});
 
-		// Verify pagination object was created and attached
 		expect(tableWithPagination.pagination).toBeDefined();
 		expect(tableWithPagination.pagination.pageSize).toBe(2);
-		expect(tableWithPagination.pagination.rows).toHaveLength(2); // First 2 rows
-		expect(tableWithPagination.pagination.pageCount).toBe(2); // 3 items with page size 2 = 2 pages
+		expect(tableWithPagination.pagination.pageCount).toBe(2);
+		expect(tableWithPagination.rows).toHaveLength(2); // First 2 rows
 	});
 
 	it('should handle pagination with empty data', () => {
-		const emptyTableWithPagination = reactiveTable(
-			[], // Empty data array
-			columns,
-			{ pagination: reactivePagination({ pageSize: 5 }) }
-		);
+		const emptyTableWithPagination = reactiveTable([], columns, {
+			pagination: reactivePagination({ pageSize: 5 })
+		});
 
 		// Verify pagination object works with empty data
 		expect(emptyTableWithPagination.pagination).toBeDefined();
-		expect(emptyTableWithPagination.pagination.rows).toHaveLength(0);
 		expect(emptyTableWithPagination.pagination.pageCount).toBe(0);
+		expect(emptyTableWithPagination.rows).toHaveLength(0);
 	});
 
 	it('should provide access to normalized columns with default values', () => {

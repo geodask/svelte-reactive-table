@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { reactivePagination, type ReactivePagination } from './pagination.svelte.js';
+import { reactivePagination, type ReactivePaginationOutput } from './pagination.svelte.js';
 import type { Row } from './table.svelte.js';
 
 // Define a simple type for testing
@@ -110,112 +110,110 @@ const createTestRows = (): Row<TestItem>[] => [
 
 describe('reactivePagination', () => {
 	let rows: Row<TestItem>[];
-	let getAllRows: () => Row<TestItem>[];
-	let pagination: ReactivePagination<TestItem>;
+	let paginationOutput: ReactivePaginationOutput<TestItem>;
 
 	beforeEach(() => {
 		rows = createTestRows();
-		getAllRows = () => rows;
-		pagination = reactivePagination<TestItem>({ pageSize: 5 })(getAllRows);
+		paginationOutput = reactivePagination<TestItem>({ pageSize: 5 })(() => rows);
 	});
 
 	it('should initialize with correct default values', () => {
-		expect(pagination.page).toBe(0);
-		expect(pagination.pageSize).toBe(5);
-		expect(pagination.pageCount).toBe(3); // 12 items with page size 5 = 3 pages
-		expect(pagination.rows).toHaveLength(5);
-		expect(pagination.rows[0].id).toBe(1);
-		expect(pagination.rows[4].id).toBe(5);
+		expect(paginationOutput.state.page).toBe(0);
+		expect(paginationOutput.state.pageSize).toBe(5);
+		expect(paginationOutput.state.pageCount).toBe(3); // 12 items with page size 5 = 3 pages
+		expect(paginationOutput.rows).toHaveLength(5);
+		expect(paginationOutput.rows[0].id).toBe(1);
+		expect(paginationOutput.rows[4].id).toBe(5);
 	});
 
 	it('should navigate to the next page', () => {
-		const result = pagination.nextPage();
+		const result = paginationOutput.state.nextPage();
 
 		expect(result).toBe(true);
-		expect(pagination.page).toBe(1);
-		expect(pagination.rows).toHaveLength(5);
-		expect(pagination.rows[0].id).toBe(6);
-		expect(pagination.rows[4].id).toBe(10);
+		expect(paginationOutput.state.page).toBe(1);
+		expect(paginationOutput.rows).toHaveLength(5);
+		expect(paginationOutput.rows[0].id).toBe(6);
+		expect(paginationOutput.rows[4].id).toBe(10);
 	});
 
 	it('should navigate to the previous page', () => {
-		pagination.nextPage(); // Go to page 1
-		const result = pagination.previousPage();
+		paginationOutput.state.nextPage(); // Go to page 1
+		const result = paginationOutput.state.previousPage();
 
 		expect(result).toBe(true);
-		expect(pagination.page).toBe(0);
-		expect(pagination.rows).toHaveLength(5);
-		expect(pagination.rows[0].id).toBe(1);
+		expect(paginationOutput.state.page).toBe(0);
+		expect(paginationOutput.rows).toHaveLength(5);
+		expect(paginationOutput.rows[0].id).toBe(1);
 	});
 
 	it('should not navigate to the previous page when on the first page', () => {
-		const result = pagination.previousPage();
+		const result = paginationOutput.state.previousPage();
 
 		expect(result).toBe(false);
-		expect(pagination.page).toBe(0);
+		expect(paginationOutput.state.page).toBe(0);
 	});
 
 	it('should not navigate to the next page when on the last page', () => {
-		pagination.lastPage(); // Go to last page
-		const result = pagination.nextPage();
+		paginationOutput.state.lastPage(); // Go to last page
+		const result = paginationOutput.state.nextPage();
 
 		expect(result).toBe(false);
-		expect(pagination.page).toBe(2); // Still on last page
+		expect(paginationOutput.state.page).toBe(2); // Still on last page
 	});
 
 	it('should go to the first page', () => {
-		pagination.nextPage(); // Go to page 1
-		pagination.firstPage();
+		paginationOutput.state.nextPage(); // Go to page 1
+		paginationOutput.state.firstPage();
 
-		expect(pagination.page).toBe(0);
-		expect(pagination.rows[0].id).toBe(1);
+		expect(paginationOutput.state.page).toBe(0);
+		expect(paginationOutput.rows[0].id).toBe(1);
 	});
 
 	it('should go to the last page', () => {
-		pagination.lastPage();
+		paginationOutput.state.lastPage();
 
-		expect(pagination.page).toBe(2);
-		expect(pagination.rows).toHaveLength(2); // Only 2 items on the last page
-		expect(pagination.rows[0].id).toBe(11);
-		expect(pagination.rows[1].id).toBe(12);
+		expect(paginationOutput.state.page).toBe(2);
+		expect(paginationOutput.rows).toHaveLength(2); // Only 2 items on the last page
+		expect(paginationOutput.rows[0].id).toBe(11);
+		expect(paginationOutput.rows[1].id).toBe(12);
 	});
 
 	it('should set the page directly', () => {
-		pagination.setPage(1);
+		paginationOutput.state.setPage(1);
 
-		expect(pagination.page).toBe(1);
-		expect(pagination.rows[0].id).toBe(6);
+		expect(paginationOutput.state.page).toBe(1);
+		expect(paginationOutput.rows[0].id).toBe(6);
 	});
 
 	it('should not set the page outside of valid range', () => {
-		pagination.setPage(5); // Invalid page
+		paginationOutput.state.setPage(5); // Invalid page
 
-		expect(pagination.page).toBe(0); // Should remain on the first page
+		expect(paginationOutput.state.page).toBe(0); // Should remain on the first page
 	});
 
 	it('should set the page size', () => {
-		pagination.setPageSize(3);
+		paginationOutput.state.setPageSize(3);
 
-		expect(pagination.pageSize).toBe(3);
-		expect(pagination.pageCount).toBe(4); // 12 items with page size 3 = 4 pages
-		expect(pagination.page).toBe(0); // Should reset to first page by default
-		expect(pagination.rows).toHaveLength(3);
+		expect(paginationOutput.state.pageSize).toBe(3);
+		expect(paginationOutput.state.pageCount).toBe(4); // 12 items with page size 3 = 4 pages
+		expect(paginationOutput.state.page).toBe(0); // Should reset to first page by default
+		expect(paginationOutput.rows).toHaveLength(3);
 	});
 
 	it('should set the page size without resetting page when specified', () => {
-		pagination.nextPage(); // Go to page 1
-		pagination.setPageSize(3, false); // Don't reset page
+		paginationOutput.state.nextPage(); // Go to page 1
+		paginationOutput.state.setPageSize(3, false); // Don't reset page
 
-		expect(pagination.pageSize).toBe(3);
-		expect(pagination.page).toBe(1); // Should remain on page 1
-		expect(pagination.rows).toHaveLength(3);
-		expect(pagination.rows[0].id).toBe(4);
+		expect(paginationOutput.state.pageSize).toBe(3);
+		expect(paginationOutput.state.page).toBe(1); // Should remain on page 1
+		expect(paginationOutput.rows).toHaveLength(3);
+		expect(paginationOutput.rows[0].id).toBe(4);
 	});
 
 	it('should not set page size to invalid values', () => {
-		pagination.setPageSize(0); // Invalid page size
+		paginationOutput.state.setPageSize(0); // Invalid page size
 
-		expect(pagination.pageSize).toBe(5); // Should remain with the original page size
+		expect(paginationOutput.state.pageSize).toBe(5); // Should remain with the original page size
 	});
 
 	// Add new test case to increase coverage
@@ -223,52 +221,52 @@ describe('reactivePagination', () => {
 		// This test specifically targets the implementation at lines 89-90
 		const newPageSize = 4;
 
-		pagination.setPageSize(newPageSize);
+		paginationOutput.state.setPageSize(newPageSize);
 
 		// Verify that pageSize was updated
-		expect(pagination.pageSize).toBe(newPageSize);
+		expect(paginationOutput.state.pageSize).toBe(newPageSize);
 
 		// Verify that the rows property reflects the new page size
-		expect(pagination.rows.length).toBe(4);
+		expect(paginationOutput.rows.length).toBe(4);
 
 		// Verify page was reset to 0 (default behavior)
-		expect(pagination.page).toBe(0);
+		expect(paginationOutput.state.page).toBe(0);
 
 		// Also test without resetting the page
-		pagination.nextPage(); // Go to page 1
-		const currentPage = pagination.page;
-		pagination.setPageSize(6, false);
+		paginationOutput.state.nextPage(); // Go to page 1
+		const currentPage = paginationOutput.state.page;
+		paginationOutput.state.setPageSize(6, false);
 
 		// Page should be preserved
-		expect(pagination.page).toBe(currentPage);
-		expect(pagination.pageSize).toBe(6);
+		expect(paginationOutput.state.page).toBe(currentPage);
+		expect(paginationOutput.state.pageSize).toBe(6);
 	});
 
 	it('should reflect changes in the source data', () => {
 		// Remove two items
 		rows.splice(0, 2);
 
-		expect(pagination.pageCount).toBe(2); // 10 items with page size 5 = 2 pages
-		expect(pagination.rows).toHaveLength(5);
-		expect(pagination.rows[0].id).toBe(3); // First item now has id 3
+		expect(paginationOutput.state.pageCount).toBe(2); // 10 items with page size 5 = 2 pages
+		expect(paginationOutput.rows).toHaveLength(5);
+		expect(paginationOutput.rows[0].id).toBe(3); // First item now has id 3
 	});
 
 	it('should handle empty data', () => {
 		rows.splice(0, rows.length); // Clear all rows
 
-		expect(pagination.pageCount).toBe(0);
-		expect(pagination.rows).toHaveLength(0);
+		expect(paginationOutput.state.pageCount).toBe(0);
+		expect(paginationOutput.rows).toHaveLength(0);
 	});
 
 	it('should initialize with custom pagination settings', () => {
 		const customPagination = reactivePagination<TestItem>({
 			page: 1,
 			pageSize: 3
-		})(getAllRows);
+		})(() => rows);
 
-		expect(customPagination.page).toBe(1);
-		expect(customPagination.pageSize).toBe(3);
-		expect(customPagination.pageCount).toBe(4);
+		expect(customPagination.state.page).toBe(1);
+		expect(customPagination.state.pageSize).toBe(3);
+		expect(customPagination.state.pageCount).toBe(4);
 		expect(customPagination.rows).toHaveLength(3);
 		expect(customPagination.rows[0].id).toBe(4);
 	});
