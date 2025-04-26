@@ -1,4 +1,4 @@
-import type { Column } from './table.svelte.js';
+import type { Column } from '../../core/table.svelte.js';
 
 /**
  * Column visibility state

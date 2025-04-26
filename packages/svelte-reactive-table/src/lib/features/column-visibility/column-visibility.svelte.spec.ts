@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { reactiveColumnVisibility } from './column-visibility.svelte';
-import type { Column } from './table.svelte.js';
+import { reactiveColumnVisibility } from './index.js';
+import type { Column } from '../../core/types.js';
 
 // Define mock data and columns for testing
 type TestData = {

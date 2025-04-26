@@ -1,5 +1,5 @@
-import { log, messages } from './internal/logger/index.js';
-import type { Row } from './table.svelte.js';
+import { log, messages } from '../../internal/logger/index.js';
+import type { Row } from '../../core/table.svelte.js';
 
 /**
  * Pagination state

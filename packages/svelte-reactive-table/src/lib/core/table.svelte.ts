@@ -1,16 +1,38 @@
-import { log, messages } from './internal/logger/index.js';
-import {
-	type ReactivePagination,
-	type ReactivePaginationFactory,
-	type ReactivePaginationOutput
-} from './pagination.svelte.js';
-import {
-	type ReactiveColumnVisibility,
-	type ReactiveColumnVisibilityFactory,
-	type ReactiveColumnVisibilityOutput
-} from './column-visibility.svelte.js';
+import { log, messages } from '../internal/logger/index.js';
+import type {
+	ReactivePagination,
+	ReactivePaginationFactory,
+	ReactivePaginationOutput
+} from '../features/pagination/index.js';
+import type {
+	ReactiveColumnVisibility,
+	ReactiveColumnVisibilityFactory,
+	ReactiveColumnVisibilityOutput
+} from '../features/column-visibility/index.js';
 
-// --------- Basic Data Types ---------
+/**
+ * Feature type for pagination in a reactive table.
+ *
+ * @internal
+ */
+export type PaginationFeature<T> = {
+	/**
+	 * The pagination object that returns the current state of pagination and provides methods to control it.
+	 */
+	pagination: ReactivePagination<T>;
+};
+
+/**
+ * Feature type for column visibility in a reactive table.
+ *
+ * @internal
+ */
+export type ColumnVisibilityFeature<T> = {
+	/**
+	 * The column visibility object that returns the current state of column visibility and provides methods to control it.
+	 */
+	columnVisibility: ReactiveColumnVisibility<T>;
+};
 
 /**
  * Represents the definition of a column in the table.
@@ -70,8 +92,6 @@ export type Row<T> = {
 	cells: Cell<T>[];
 };
 
-// --------- Configuration Types ---------
-
 /**
  * Configuration options for the table
  */
@@ -81,40 +101,12 @@ export type TableOptions<T> = {
 	// Future options can be added here
 };
 
-// --------- Feature Types ---------
-
-/**
- * Feature type for pagination in a reactive table.
- *
- * @internal
- */
-type PaginationFeature<T> = {
-	/**
-	 * The pagination object that returns the current state of pagination and provides methods to control it.
-	 */
-	pagination: ReactivePagination<T>;
-};
-
-/**
- * Feature type for column visibility in a reactive table.
- *
- * @internal
- */
-type ColumnVisibilityFeature<T> = {
-	/**
-	 * The column visibility object that returns the current state of column visibility and provides methods to control it.
-	 */
-	columnVisibility: ReactiveColumnVisibility<T>;
-};
-
-// --------- Core Table Types ---------
-
 /**
  * Base type for a reactive table.
  *
  * @internal
  */
-type ReactiveTableBase<T> = {
+export type ReactiveTableBase<T> = {
 	/**
 	 * The current data array. This is the source of truth for the table.
 	 * It is reactive, meaning that any changes to this array will automatically update the table.

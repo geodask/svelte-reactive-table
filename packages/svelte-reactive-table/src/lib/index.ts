@@ -1,14 +1,14 @@
-export { reactiveColumnVisibility } from './column-visibility.svelte.js';
+export { reactiveColumnVisibility } from './features/column-visibility/index.js';
 export type {
 	ColumnVisibility,
 	ReactiveColumnVisibility,
 	ReactiveColumnVisibilityFactory
-} from './column-visibility.svelte.js';
-export { reactivePagination } from './pagination.svelte.js';
+} from './features/column-visibility/index.js';
+export { reactivePagination } from './features/pagination/index.js';
 export type {
 	Pagination,
 	ReactivePagination,
 	ReactivePaginationFactory
-} from './pagination.svelte.js';
-export { reactiveTable } from './table.svelte.js';
-export type { Cell, Column, ColumnDef, ReactiveTable, Row, TableOptions } from './table.svelte.js';
+} from './features/pagination/index.js';
+export { reactiveTable } from './core/index.js';
+export type { Cell, Column, ColumnDef, ReactiveTable, Row, TableOptions } from './core/index.js';

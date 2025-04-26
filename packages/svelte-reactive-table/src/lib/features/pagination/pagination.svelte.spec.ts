@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { reactivePagination, type ReactivePaginationOutput } from './pagination.svelte.js';
-import type { Row } from './table.svelte.js';
+import { reactivePagination, type ReactivePaginationOutput } from './index.js';
+import type { Row } from '../../core/types.js';
 
 // Define a simple type for testing
 type TestItem = {

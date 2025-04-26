@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { reactivePagination } from './pagination.svelte.js';
-import { reactiveTable, type ColumnDef, type ReactiveTable } from './table.svelte.js';
-import { reactiveColumnVisibility } from './column-visibility.svelte.js';
+import { reactivePagination } from '../features/pagination/index.js';
+import { reactiveTable, type ColumnDef, type ReactiveTable } from './index.js';
+import { reactiveColumnVisibility } from '../features/column-visibility/index.js';
 
 type Person = {
 	id: number;
