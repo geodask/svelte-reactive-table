@@ -15,8 +15,8 @@ This guide will help you install the Svelte Reactive Table library in your Svelt
 
 ## Prerequisites
 
-- A Svelte project (version 4.0.0 or higher, with full support for Svelte 5)
-- Node.js and npm (or pnpm/yarn)
+- Node.js and any package manager (`npm`, `pnpm`, `yarn`, or `bun`)
+- Svelte version `5.0.0` or higher
 
 ## Installing the Package
 

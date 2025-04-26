@@ -1,9 +1,13 @@
 <script lang="ts">
+	import { useClipboard } from '$shared/lib/clipboard.svelte';
 	import type { Snippet } from 'svelte';
 	import { ScrollArea } from '../shadcn/scroll-area';
 
+	import { Check, Copy } from '@lucide/svelte';
 	import { Button } from '../shadcn/button';
-	import { Copy } from '@lucide/svelte';
+	import { fade } from 'svelte/transition';
+
+	const clipboard = useClipboard();
 
 	const { children }: { children: Snippet } = $props();
 </script>
@@ -16,11 +20,24 @@
 		</Button>
 	</div> -->
 	<ScrollArea orientation="both" class="relative">
-		<Button variant="ghost" size="icon" class="size-8 z-10 absolute bg-muted right-2 top-2">
-			<Copy />
+		<Button
+			onclick={() => clipboard.copy()}
+			variant="ghost"
+			size="icon"
+			class="size-8 z-10 absolute bg-muted right-2 top-2"
+		>
+			{#if clipboard.copied}
+				<div in:fade={{ duration: 80 }}>
+					<Check class="text-emerald-500" />
+				</div>
+			{:else}
+				<div in:fade={{ duration: 200 }}>
+					<Copy />
+				</div>
+			{/if}
 		</Button>
 
-		<pre class="not-prose shiki max-h-[32rem] flex shrink">
+		<pre class="not-prose shiki max-h-[32rem] flex shrink" use:clipboard.readText>
 			{@render children()}
 		</pre>
 
