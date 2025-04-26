@@ -12,30 +12,30 @@ When you create a table with `reactiveTable`, it establishes reactive bindings t
 
 ```svelte
 <script lang="ts">
-  import { reactiveTable } from 'svelte-reactive-table';
+	import { reactiveTable } from 'svelte-reactive-table';
 
-  // Initial data
-  const data = [
-    { id: 1, name: 'John Doe', age: 30 },
-    { id: 2, name: 'Jane Smith', age: 25 }
-  ];
+	// Initial data
+	const data = [
+		{ id: 1, name: 'John Doe', age: 30 },
+		{ id: 2, name: 'Jane Smith', age: 25 }
+	];
 
-  const columns = [
-    { accessor: 'id', header: 'ID', isIdentifier: true },
-    { accessor: 'name', header: 'Name' },
-    { accessor: 'age', header: 'Age' }
-  ];
+	const columns = [
+		{ accessor: 'id', header: 'ID', isIdentifier: true },
+		{ accessor: 'name', header: 'Name' },
+		{ accessor: 'age', header: 'Age' }
+	];
 
-  const table = reactiveTable(data, columns);
+	const table = reactiveTable(data, columns);
 
-  // Adding a row will automatically update the table
-  function addPerson() {
-    table.data.push({
-      id: table.data.length + 1,
-      name: 'New Person',
-      age: Math.floor(Math.random() * 40) + 20
-    });
-  }
+	// Adding a row will automatically update the table
+	function addPerson() {
+		table.data.push({
+			id: table.data.length + 1,
+			name: 'New Person',
+			age: Math.floor(Math.random() * 40) + 20
+		});
+	}
 </script>
 ```
 
@@ -57,23 +57,23 @@ You can directly modify the table's data in any way:
 
 ```svelte
 <script>
-  // Directly modify a property
-  function incrementAge(id) {
-    const index = table.data.findIndex(item => item.id === id);
-    if (index !== -1) {
-      table.data[index].age++;
-    }
-  }
+	// Directly modify a property
+	function incrementAge(id) {
+		const index = table.data.findIndex((item) => item.id === id);
+		if (index !== -1) {
+			table.data[index].age++;
+		}
+	}
 
-  // Replace the entire dataset
-  function loadNewData(newData) {
-    table.data = newData;
-  }
+	// Replace the entire dataset
+	function loadNewData(newData) {
+		table.data = newData;
+	}
 
-  // Sort the data
-  function sortByAge() {
-    table.data = [...table.data].sort((a, b) => a.age - b.age);
-  }
+	// Sort the data
+	function sortByAge() {
+		table.data = [...table.data].sort((a, b) => a.age - b.age);
+	}
 </script>
 ```
 
@@ -83,10 +83,10 @@ Features like column visibility and pagination are also reactive:
 
 ```svelte
 <script>
-  // The UI automatically updates when visibility changes
-  function toggleAgeColumn() {
-    table.toggleColumnVisibility('age');
-  }
+	// The UI automatically updates when visibility changes
+	function toggleAgeColumn() {
+		table.toggleColumnVisibility('age');
+	}
 </script>
 ```
 
@@ -94,10 +94,10 @@ With pagination enabled, all pagination state is reactive:
 
 ```svelte
 <script>
-  // This expression automatically updates when pagination changes
-  const pageInfo = $derived(
-    `Showing page ${table.pagination.page + 1} of ${table.pagination.pageCount}`
-  );
+	// This expression automatically updates when pagination changes
+	const pageInfo = $derived(
+		`Showing page ${table.pagination.page + 1} of ${table.pagination.pageCount}`
+	);
 </script>
 
 <div>{pageInfo}</div>

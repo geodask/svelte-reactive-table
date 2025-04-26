@@ -57,10 +57,10 @@ Once installed, you can import the library in your Svelte files:
 
 ```svelte
 <script lang="ts">
-  import { reactiveTable } from 'svelte-reactive-table';
-  
-  // Optional pagination functionality
-  import { reactivePagination } from 'svelte-reactive-table';
+	import { reactiveTable } from 'svelte-reactive-table';
+
+	// Optional pagination functionality
+	import { reactivePagination } from 'svelte-reactive-table';
 </script>
 ```
 

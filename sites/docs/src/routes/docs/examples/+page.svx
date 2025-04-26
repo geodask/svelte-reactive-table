@@ -6,9 +6,10 @@ layout: docPage
 
 ## Coming Soon...
 
-We're currently working on a collection of practical examples to demonstrate the capabilities of Svelte Reactive Table. 
+We're currently working on a collection of practical examples to demonstrate the capabilities of Svelte Reactive Table.
 
 Check back later for examples covering:
+
 - Basic table usage
 - Advanced column configuration
 - Custom styling and theming

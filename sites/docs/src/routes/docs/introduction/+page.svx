@@ -37,6 +37,7 @@ The foundation is a simple, reactive table with column definitions and row gener
 ### 2. Optional Feature Extensions
 
 Add just the features you need:
+
 - **Pagination**: Navigate through large datasets with page size controls and navigation
 - **Column Visibility**: Show or hide columns dynamically
 - **More Coming Soon**: Sorting, filtering, row selection, and other capabilities are planned

@@ -15,15 +15,15 @@ You can control the initial visibility of columns using the `visible` property i
 import { reactiveTable } from 'svelte-reactive-table';
 
 const data = [
-  { id: 1, name: 'John Doe', age: 30, email: 'john@example.com' },
-  { id: 2, name: 'Jane Smith', age: 25, email: 'jane@example.com' }
+	{ id: 1, name: 'John Doe', age: 30, email: 'john@example.com' },
+	{ id: 2, name: 'Jane Smith', age: 25, email: 'jane@example.com' }
 ];
 
 const columns = [
-  { accessor: 'id', header: 'ID', isIdentifier: true },
-  { accessor: 'name', header: 'Name' },
-  { accessor: 'age', header: 'Age' },
-  { accessor: 'email', header: 'Email', visible: false } // Initially hidden
+	{ accessor: 'id', header: 'ID', isIdentifier: true },
+	{ accessor: 'name', header: 'Name' },
+	{ accessor: 'age', header: 'Age' },
+	{ accessor: 'email', header: 'Email', visible: false } // Initially hidden
 ];
 
 const table = reactiveTable(data, columns);
@@ -40,12 +40,12 @@ Sets a column's visibility to a specific state:
 ```js
 // Show the email column
 function showEmailColumn() {
-  table.setColumnVisibility('email', true);
+	table.setColumnVisibility('email', true);
 }
 
 // Hide the age column
 function hideAgeColumn() {
-  table.setColumnVisibility('age', false);
+	table.setColumnVisibility('age', false);
 }
 ```
 
@@ -55,7 +55,7 @@ Toggles a column's visibility between shown and hidden:
 
 ```js
 function toggleEmailColumn() {
-  table.toggleColumnVisibility('email');
+	table.toggleColumnVisibility('email');
 }
 ```
 
@@ -65,16 +65,16 @@ Here's a practical example of a column selector component:
 
 ```svelte
 <div class="column-toggles">
-  {#each table.columns as column}
-    <label class="toggle">
-      <input
-        type="checkbox"
-        checked={column.visible}
-        on:change={() => table.toggleColumnVisibility(column.accessor)}
-      />
-      {column.header}
-    </label>
-  {/each}
+	{#each table.columns as column}
+		<label class="toggle">
+			<input
+				type="checkbox"
+				checked={column.visible}
+				on:change={() => table.toggleColumnVisibility(column.accessor)}
+			/>
+			{column.header}
+		</label>
+	{/each}
 </div>
 ```
 
