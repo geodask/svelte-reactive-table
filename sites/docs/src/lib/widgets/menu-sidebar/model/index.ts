@@ -54,6 +54,10 @@ export const data = {
 					url: '/docs/api/reactive-pagination'
 				},
 				{
+					title: 'reactiveColumnVisibility',
+					url: '/docs/api/reactive-column-visibility'
+				},
+				{
 					title: 'Types',
 					url: '/docs/api/types'
 				}

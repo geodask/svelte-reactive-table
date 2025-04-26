@@ -120,7 +120,7 @@ Add pagination to your table for handling larger datasets:
 		<!-- headers as before -->
 	</thead>
 	<tbody>
-		{#each tableWithPagination.pagination.rows as row}
+		{#each tableWithPagination.rows as row}
 			<tr>
 				{#each row.cells as cell}
 					<td>{cell.value}</td>

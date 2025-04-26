@@ -47,7 +47,8 @@ The table instance provides several reactive properties that update automaticall
 - `columnDefs`: Column definitions array
 - `headers`: Array of visible column headers
 - `allRows`: Array of all rows with their cells
-- `visibleColumns`: Array of currently visible columns
+- `rows`: Rows after applying active features (pagination, sorting, etc.)
+- `columns`: Array of currently visible columns
 
 When these properties change, your UI updates automatically.
 

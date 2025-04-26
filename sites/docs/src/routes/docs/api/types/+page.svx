@@ -29,12 +29,6 @@ type ColumnDef<T> = {
 	 * @default false
 	 */
 	isIdentifier?: boolean;
-
-	/**
-	 * Controls whether the column is shown in the table
-	 * @default true
-	 */
-	visible?: boolean;
 };
 ```
 
@@ -47,7 +41,6 @@ type Column<T> = {
 	accessor: keyof T;
 	header: string;
 	isIdentifier: boolean;
-	visible: boolean;
 };
 ```
 
@@ -118,6 +111,11 @@ type ReactiveTable<T, Options extends TableOptions<T> = {}> = {
 	/**
 	 * All columns with their full configuration
 	 */
+	allColumns: Column<T>[];
+
+	/**
+	 * Only columns that are currently visible
+	 */
 	columns: Column<T>[];
 
 	/**
@@ -126,24 +124,19 @@ type ReactiveTable<T, Options extends TableOptions<T> = {}> = {
 	allRows: Row<T>[];
 
 	/**
-	 * Only columns that are currently visible
+	 * Rows after applying active features (pagination, sorting, etc.)
 	 */
-	visibleColumns: ColumnDef<T>[];
-
-	/**
-	 * Show or hide a specific column
-	 */
-	setColumnVisibility(accessor: keyof T, isVisible: boolean): void;
-
-	/**
-	 * Toggle visibility of a specific column
-	 */
-	toggleColumnVisibility(accessor: keyof T): void;
+	rows: Row<T>[];
 
 	/**
 	 * Pagination properties and methods (only when pagination is enabled)
 	 */
 	pagination?: ReactivePagination<T>;
+
+	/**
+	 * Column visibility properties and methods (only when column visibility is enabled)
+	 */
+	columnVisibility?: ReactiveColumnVisibility<T>;
 };
 ```
 
@@ -157,6 +150,11 @@ type TableOptions<T> = {
 	 * Optional pagination factory
 	 */
 	pagination?: ReactivePaginationFactory<T>;
+
+	/**
+	 * Optional column visibility factory
+	 */
+	columnVisibility?: ReactiveColumnVisibilityFactory<T>;
 };
 ```
 
@@ -182,11 +180,6 @@ type ReactivePagination<T> = {
 	 * Total number of pages
 	 */
 	pageCount: number;
-
-	/**
-	 * Rows for the current page only
-	 */
-	rows: Row<T>[];
 
 	/**
 	 * Go to the next page
@@ -263,6 +256,7 @@ import {
 import {
 	reactiveTable,
 	reactivePagination,
+	reactiveColumnVisibility,
 	type ColumnDef,
 	type ReactiveTable
 } from 'svelte-reactive-table';
@@ -281,17 +275,21 @@ const columns: ColumnDef<User>[] = [
 	{ accessor: 'email', header: 'Email' }
 ];
 
-// Create a typed table with pagination
+// Create a typed table with pagination and column visibility
 const table: ReactiveTable<User> = reactiveTable(users, columns, {
-	pagination: reactivePagination<User>({ pageSize: 10 })
+	pagination: reactivePagination<User>({ pageSize: 10 }),
+	columnVisibility: reactiveColumnVisibility<User>()
 });
 
-// TypeScript provides full type-checking
-table.toggleColumnVisibility('email'); // Valid
-table.toggleColumnVisibility('phone'); // Error: 'phone' not in User
+// TypeScript provides full type-checking for column visibility
+table.columnVisibility.toggleColumnVisibility('email'); // ✓ Valid
+table.columnVisibility.toggleColumnVisibility('phone'); // ❌ Error: 'phone' not in User
 
 // Pagination is properly typed
 if (table.pagination) {
 	table.pagination.nextPage();
 }
+
+// Access the current page of rows
+const currentPageRows = table.rows;
 ```

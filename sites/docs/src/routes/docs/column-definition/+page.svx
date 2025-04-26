@@ -51,18 +51,28 @@ If no column is marked as the identifier, the first column will be used by defau
 - Tracking rows across data updates
 - Supporting row operations like selection (in future versions)
 
-## Column Visibility
+## Initial Column Visibility
 
-Control initial column visibility:
+To control initial column visibility, use the `reactiveColumnVisibility` function when creating your table:
 
 ```svelte
+import { reactiveTable, reactiveColumnVisibility } from 'svelte-reactive-table';
+
 const columns = [
   { accessor: 'id', header: 'ID', isIdentifier: true },
   { accessor: 'name', header: 'Name' },
   { accessor: 'age', header: 'Age' },
-  { accessor: 'email', header: 'Email', visible: false } // Initially hidden
+  { accessor: 'email', header: 'Email' }
 ];
+
+const table = reactiveTable(data, columns, {
+  columnVisibility: reactiveColumnVisibility({
+    hiddenColumns: ['email'] // Initially hide the email column
+  })
+});
 ```
+
+See the [Column Visibility](/docs/column-visibility) section for more details on managing column visibility.
 
 ## Dynamic Column Changes
 
@@ -146,11 +156,11 @@ The table provides properties for working with columns:
 
 ```svelte
 <script>
-	// All columns (including hidden ones)
-	const allColumns = table.columns;
+	// All columns with their full definitions
+	const allColumns = table.allColumns;
 
 	// Only visible columns
-	const visibleColumns = table.visibleColumns;
+	const visibleColumns = table.columns;
 
 	// Column headers (from visible columns only)
 	const headers = table.headers;

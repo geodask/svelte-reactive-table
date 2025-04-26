@@ -89,22 +89,22 @@ For detailed pagination properties and methods, see the [reactivePagination API 
 
 ## Properties
 
-| Property         | Type             | Description                                                     |
-| ---------------- | ---------------- | --------------------------------------------------------------- |
-| `data`           | `T[]`            | Current data array (reactive)                                   |
-| `columnDefs`     | `ColumnDef<T>[]` | Current column definitions (reactive)                           |
-| `columns`        | `Column<T>[]`    | All columns with their full configuration                       |
-| `visibleColumns` | `Column<T>[]`    | Only columns that are currently visible                         |
-| `headers`        | `string[]`       | Array of header texts from visible columns                      |
-| `allRows`        | `Row<T>[]`       | Array of all rows with their cells                              |
-| `rows`           | `Row<T>[]`       | Rows after applying active features (pagination, sorting, etc.) |
+| Property     | Type             | Description                                                     |
+| ------------ | ---------------- | --------------------------------------------------------------- |
+| `data`       | `T[]`            | Current data array (reactive)                                   |
+| `columnDefs` | `ColumnDef<T>[]` | Current column definitions (reactive)                           |
+| `allColumns` | `Column<T>[]`    | All columns with their full configuration                       |
+| `columns`    | `Column<T>[]`    | Only columns that are currently visible                         |
+| `headers`    | `string[]`       | Array of header texts from visible columns                      |
+| `allRows`    | `Row<T>[]`       | Array of all rows with their cells                              |
+| `rows`       | `Row<T>[]`       | Rows after applying active features (pagination, sorting, etc.) |
 
 ## Methods
 
-| Method                                                       | Return Type          | Description                              |
-| ------------------------------------------------------------ | -------------------- | ---------------------------------------- |
-| `setColumnVisibility(accessor: keyof T, isVisible: boolean)` | `void`               | Show or hide a specific column           |
-| `toggleColumnVisibility(accessor: keyof T)`                  | `void`               | Toggle visibility of a specific column   |
+| Method                                                       | Return Type | Description                            |
+| ------------------------------------------------------------ | ----------- | -------------------------------------- |
+| `setColumnVisibility(accessor: keyof T, isVisible: boolean)` | `void`      | Show or hide a specific column         |
+| `toggleColumnVisibility(accessor: keyof T)`                  | `void`      | Toggle visibility of a specific column |
 
 ## Examples
 

@@ -6,13 +6,13 @@ layout: docPage
 
 One of the key features of Svelte Reactive Table is the ability to dynamically control which columns are visible in your table. This feature allows users to customize their view by showing only the information they need.
 
-## Setting Initial Visibility
+## Adding Column Visibility to Your Table
 
-You can control the initial visibility of columns using the `visible` property in column definitions:
+To enable column visibility management in your table, use the `reactiveColumnVisibility` function when creating your table:
 
 ```ts
 // In your Svelte component
-import { reactiveTable } from 'svelte-reactive-table';
+import { reactiveTable, reactiveColumnVisibility } from 'svelte-reactive-table';
 
 const data = [
 	{ id: 1, name: 'John Doe', age: 30, email: 'john@example.com' },
@@ -23,39 +23,64 @@ const columns = [
 	{ accessor: 'id', header: 'ID', isIdentifier: true },
 	{ accessor: 'name', header: 'Name' },
 	{ accessor: 'age', header: 'Age' },
-	{ accessor: 'email', header: 'Email', visible: false } // Initially hidden
+	{ accessor: 'email', header: 'Email' }
 ];
 
-const table = reactiveTable(data, columns);
+const table = reactiveTable(data, columns, {
+	columnVisibility: reactiveColumnVisibility({
+		hiddenColumns: ['email'] // Initially hide the email column
+	})
+});
 ```
 
-## Changing Column Visibility
+## Controlling Column Visibility
 
-The table instance provides two simple methods for controlling column visibility:
+The table instance provides several methods for controlling column visibility through the `columnVisibility` object:
 
-### 1. `setColumnVisibility`
+### 1. Toggle Column Visibility
 
-Sets a column's visibility to a specific state:
+```js
+// Toggle the email column between visible and hidden
+function toggleEmailColumn() {
+	table.columnVisibility.toggleColumnVisibility('email');
+}
+```
+
+### 2. Set Specific Visibility
 
 ```js
 // Show the email column
 function showEmailColumn() {
-	table.setColumnVisibility('email', true);
+	table.columnVisibility.setColumnVisibility('email', true);
 }
 
 // Hide the age column
 function hideAgeColumn() {
-	table.setColumnVisibility('age', false);
+	table.columnVisibility.setColumnVisibility('age', false);
 }
 ```
 
-### 2. `toggleColumnVisibility`
-
-Toggles a column's visibility between shown and hidden:
+### 3. Working with Multiple Columns
 
 ```js
-function toggleEmailColumn() {
-	table.toggleColumnVisibility('email');
+// Show multiple columns at once
+function showUserInfo() {
+	table.columnVisibility.showColumns(['name', 'email']);
+}
+
+// Hide multiple columns at once
+function hideUserInfo() {
+	table.columnVisibility.hideColumns(['name', 'email']);
+}
+
+// Show only specific columns, hiding all others
+function showOnlyBasics() {
+	table.columnVisibility.setVisibleColumns(['id', 'name']);
+}
+
+// Reset column visibility to show all columns
+function showAllColumns() {
+	table.columnVisibility.resetColumnVisibility();
 }
 ```
 
@@ -65,12 +90,12 @@ Here's a practical example of a column selector component:
 
 ```svelte
 <div class="column-toggles">
-	{#each table.columns as column}
+	{#each table.allColumns as column}
 		<label class="toggle">
 			<input
 				type="checkbox"
-				checked={column.visible}
-				on:change={() => table.toggleColumnVisibility(column.accessor)}
+				checked={table.columnVisibility.isColumnVisible(column.accessor)}
+				on:change={() => table.columnVisibility.toggleColumnVisibility(column.accessor)}
 			/>
 			{column.header}
 		</label>
@@ -82,19 +107,48 @@ Here's a practical example of a column selector component:
 
 When you change column visibility:
 
-1. The `visibleColumns` array updates automatically
+1. The table's `columns` array updates automatically to include only visible columns
 2. The `headers` array updates to include only visible column headers
-3. Each row's `cells` array updates to include only cells from visible columns
+3. The `rows` and `allRows` properties update their `cells` arrays to reflect the current visibility settings
 
 Your UI will reflect these changes instantly without any manual synchronization code.
 
-## Accessing Visible Columns
+## Checking Column Visibility State
 
-To see which columns are currently visible or to build UI based on visibility:
+To check if a column is currently visible or to build UI based on visibility:
 
 ```js
-// Get the number of visible columns
-const visibleColumnCount = $derived(table.visibleColumns.length);
+// Check if a specific column is visible
+const isAgeVisible = table.columnVisibility.isColumnVisible('age');
+
+// Get all currently hidden columns
+const hiddenColumns = table.columnVisibility.hiddenColumns;
+
+// Create a derived value that updates when visibility changes
+const visibleColumnCount = $derived(table.columns.length);
 ```
 
 Column visibility control helps you build tables that adapt to your users' needs, creating a more focused and effective data display.
+
+## TypeScript Support
+
+Column visibility is fully typed, ensuring type safety when working with your table:
+
+```ts
+type User = {
+	id: number;
+	name: string;
+	age: number;
+	email: string;
+};
+
+const table = reactiveTable<User>(users, columns, {
+	columnVisibility: reactiveColumnVisibility<User>({
+		hiddenColumns: ['email']
+	})
+});
+
+// TypeScript will ensure you only reference valid column keys
+table.columnVisibility.toggleColumnVisibility('name'); // ✓ Valid
+table.columnVisibility.toggleColumnVisibility('invalid'); // ❌ Type error
+```
