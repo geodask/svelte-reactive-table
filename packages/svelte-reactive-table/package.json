@@ -79,7 +79,7 @@
 		},
 		{
 			"path": "dist/index.js",
-			"import": "{ reactiveTable, reactiveColumnVisibility, reactivePagination }",
+			"import": "{ reactiveTable, reactiveColumnVisibility, reactivePagination, reactiveSorting }",
 			"limit": "10 KB",
 			"name": "All features imported"
 		}
