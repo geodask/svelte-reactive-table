@@ -22,7 +22,7 @@ The pagination feature provides:
 - Current page indicator and total page count
 - Row count indicators
 
-<Tabs value="Preview" {items}>
+<Tabs value="Code" {items}>
 
 <TabItem value="Code">
 

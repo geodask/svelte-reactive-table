@@ -146,7 +146,7 @@ This example demonstrates how to enable multi-column sorting, allowing users to 
 - Visual indicators show current sort direction for each column
 - Option to clear all sorting conditions at once
 
-<Tabs value="Preview" {items}>
+<Tabs value="Code" {items}>
 
 <TabItem value="Code">
 

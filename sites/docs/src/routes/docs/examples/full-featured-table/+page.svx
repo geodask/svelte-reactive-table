@@ -22,7 +22,7 @@ The full-featured table includes:
 - Multi-column sorting
 - All features working together seamlessly
 
-<Tabs value="Preview" {items}>
+<Tabs value="Code" {items}>
 
 <TabItem value="Code">
 

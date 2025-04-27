@@ -21,7 +21,7 @@ The column visibility feature provides:
 - Visual indicators of column state (visible/hidden)
 - Automatic table adjustment when toggling columns
 
-<Tabs value="Preview" {items}>
+<Tabs value="Code" {items}>
 
 <TabItem value="Code">
 

@@ -24,7 +24,7 @@ The basic table provides core functionality including:
 - Dynamic updates when adding new rows
 - Empty state handling
 
-<Tabs value="Preview" {items}>
+<Tabs value="Code" {items}>
 
 <TabItem value="Code">
 
