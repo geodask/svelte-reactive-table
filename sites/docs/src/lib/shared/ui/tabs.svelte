@@ -9,8 +9,8 @@
 	const { children, items, value = items[0] }: WithChildren<TabsProps> = $props();
 </script>
 
-<Tabs.Root {value}>
-	<Tabs.List class="shadow-md">
+<Tabs.Root class="border border-muted dark:border-secondary p-2 rounded-lg" {value}>
+	<Tabs.List class="shadow-md ">
 		{#each items as item}
 			<Tabs.Trigger value={item}>{item}</Tabs.Trigger>
 		{/each}

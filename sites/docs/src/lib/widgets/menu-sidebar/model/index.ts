@@ -64,12 +64,28 @@ export const data = {
 			]
 		},
 		{
-			title: 'Resources',
-			url: '/docs/resources',
+			title: 'Examples',
+			url: '/docs/examples/basic-table',
 			items: [
 				{
-					title: 'Examples',
-					url: '/docs/examples'
+					title: 'Basic Table',
+					url: '/docs/examples/basic-table'
+				},
+				{
+					title: 'Column Visibility',
+					url: '/docs/examples/column-visibility'
+				},
+				{
+					title: 'Pagination',
+					url: '/docs/examples/pagination'
+				},
+				{
+					title: 'Sorting',
+					url: '/docs/examples/sorting'
+				},
+				{
+					title: 'Full Featured Table',
+					url: '/docs/examples/full-featured-table'
 				}
 			]
 		}
