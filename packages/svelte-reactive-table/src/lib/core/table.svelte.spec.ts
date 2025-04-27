@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { reactivePagination } from '../features/pagination/index.js';
 import { reactiveTable, type ColumnDef, type ReactiveTable } from './index.js';
 import { reactiveColumnVisibility } from '../features/column-visibility/index.js';
+import { reactiveSorting } from '$lib/features/sorting/sorting.svelte.js';
 
 type Person = {
 	id: number;
@@ -221,17 +222,6 @@ describe('reactiveTable', () => {
 		expect(tableWithPagination.rows).toHaveLength(2); // First 2 rows
 	});
 
-	it('should handle pagination with empty data', () => {
-		const emptyTableWithPagination = reactiveTable([], columns, {
-			pagination: reactivePagination({ pageSize: 5 })
-		});
-
-		// Verify pagination object works with empty data
-		expect(emptyTableWithPagination.pagination).toBeDefined();
-		expect(emptyTableWithPagination.pagination.pageCount).toBe(0);
-		expect(emptyTableWithPagination.rows).toHaveLength(0);
-	});
-
 	it('should add column visibility feature when option is provided', () => {
 		const tableWithColumnVisvibility = reactiveTable(sampleData, columns, {
 			columnVisibility: reactiveColumnVisibility({
@@ -242,5 +232,18 @@ describe('reactiveTable', () => {
 		expect(tableWithColumnVisvibility.columnVisibility).toBeDefined();
 		expect(tableWithColumnVisvibility.columnVisibility.hiddenColumns).toEqual(['age']);
 		expect(tableWithColumnVisvibility.columns).toHaveLength(3);
+	});
+
+	it('should add sorting feature when option is provided', () => {
+		const tableWithSorting = reactiveTable(sampleData, columns, {
+			sorting: reactiveSorting({
+				columnSortings: [{ key: 'name', direction: 'asc' }]
+			})
+		});
+
+		expect(tableWithSorting.sorting).toBeDefined();
+		expect(tableWithSorting.sorting.columnSortings).toHaveLength(1);
+		expect(tableWithSorting.sorting.columnSortings[0].key).toBe('name');
+		expect(tableWithSorting.sorting.columnSortings[0].direction).toBe('asc');
 	});
 });

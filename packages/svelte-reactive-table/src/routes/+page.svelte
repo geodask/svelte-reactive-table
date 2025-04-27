@@ -3,6 +3,8 @@
 	import ColumnVisibility from './components/ColumnVisibility.svelte';
 	import Pagination from './components/Pagination.svelte';
 	import { onMount } from 'svelte';
+	import Sorting from './components/Sorting.svelte';
+	import FullFeaturedTable from './components/FullFeaturedTable.svelte';
 
 	let activeTab = 'basic';
 
@@ -10,7 +12,7 @@
 		// Check if there's a hash in the URL to set the active tab
 		if (window.location.hash) {
 			const hash = window.location.hash.substring(1);
-			if (['basic', 'columns', 'pagination'].includes(hash)) {
+			if (['basic', 'columns', 'pagination', 'sorting', 'full'].includes(hash)) {
 				activeTab = hash;
 			}
 		}
@@ -60,6 +62,26 @@
 						>
 							Pagination
 						</button>
+
+						<button
+							class="px-4 py-2 text-sm font-medium rounded-md transition-colors
+							{activeTab === 'sorting'
+								? 'bg-white text-emerald-700 shadow-sm'
+								: 'text-gray-700 hover:text-gray-900'}"
+							on:click={() => setActiveTab('sorting')}
+						>
+							Sorting
+						</button>
+
+						<button
+							class="px-4 py-2 text-sm font-medium rounded-md transition-colors
+							{activeTab === 'full'
+								? 'bg-white text-emerald-700 shadow-sm'
+								: 'text-gray-700 hover:text-gray-900'}"
+							on:click={() => setActiveTab('full')}
+						>
+							Full Example
+						</button>
 					</div>
 				</div>
 			</div>
@@ -77,6 +99,14 @@
 				{:else if activeTab === 'pagination'}
 					<div id="pagination">
 						<Pagination />
+					</div>
+				{:else if activeTab === 'sorting'}
+					<div id="sorting">
+						<Sorting />
+					</div>
+				{:else if activeTab === 'full'}
+					<div id="full">
+						<FullFeaturedTable />
 					</div>
 				{/if}
 			</div>

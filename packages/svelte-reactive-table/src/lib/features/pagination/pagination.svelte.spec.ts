@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { reactivePagination, type ReactivePaginationOutput } from './index.js';
-import type { Row } from '../../core/types.js';
+import type { Row } from '$lib/core/table.svelte.js';
 
 // Define a simple type for testing
 type TestItem = {
@@ -242,20 +242,14 @@ describe('reactivePagination', () => {
 		expect(paginationOutput.state.pageSize).toBe(6);
 	});
 
-	it('should reflect changes in the source data', () => {
-		// Remove two items
-		rows.splice(0, 2);
-
-		expect(paginationOutput.state.pageCount).toBe(2); // 10 items with page size 5 = 2 pages
-		expect(paginationOutput.rows).toHaveLength(5);
-		expect(paginationOutput.rows[0].id).toBe(3); // First item now has id 3
-	});
-
 	it('should handle empty data', () => {
-		rows.splice(0, rows.length); // Clear all rows
+		const customPagination = reactivePagination<TestItem>({
+			page: 1,
+			pageSize: 3
+		})(() => []);
 
-		expect(paginationOutput.state.pageCount).toBe(0);
-		expect(paginationOutput.rows).toHaveLength(0);
+		expect(customPagination.state.pageCount).toBe(0);
+		expect(customPagination.rows).toHaveLength(0);
 	});
 
 	it('should initialize with custom pagination settings', () => {

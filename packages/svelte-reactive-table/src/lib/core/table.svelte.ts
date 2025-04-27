@@ -1,14 +1,19 @@
-import { log, messages } from '../internal/logger/index.js';
 import type {
-	ReactivePagination,
-	ReactivePaginationFactory,
-	ReactivePaginationOutput
-} from '../features/pagination/index.js';
+	ReactiveSorting,
+	ReactiveSortingFactory,
+	ReactiveSortingOutput
+} from '$lib/features/sorting/sorting.svelte.js';
 import type {
 	ReactiveColumnVisibility,
 	ReactiveColumnVisibilityFactory,
 	ReactiveColumnVisibilityOutput
 } from '../features/column-visibility/index.js';
+import type {
+	ReactivePagination,
+	ReactivePaginationFactory,
+	ReactivePaginationOutput
+} from '../features/pagination/index.js';
+import { log, messages } from '../internal/logger/index.js';
 
 /**
  * Feature type for pagination in a reactive table.
@@ -32,6 +37,18 @@ export type ColumnVisibilityFeature<T> = {
 	 * The column visibility object that returns the current state of column visibility and provides methods to control it.
 	 */
 	columnVisibility: ReactiveColumnVisibility<T>;
+};
+
+/**
+ * Feature type for sorting in a reactive table.
+ *
+ * @internal
+ */
+export type SortingFeature<T> = {
+	/**
+	 * The sorting object that returns the current state of sorting and provides methods to control it.
+	 */
+	sorting: ReactiveSorting<T>;
 };
 
 /**
@@ -98,6 +115,7 @@ export type Row<T> = {
 export type TableOptions<T> = {
 	pagination?: ReactivePaginationFactory<T>;
 	columnVisibility?: ReactiveColumnVisibilityFactory<T>;
+	sorting?: ReactiveSortingFactory<T>;
 	// Future options can be added here
 };
 
@@ -149,7 +167,8 @@ export type ReactiveTable<T, Options extends TableOptions<T> = {}> = ReactiveTab
 	(Options['pagination'] extends ReactivePaginationFactory<T> ? PaginationFeature<T> : {}) &
 	(Options['columnVisibility'] extends ReactiveColumnVisibilityFactory<T>
 		? ColumnVisibilityFeature<T>
-		: {});
+		: {}) &
+	(Options['sorting'] extends ReactiveSortingFactory<T> ? SortingFeature<T> : {});
 
 /**
  * Creates a reactive table that automatically updates with data changes.
@@ -223,17 +242,18 @@ export function reactiveTable<T, Options extends TableOptions<T> = {}>(
 	// Start with all rows
 	let getDisplayRows = () => allRows;
 
+	let sortingOutput: ReactiveSortingOutput<T> | undefined;
+	if (options.sorting) {
+		sortingOutput = options.sorting(() => allRows);
+		getDisplayRows = () => sortingOutput!.rows;
+	}
+
 	// Add pagination if option is provided
 	let paginationOutput: ReactivePaginationOutput<T> | undefined;
 	if (options.pagination) {
-		paginationOutput = options.pagination(() => allRows);
+		paginationOutput = options.pagination(getDisplayRows); // getDisplayRows returns either allRows or sorted rows
 		getDisplayRows = () => paginationOutput!.rows;
 	}
-
-	// Future features would be applied here in the proper order:
-	// 1. Sorting would be applied to allRows
-	// 2. Pagination would be applied to the sorted rows
-	// 3. etc.
 
 	// Now create the table object with the proper rows getter
 	const table: ReactiveTableBase<T> = {
@@ -279,6 +299,10 @@ export function reactiveTable<T, Options extends TableOptions<T> = {}>(
 	if (columnVisibilityOutput) {
 		(tableWithFeatures as ReactiveTableBase<T> & ColumnVisibilityFeature<T>).columnVisibility =
 			columnVisibilityOutput.state;
+	}
+
+	if (sortingOutput) {
+		(tableWithFeatures as ReactiveTableBase<T> & SortingFeature<T>).sorting = sortingOutput.state;
 	}
 
 	return tableWithFeatures;

@@ -1,3 +1,14 @@
+export { reactiveSorting } from './features/sorting/index.js';
+export type {
+	ColumnSorting,
+	Comparator,
+	ReactiveSorting,
+	ReactiveSortingFactory,
+	ReactiveSortingOutput,
+	SortDirection,
+	Sorting
+} from './features/sorting/index.js';
+
 export { reactiveColumnVisibility } from './features/column-visibility/index.js';
 export type {
 	ColumnVisibility,
