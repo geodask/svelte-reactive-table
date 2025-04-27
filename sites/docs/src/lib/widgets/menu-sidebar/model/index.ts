@@ -38,6 +38,10 @@ export const data = {
 				{
 					title: 'Pagination',
 					url: '/docs/pagination'
+				},
+				{
+					title: 'Sorting',
+					url: '/docs/sorting'
 				}
 			]
 		},
@@ -56,6 +60,10 @@ export const data = {
 				{
 					title: 'reactiveColumnVisibility',
 					url: '/docs/api/reactive-column-visibility'
+				},
+				{
+					title: 'reactiveSorting',
+					url: '/docs/api/reactive-sorting'
 				},
 				{
 					title: 'Types',

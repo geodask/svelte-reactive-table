@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { 
-		reactiveTable, 
-		reactiveColumnVisibility, 
-		reactivePagination, 
+	import {
+		reactiveTable,
+		reactiveColumnVisibility,
+		reactivePagination,
 		reactiveSorting,
 		type ColumnSorting
 	} from '$lib/index.js';
@@ -61,16 +61,14 @@
 
 	// Helper function to determine the current sort direction for a column
 	function getSortDirection(accessor: string) {
-		const sorting = table.sorting.columnSortings.find(
-			(s: ColumnSorting) => s.key === accessor
-		);
+		const sorting = table.sorting.columnSortings.find((s: ColumnSorting) => s.key === accessor);
 		return sorting ? sorting.direction : 'none';
 	}
 </script>
 
 <section class="max-w-6xl mx-auto my-8 px-4">
 	<h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Full-Featured Table</h2>
-	
+
 	<!-- Feature Panels -->
 	<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
 		<!-- Column Visibility Panel -->
@@ -134,7 +132,9 @@
 								? 'bg-emerald-600 text-white border-emerald-600 z-10'
 								: 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}
                     {pageSizeOptions.indexOf(size) === 0 ? 'rounded-l-md' : ''}
-                    {pageSizeOptions.indexOf(size) === pageSizeOptions.length - 1 ? 'rounded-r-md' : ''}
+                    {pageSizeOptions.indexOf(size) === pageSizeOptions.length - 1
+								? 'rounded-r-md'
+								: ''}
                     border focus:z-10 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 transition-colors"
 							on:click={() => setPageSize(size)}
 						>
@@ -159,16 +159,16 @@
 						<div class="overflow-y-auto flex-grow mb-2 pr-1 custom-scrollbar">
 							<div class="space-y-2">
 								{#each table.sorting.columnSortings as sorting, i}
-									<div class="flex justify-between items-center bg-gray-50 px-3 py-2 rounded-md border border-gray-200">
+									<div
+										class="flex justify-between items-center bg-gray-50 px-3 py-2 rounded-md border border-gray-200"
+									>
 										<div class="flex items-center gap-2">
 											<span class="text-xs font-medium">{i + 1}</span>
 											<span class="text-sm">{sorting.key}</span>
 										</div>
 										<span
 											class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
-											{sorting.direction === 'asc'
-												? 'bg-blue-100 text-blue-800'
-												: 'bg-purple-100 text-purple-800'}"
+											{sorting.direction === 'asc' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'}"
 										>
 											{sorting.direction === 'asc' ? 'Ascending' : 'Descending'}
 										</span>
@@ -203,8 +203,19 @@
 							No active sorting. Click on column headers to sort the table.
 						</p>
 						<div class="flex-1 flex items-center justify-center opacity-30">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-12 w-12 text-gray-400"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="1"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+								/>
 							</svg>
 						</div>
 					</div>
@@ -433,18 +444,18 @@
 </section>
 
 <style>
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
+	.custom-scrollbar::-webkit-scrollbar {
+		width: 4px;
+	}
+	.custom-scrollbar::-webkit-scrollbar-track {
+		background: #f1f1f1;
+		border-radius: 4px;
+	}
+	.custom-scrollbar::-webkit-scrollbar-thumb {
+		background: #cbd5e1;
+		border-radius: 4px;
+	}
+	.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+		background: #94a3b8;
+	}
 </style>

@@ -54,11 +54,11 @@
 		'Column definitions and header rendering',
 		'Row and cell generation',
 		'Column visibility toggling',
-		'Pagination (page size, navigation, reactive state)'
+		'Pagination (page size, navigation, reactive state)',
+		'Column sorting (single and multi-column)'
 	];
 
 	const comingSoon = [
-		'Column sorting (single and multi-column)',
 		'Filtering (global and column-based)',
 		'Row selection (single, multi, range)',
 		'Column resizing and reordering',

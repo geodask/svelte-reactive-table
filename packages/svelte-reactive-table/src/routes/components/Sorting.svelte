@@ -59,20 +59,18 @@
 
 	// Helper function to determine the current sort direction for a column
 	function getSortDirection(table: any, accessor: string) {
-		const sorting = table.sorting.columnSortings.find(
-			(s: ColumnSorting) => s.key === accessor
-		);
+		const sorting = table.sorting.columnSortings.find((s: ColumnSorting) => s.key === accessor);
 		return sorting ? sorting.direction : 'none';
 	}
 </script>
 
 <section class="max-w-5xl mx-auto my-8 px-4">
 	<h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Sortable Data Tables</h2>
-	
+
 	<!-- Multi-Sort Table Example -->
 	<div class="mb-10">
 		<h3 class="text-xl font-semibold mb-4 text-gray-700">Multi-Column Sorting</h3>
-		
+
 		<div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 			<p class="text-sm text-gray-600">
 				Click on column headers to sort. Multiple columns can be sorted simultaneously.
@@ -108,7 +106,9 @@
 								<div class="bg-gray-50 p-3 rounded-md border border-gray-200">
 									<div class="flex justify-between items-center">
 										<div class="flex items-center gap-2">
-											<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gray-200 text-gray-700 text-xs font-medium">
+											<span
+												class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gray-200 text-gray-700 text-xs font-medium"
+											>
 												{i + 1}
 											</span>
 											<span class="font-medium text-gray-700 text-sm">
@@ -117,9 +117,7 @@
 										</div>
 										<span
 											class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium whitespace-nowrap
-											{sorting.direction === 'asc'
-												? 'bg-blue-100 text-blue-800'
-												: 'bg-purple-100 text-purple-800'}"
+											{sorting.direction === 'asc' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'}"
 										>
 											{sorting.direction === 'asc' ? 'Ascending' : 'Descending'}
 										</span>
@@ -134,8 +132,19 @@
 							No active sorting. Click on column headers to sort the table.
 						</p>
 						<div class="flex-1 flex items-center justify-center opacity-30">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-10 w-10 text-gray-400"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="1"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+								/>
 							</svg>
 						</div>
 					</div>
@@ -220,7 +229,7 @@
 	<!-- Single-Sort Table Example -->
 	<div class="mt-12 pt-8 border-t border-gray-200">
 		<h3 class="text-xl font-semibold mb-4 text-gray-700">Single-Column Sorting</h3>
-		
+
 		<div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 			<p class="text-sm text-gray-600">
 				Click on column headers to sort. Only one column can be sorted at a time.
@@ -258,9 +267,7 @@
 								</span>
 								<span
 									class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-									{sorting.direction === 'asc'
-										? 'bg-blue-100 text-blue-800'
-										: 'bg-purple-100 text-purple-800'}"
+									{sorting.direction === 'asc' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'}"
 								>
 									{sorting.direction === 'asc' ? 'Ascending' : 'Descending'}
 								</span>
@@ -273,8 +280,19 @@
 							No active sorting. Click on column headers to sort the table.
 						</p>
 						<div class="flex-1 flex items-center justify-center opacity-30">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-8 w-8 text-gray-400"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="1"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+								/>
 							</svg>
 						</div>
 					</div>
@@ -354,11 +372,12 @@
 				</table>
 			</div>
 		</div>
-		
+
 		<div class="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-md">
 			<h5 class="text-sm font-medium text-amber-800 mb-2">Behavior Note</h5>
 			<p class="text-sm text-amber-700">
-				When <code class="px-1 py-0.5 bg-amber-100 rounded">multiSort: false</code>, clicking on a column will:
+				When <code class="px-1 py-0.5 bg-amber-100 rounded">multiSort: false</code>, clicking on a
+				column will:
 			</p>
 			<ul class="list-disc ml-6 mt-2 text-sm text-amber-700 space-y-1">
 				<li>Clear any existing sort when sorting a new column</li>
@@ -369,18 +388,18 @@
 </section>
 
 <style>
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
+	.custom-scrollbar::-webkit-scrollbar {
+		width: 4px;
+	}
+	.custom-scrollbar::-webkit-scrollbar-track {
+		background: #f1f1f1;
+		border-radius: 4px;
+	}
+	.custom-scrollbar::-webkit-scrollbar-thumb {
+		background: #cbd5e1;
+		border-radius: 4px;
+	}
+	.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+		background: #94a3b8;
+	}
 </style>

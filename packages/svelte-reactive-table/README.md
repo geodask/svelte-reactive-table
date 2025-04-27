@@ -67,9 +67,9 @@ Svelte Reactive Table is designed to give you complete control over your data ta
   - ⬜ Dynamic column updates
   - ⬜ Computed columns
 - 🔄 **Sorting**
-  - ⬜ Column-based sorting
-  - ⬜ Multi-column sort
-  - ⬜ Custom comparators
+  - ✅ Column-based sorting
+  - ✅ Multi-column sort
+  - ✅ Custom comparators
 - 🔍 **Filtering**
   - ⬜ Global search
   - ⬜ Column filters
