@@ -5,13 +5,19 @@
 	"main": "index.js",
 	"private": true,
 	"scripts": {
-		"ci:publish": "pnpm --filter svelte-reactive-table build && changeset publish",
-		"build": "pnpm --filter svelte-reactive-table build",
-		"test": "pnpm --filter svelte-reactive-table test",
-		 "test:coverage": "pnpm --filter svelte-reactive-table test:coverage",
-		"typecheck": "pnpm --filter svelte-reactive-table typecheck",
-		"format": "pnpm -r format",
-		"lint": "pnpm -r lint"
+		"ci:publish": "turbo run build --filter=svelte-reactive-table && changeset publish",
+		"build": "turbo run build",
+		"test": "turbo run test",
+		"test:unit": "turbo run test:unit",
+		"test:coverage": "turbo run test:coverage",
+		"typecheck": "turbo run typecheck",
+		"check": "turbo run check",
+		"check:watch": "turbo run check:watch",
+		"format": "turbo run format",
+		"lint": "turbo run lint",
+		"dev": "turbo run dev",
+		"preview": "turbo run preview",
+		"size": "turbo run size --filter=svelte-reactive-table"
 	},
 	"keywords": [],
 	"author": {
@@ -41,6 +47,7 @@
 		"globals": "^16.0.0",
 		"prettier": "^3.5.3",
 		"prettier-plugin-svelte": "^3.3.3",
+		"turbo": "^2.5.2",
 		"typescript-eslint": "^8.20.0"
 	}
 }

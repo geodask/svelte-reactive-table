@@ -1,4 +1,3 @@
-// filepath: /home/gdaskalakis/personal/svelte-reactive-table/packages/svelte-reactive-table/src/lib/features/sorting/sorting.svelte.spec.ts
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { reactiveSorting, type ReactiveSortingOutput } from './index.js';
 import type { Row } from '../../core/table.svelte.js';
@@ -147,7 +146,7 @@ describe('reactiveSorting', () => {
 		expect(sortingOutput.rows[3].original.rating).toBe(5);
 	});
 
-	it('should cycle through asc, desc, none in multi-sort mode', () => {
+	it('should cycle through asc, desc, then remove in multi-sort mode', () => {
 		// Initialize with multiSort enabled
 		sortingOutput = reactiveSorting<TestItem>({ multiSort: true })(() => rows);
 
@@ -157,11 +156,9 @@ describe('reactiveSorting', () => {
 		sortingOutput.state.toggleSort('name'); // Second toggle - desc
 		expect(sortingOutput.state.columnSortings[0].direction).toBe('desc');
 
-		sortingOutput.state.toggleSort('name'); // Third toggle - none
-		expect(sortingOutput.state.columnSortings[0].direction).toBe('none');
-
-		// The column sort state should still exist but with 'none' direction
-		expect(sortingOutput.state.columnSortings).toHaveLength(1);
+		sortingOutput.state.toggleSort('name'); // Third toggle - removes the sorting completely
+		// The column sort should be removed when toggled past desc in multi-sort mode
+		expect(sortingOutput.state.columnSortings).toHaveLength(0);
 	});
 
 	it('should clear all sorts', () => {
