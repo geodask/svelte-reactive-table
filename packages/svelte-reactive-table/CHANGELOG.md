@@ -1,5 +1,15 @@
 # svelte-reactive-table
 
+## 0.4.0
+
+### Minor Changes
+
+- ad357dd: feat: add basic sorting functionality
+
+### Patch Changes
+
+- e26a788: refactor: reorganize project structure into core and features modules
+
 ## 0.3.0
 
 ### Minor Changes
