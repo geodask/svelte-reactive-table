@@ -1,5 +1,11 @@
 # svelte-reactive-table
 
+## 0.4.1
+
+### Patch Changes
+
+- a8308bd: refactor: small improvements
+
 ## 0.4.0
 
 ### Minor Changes
