@@ -116,12 +116,12 @@ function createPagination<T>(
 			log.warn(messages.invalid_page(page, pageCount));
 			return;
 		}
-		_pagination = { ..._pagination, page: page };
+		_pagination.page = page;
 	}
 
 	function nextPage(): boolean {
 		if (_pagination.page < pageCount - 1) {
-			_pagination = { ..._pagination, page: _pagination.page + 1 };
+			_pagination.page += 1;
 			return true;
 		}
 		return false;
@@ -129,18 +129,18 @@ function createPagination<T>(
 
 	function previousPage(): boolean {
 		if (_pagination.page > 0) {
-			_pagination = { ..._pagination, page: _pagination.page - 1 };
+			_pagination.page -= 1;
 			return true;
 		}
 		return false;
 	}
 
 	function firstPage() {
-		_pagination = { ..._pagination, page: 0 };
+		_pagination.page = 0;
 	}
 
 	function lastPage() {
-		_pagination = { ..._pagination, page: Math.max(0, pageCount - 1) };
+		_pagination.page = Math.max(0, pageCount - 1);
 	}
 
 	function setPageSize(pageSize: number, resetpage = true) {
@@ -149,11 +149,10 @@ function createPagination<T>(
 			return;
 		}
 
-		_pagination = {
-			..._pagination,
-			pageSize,
-			page: resetpage ? 0 : _pagination.page
-		};
+		_pagination.pageSize = pageSize;
+		if (resetpage) {
+			_pagination.page = 0;
+		}
 	}
 
 	const paginationOutput = {
@@ -192,10 +191,5 @@ function createPagination<T>(
 export function reactivePagination<T>(
 	initialPagination?: Partial<Pagination>
 ): ReactivePaginationFactory<T> {
-	const options = {
-		page: initialPagination?.page ?? 0,
-		pageSize: initialPagination?.pageSize ?? 10
-	};
-
-	return (getRows: () => Row<T>[]) => createPagination(getRows, options);
+	return (getRows: () => Row<T>[]) => createPagination(getRows, initialPagination || {});
 }

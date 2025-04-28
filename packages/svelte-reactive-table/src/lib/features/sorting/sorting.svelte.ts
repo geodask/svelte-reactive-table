@@ -150,25 +150,20 @@ function createSorting<T>(
 		}
 
 		if (exists) {
-			// Get the existing column sorting
 			const columnSorting = _sortingState.columnSortings[columnSortingIndex];
 
 			if (columnSorting.direction === 'asc') {
 				columnSorting.direction = 'desc';
-
-				// If in multi-sort mode, move to the end for highest priority
+				// Move to end for highest priority in multi-sort mode
 				if (_sortingState.multiSort) {
 					_sortingState.columnSortings.splice(columnSortingIndex, 1);
 					_sortingState.columnSortings.push(columnSorting);
 				}
-			} else if (columnSorting.direction === 'desc') {
-				if (_sortingState.multiSort) {
-					// In multi-sort mode, remove it from the array when it would be 'none'
-					_sortingState.columnSortings.splice(columnSortingIndex, 1);
-				} else {
-					// In single-sort mode, clear when going past 'desc'
-					clearSort();
-				}
+			} else {
+				// Either remove from array in multi-sort or clear in single-sort
+				_sortingState.multiSort
+					? _sortingState.columnSortings.splice(columnSortingIndex, 1)
+					: clearSort();
 			}
 		} else {
 			// Add new sort with 'asc' direction
@@ -183,43 +178,31 @@ function createSorting<T>(
 		_sortingState.columnSortings.length = 0;
 	}
 
-	// Get a sort function for the specified column
+	// Get sort function for a column (use default if none provided)
 	function getSortFn(key: keyof T): Comparator<any> {
-		if (!comparators.has(key)) {
-			return defaultComparator;
-		}
-		return comparators.get(key)!;
+		return comparators.has(key) ? comparators.get(key)! : defaultComparator;
 	}
 
 	// Sort the rows based on the current sort states
 	const sortedRows = $derived.by(() => {
-		if (_sortingState.columnSortings.length === 0) {
-			return rows; // No sorting applied
-		}
+		if (!_sortingState.columnSortings.length) return rows;
 
 		return [...rows].sort((rowA, rowB) => {
-			for (const columnSorting of _sortingState.columnSortings) {
-				const key = columnSorting.key as keyof T;
-				const direction = columnSorting.direction;
-
-				const valueA = rowA.original[key];
-				const valueB = rowB.original[key];
-				const sortFn = getSortFn(key);
-
-				// Compare values using the sort function
+			for (const { key, direction } of _sortingState.columnSortings) {
+				const valueA = rowA.original[key as keyof T];
+				const valueB = rowB.original[key as keyof T];
+				const sortFn = getSortFn(key as keyof T);
 				const result = sortFn(valueA, valueB);
 
 				if (result !== 0) {
 					return direction === 'asc' ? result : -result;
 				}
 			}
-
-			// If all sort criteria are equal, maintain original order
-			return 0;
+			return 0; // Maintain original order if all criteria equal
 		});
 	});
 
-	const sortingOutput = {
+	return {
 		get rows() {
 			return sortedRows;
 		},
@@ -234,8 +217,6 @@ function createSorting<T>(
 			clearSort
 		}
 	};
-
-	return sortingOutput;
 }
 
 /**
