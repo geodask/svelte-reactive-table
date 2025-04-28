@@ -151,7 +151,7 @@ importers:
         version: 4.1.6(picomatch@4.0.2)(svelte@5.27.0)(typescript@5.8.3)
       svelte-reactive-table:
         specifier: ^0.4.0
-        version: link:../../packages/svelte-reactive-table
+        version: 0.4.0(svelte@5.27.0)
       tailwind-merge:
         specifier: ^3.2.0
         version: 3.2.0
@@ -2971,6 +2971,11 @@ packages:
     peerDependenciesMeta:
       svelte:
         optional: true
+
+  svelte-reactive-table@0.4.0:
+    resolution: {integrity: sha512-5TmfGItT+Rs+tTFMum7d++aadkSsUmeKBHS3Eh/M0yn2eQc0xPDg3Yf6r9Bf98X2GoJZvckoufgoj1B8d2VYkg==}
+    peerDependencies:
+      svelte: ^5.0.0
 
   svelte-toolbelt@0.7.1:
     resolution: {integrity: sha512-HcBOcR17Vx9bjaOceUvxkY3nGmbBmCBBbuWLLEWO6jtmWH8f/QoWmbyUfQZrpDINH39en1b8mptfPQT9VKQ1xQ==}
@@ -6450,6 +6455,10 @@ snapshots:
       postcss-scss: 4.0.9(postcss@8.5.3)
       postcss-selector-parser: 7.1.0
     optionalDependencies:
+      svelte: 5.27.0
+
+  svelte-reactive-table@0.4.0(svelte@5.27.0):
+    dependencies:
       svelte: 5.27.0
 
   svelte-toolbelt@0.7.1(svelte@5.27.0):
