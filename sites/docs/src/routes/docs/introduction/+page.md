@@ -1,5 +1,6 @@
 ---
 layout: docPage
+slug: introduction
 ---
 
 <script lang="ts">

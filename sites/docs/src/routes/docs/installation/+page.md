@@ -1,5 +1,6 @@
 ---
 layout: docPage
+slug: installation
 ---
 
 <script lang="ts">
