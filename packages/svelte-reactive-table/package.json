@@ -12,11 +12,11 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --config ../../.prettierrc --write .",
 		"lint": "prettier --config ../../.prettierrc --check .",
-		"test:unit": "vitest",
-		"test": "pnpm run test:unit -- --run",
-		"test:coverage": "vitest --coverage",
+		"test": "vitest run",
+		"test:coverage": "vitest run --coverage",
+		"test:unit": "vitest run",
 		"typecheck": "svelte-check --tsconfig ./tsconfig.json",
-		"size": "pnpm build && size-limit"
+		"size": "size-limit"
 	},
 	"author": {
 		"name": "George Daskalakis",
@@ -77,12 +77,6 @@
 		{
 			"path": "dist/index.js",
 			"limit": "10 KB"
-		},
-		{
-			"path": "dist/index.js",
-			"import": "{ reactiveTable, reactiveColumnVisibility, reactivePagination, reactiveSorting }",
-			"limit": "10 KB",
-			"name": "All features imported"
 		}
 	],
 	"keywords": [
