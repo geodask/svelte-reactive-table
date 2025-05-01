@@ -3,7 +3,7 @@
 	import { Button } from '$shared/ui/shadcn/button';
 	import { Separator } from '$shared/ui/shadcn/separator';
 	import * as Sidebar from '$shared/ui/shadcn/sidebar';
-	import { Moon, Search, Sun } from '@lucide/svelte';
+	import { Moon, Sun } from '@lucide/svelte';
 	import { mode, toggleMode } from 'mode-watcher';
 </script>
 

@@ -9,7 +9,6 @@ layout: docPage
 	import Pre from '$shared/ui/markdown/pre.svelte';
 
 	const items = ['Code', 'Preview'];
-
 </script>
 
 # Basic Table Example

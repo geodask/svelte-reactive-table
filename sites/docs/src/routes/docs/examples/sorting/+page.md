@@ -5,7 +5,6 @@ layout: docPage
 <script lang="ts">
 	import Sorting from './sorting.svelte';
 	import MultiSorting from './multi-sorting.svelte';
-
 	import Tabs from '$shared/ui/tabs.svelte'
 	import TabItem from '$shared/ui/tab-item.svelte'
 	import Pre from '$shared/ui/markdown/pre.svelte';
