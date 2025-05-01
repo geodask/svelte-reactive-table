@@ -37,6 +37,8 @@
 		"clsx": "^2.1.1",
 		"mdsvex": "^0.12.3",
 		"mode-watcher": "1.0.2",
+		"rehype-autolink-headings": "^7.1.0",
+		"rehype-slug": "^6.0.0",
 		"shiki": "^3.2.2",
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
@@ -49,5 +51,8 @@
 		"unified": "^11.0.5",
 		"velite": "^0.2.2",
 		"vite": "^6.0.0"
+	},
+	"dependencies": {
+		"@hbsnow/rehype-sectionize": "^1.0.7"
 	}
 }

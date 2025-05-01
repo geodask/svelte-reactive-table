@@ -8,7 +8,7 @@
 	let viewportRef: HTMLDivElement | null = $state(null);
 
 	onNavigate(() => {
-		viewportRef?.scrollTo({ top: 0 });
+		viewportRef?.scrollTo({ top: 0, behavior: 'instant' });
 	});
 
 	const { children } = $props();

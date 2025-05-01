@@ -1,5 +1,5 @@
 <script lang="ts" module>
-	export { code, pre } from '../markdown';
+	export { code, pre, h2, h3 } from '../markdown';
 </script>
 
 <script lang="ts">

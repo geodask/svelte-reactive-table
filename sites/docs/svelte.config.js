@@ -5,6 +5,8 @@ import { escapeSvelte, mdsvex } from 'mdsvex';
 import path from 'path';
 import { createHighlighter } from 'shiki';
 import { fileURLToPath } from 'url';
+import rehypeSlug from 'rehype-slug';
+import rehypeSectionize from '@hbsnow/rehype-sectionize';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,11 +18,12 @@ const highlighter = await createHighlighter({
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	extensions: ['.svelte', '.md', '.svx'],
+	extensions: ['.svelte', '.md'],
 	preprocess: [
 		vitePreprocess(),
 		mdsvex({
-			extensions: ['.svx', '.md'],
+			extensions: ['.md'],
+			rehypePlugins: [rehypeSlug, [rehypeSectionize, { idPropertyName: 'data-section-id' }]],
 			layout: {
 				docPage: path.join(__dirname, './src/lib/shared/ui/layouts/doc-page.svelte')
 			},
