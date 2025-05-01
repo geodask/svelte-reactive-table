@@ -57,7 +57,7 @@
 				<a href="/docs/introduction" class="text-sm font-medium hover:text-primary transition-colors">
 					Documentation
 				</a>
-				<a href="/docs/exampels" class="text-sm font-medium hover:text-primary transition-colors">
+				<a href="/docs/examples" class="text-sm font-medium hover:text-primary transition-colors">
 					Examples
 				</a>
 				<Button variant="ghost" target="_blank" size="icon" href="https://github.com/geodask/svelte-reactive-table">
