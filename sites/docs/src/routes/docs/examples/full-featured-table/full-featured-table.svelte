@@ -111,27 +111,25 @@
 	<Table.Root>
 		<Table.Header class="bg-muted/50">
 			<Table.Row>
-				{#each table.allColumns as column}
-					{#if table.columnVisibility.isColumnVisible(column.accessor)}
-						<Table.Head class="p-2">
-							<Button
-								onclick={() => table.sorting.toggleSort(column.accessor)}
-								size="sm"
-								variant="ghost"
-							>
-								<span class="font-medium">{column.header}</span>
-								<span class="text-muted-foreground/70">
-									{#if getSortDirection(column.accessor) === 'asc'}
-										<ArrowUp class="h-4 text-primary" />
-									{:else if getSortDirection(column.accessor) === 'desc'}
-										<ArrowDown class="h-4 text-primary" />
-									{:else}
-										<ArrowUpDown />
-									{/if}
-								</span>
-							</Button>
-						</Table.Head>
-					{/if}
+				{#each table.columns as column}
+					<Table.Head class="p-2">
+						<Button
+							onclick={() => table.sorting.toggleSort(column.accessor)}
+							size="sm"
+							variant="ghost"
+						>
+							<span class="font-medium">{column.header}</span>
+							<span class="text-muted-foreground/70">
+								{#if getSortDirection(column.accessor) === 'asc'}
+									<ArrowUp class="h-4 text-primary" />
+								{:else if getSortDirection(column.accessor) === 'desc'}
+									<ArrowDown class="h-4 text-primary" />
+								{:else}
+									<ArrowUpDown />
+								{/if}
+							</span>
+						</Button>
+					</Table.Head>
 				{/each}
 			</Table.Row>
 		</Table.Header>
@@ -139,11 +137,9 @@
 			{#each table.rows as row}
 				<Table.Row class="hover:bg-muted/20 transition-colors">
 					{#each row.cells as cell}
-						{#if table.columnVisibility.isColumnVisible(cell.key)}
-							<Table.Cell class="p-4">
-								{cell.value}
-							</Table.Cell>
-						{/if}
+						<Table.Cell class="p-4">
+							{cell.value}
+						</Table.Cell>
 					{/each}
 				</Table.Row>
 			{/each}
