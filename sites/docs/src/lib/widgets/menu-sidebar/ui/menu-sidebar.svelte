@@ -42,9 +42,9 @@
 		</ScrollArea>
 	</Sidebar.Content>
 
-	<Sidebar.Footer class="p-4">
+	<!-- <Sidebar.Footer class="p-4">
 		<p class="text-sm text-muted-foreground">
 			&copy; {currentYear} George Daskalakis
 		</p>
-	</Sidebar.Footer>
+	</Sidebar.Footer> -->
 </Sidebar.Root>

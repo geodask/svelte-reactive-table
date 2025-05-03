@@ -47,13 +47,13 @@
 				<h3 class="text-sm font-semibold">Resources</h3>
 				<div class="grid grid-cols-1 gap-2">
 					<a
-						href="/docs"
+						href="/docs/introduction"
 						class="text-sm text-muted-foreground hover:text-primary transition-colors"
 					>
 						Documentation
 					</a>
 					<a
-						href="/examples"
+						href="/docs/examples"
 						class="text-sm text-muted-foreground hover:text-primary transition-colors">Examples</a
 					>
 				</div>
@@ -64,6 +64,7 @@
 				<h3 class="text-sm font-semibold">Community</h3>
 				<div class="grid grid-cols-1 gap-2">
 					<a
+						target="_blank"
 						href="https://github.com/geodask/svelte-reactive-table"
 						class="text-sm text-muted-foreground hover:text-primary [&>svg]:size-4 transition-colors flex items-center gap-1"
 					>
@@ -71,6 +72,7 @@
 						GitHub
 					</a>
 					<a
+						target="_blank"
 						href="https://github.com/geodask/svelte-reactive-table/releases"
 						class="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
 					>

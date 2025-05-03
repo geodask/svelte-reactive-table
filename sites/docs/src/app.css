@@ -101,7 +101,7 @@
 @layer base {
 	* {
 		@apply border-border;
-		@apply scroll-mt-16 scroll-smooth;
+		@apply scroll-mt-16;
 	}
 
 	body {

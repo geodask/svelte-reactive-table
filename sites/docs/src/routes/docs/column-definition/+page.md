@@ -48,7 +48,7 @@ const columns = [
 If no column is marked as the identifier, the first column will be used by default. The identifier helps with:
 
 - Generating stable keys for each row
-- Tracking rows across data updates
+- Observing rows across data updates
 - Supporting row operations like selection (in future versions)
 
 ## Initial Column Visibility
