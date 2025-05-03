@@ -2,6 +2,25 @@
 layout: docPage
 ---
 
+<script lang="ts">
+	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
+	import { BookOpen } from '@lucide/svelte';
+
+	const breadcrumb = reactiveBreadcrumb();
+	breadcrumb.setItems([
+		{
+			icon: BookOpen, 
+			href: '/docs/introduction'
+		},
+		{
+			title: 'API Reference',
+		},
+		{
+			title: 'reactiveSorting'
+		}
+	])
+</script>
+
 # reactiveSorting
 
 The `reactiveSorting` function creates sorting functionality for Svelte Reactive Table, enabling users to sort data in ascending or descending order across one or multiple columns.

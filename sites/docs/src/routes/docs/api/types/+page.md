@@ -2,6 +2,25 @@
 layout: docPage
 ---
 
+<script lang="ts">
+	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
+	import { BookOpen } from '@lucide/svelte';
+
+	const breadcrumb = reactiveBreadcrumb();
+	breadcrumb.setItems([
+		{
+			icon: BookOpen, 
+			href: '/docs/introduction'
+		},
+		{
+			title: 'API Reference',
+		},
+		{
+			title: 'Types'
+		}
+	])
+</script>
+
 # Types
 
 Svelte Reactive Table exports several TypeScript types that help you build type-safe tables. This reference documents the main types you'll encounter when working with the library.

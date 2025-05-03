@@ -2,6 +2,25 @@
 layout: docPage
 ---
 
+<script lang="ts">
+	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
+	import { BookOpen } from '@lucide/svelte';
+
+	const breadcrumb = reactiveBreadcrumb();
+	breadcrumb.setItems([
+		{
+			icon: BookOpen, 
+			href: '/docs/introduction'
+		},
+		{
+			title: 'Core Concepts',
+		},
+		{
+			title: 'Pagination'
+		}
+	])
+</script>
+
 # Pagination
 
 Pagination is essential for handling large datasets efficiently. Svelte Reactive Table provides an intuitive pagination system that makes it easy to navigate through data.

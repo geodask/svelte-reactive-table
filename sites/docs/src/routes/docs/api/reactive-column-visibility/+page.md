@@ -2,6 +2,25 @@
 layout: docPage
 ---
 
+<script lang="ts">
+	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
+	import { BookOpen } from '@lucide/svelte';
+
+	const breadcrumb = reactiveBreadcrumb();
+	breadcrumb.setItems([
+		{
+			icon: BookOpen,
+			href: '/docs/introduction'
+		},
+		{
+			title: 'API Reference'
+		},
+		{
+			title: 'reactiveColumnVisibility'
+		}
+	]);
+</script>
+
 # reactiveColumnVisibility
 
 The `reactiveColumnVisibility` function creates column visibility management functionality for Svelte Reactive Table, allowing you to show and hide specific columns dynamically.

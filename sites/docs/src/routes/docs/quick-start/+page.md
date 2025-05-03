@@ -1,9 +1,27 @@
 ---
 layout: docPage
-title: Quick Start Guide
 ---
 
-# Quick Start Guide
+<script lang="ts">
+	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
+	import { BookOpen } from '@lucide/svelte';
+
+	const breadcrumb = reactiveBreadcrumb();
+	breadcrumb.setItems([
+		{
+			icon: BookOpen, 
+			href: '/docs/introduction'
+		},
+		{
+			title: 'Getting Started',
+		},
+		{
+			title: 'Quick Start'
+		}
+	])
+</script>
+
+# Quick Start
 
 This guide will show you how to use Svelte Reactive Table's core features to build flexible, reactive tables.
 

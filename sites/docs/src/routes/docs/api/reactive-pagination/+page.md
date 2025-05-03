@@ -2,6 +2,25 @@
 layout: docPage
 ---
 
+<script lang="ts">
+	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
+	import { BookOpen } from '@lucide/svelte';
+
+	const breadcrumb = reactiveBreadcrumb();
+	breadcrumb.setItems([
+		{
+			icon: BookOpen, 
+			href: '/docs/introduction'
+		},
+		{
+			title: 'API Reference',
+		},
+		{
+			title: 'reactivePagination'
+		}
+	])
+</script>
+
 # reactivePagination
 
 The `reactivePagination` function creates pagination functionality for Svelte Reactive Table, enabling navigation through large datasets by dividing them into manageable pages.

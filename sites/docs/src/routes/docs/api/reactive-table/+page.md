@@ -2,6 +2,26 @@
 layout: docPage
 ---
 
+<script lang="ts">
+	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
+	import { BookOpen } from '@lucide/svelte';
+
+	const breadcrumb = reactiveBreadcrumb();
+	breadcrumb.setItems([
+		{
+			icon: BookOpen, 
+			href: '/docs/introduction'
+		},
+		{
+			title: 'API Reference',
+		},
+		{
+			title: 'reactiveTable',
+			route: '/docs/api/reactive-table'
+		}
+	])
+</script>
+
 # reactiveTable
 
 The `reactiveTable` function is the core API of Svelte Reactive Table. It creates a fully reactive table instance that automatically updates when your data changes.

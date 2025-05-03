@@ -2,6 +2,25 @@
 layout: docPage
 ---
 
+<script lang="ts">
+	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
+	import { BookOpen } from '@lucide/svelte';
+
+	const breadcrumb = reactiveBreadcrumb();
+	breadcrumb.setItems([
+		{
+			icon: BookOpen, 
+			href: '/docs/introduction'
+		},
+		{
+			title: 'Core Concepts',
+		},
+		{
+			title: 'Column Definition'
+		}
+	])
+</script>
+
 # Column Definition
 
 Defining columns is a fundamental step in creating tables with Svelte Reactive Table. Column definitions determine what data is displayed and how it's identified.

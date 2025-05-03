@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { setupReactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte';
 	import { reactiveToc } from '$shared/lib/toc/toc.svelte';
 	import * as Sidebar from '$shared/ui/shadcn/sidebar';
 	import { Header } from '$widgets/header';
@@ -24,6 +25,8 @@
 			rootMargin: '-60px 0px 0px 0px'
 		}
 	);
+
+	setupReactiveBreadcrumb();
 
 	// Enhanced TOC items ready for rendering
 	const enhancedTocItems = $derived(tocState?.items ?? []);

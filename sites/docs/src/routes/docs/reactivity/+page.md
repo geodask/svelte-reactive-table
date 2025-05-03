@@ -2,6 +2,25 @@
 layout: docPage
 ---
 
+<script lang="ts">
+	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
+	import { BookOpen } from '@lucide/svelte';
+
+	const breadcrumb = reactiveBreadcrumb();
+	breadcrumb.setItems([
+		{
+			icon: BookOpen, 
+			href: '/docs/introduction'
+		},
+		{
+			title: 'Core Concepts',
+		},
+		{
+			title: 'Reactivity'
+		}
+	])
+</script>
+
 # Reactivity
 
 Reactivity is at the core of Svelte Reactive Table. Built with Svelte 5's runes system, the library automatically updates your table interface whenever your data changes.

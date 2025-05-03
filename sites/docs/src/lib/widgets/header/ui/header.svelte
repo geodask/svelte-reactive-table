@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { version } from '$shared/config/version';
 	import Github from '$shared/ui/icons/github.svelte';
+	import { Badge } from '$shared/ui/shadcn/badge';
 	import { Button } from '$shared/ui/shadcn/button';
 	import { Separator } from '$shared/ui/shadcn/separator';
 	import * as Sidebar from '$shared/ui/shadcn/sidebar';
-	import { Moon, Sun } from '@lucide/svelte';
+	import { Moon, Search, Sun } from '@lucide/svelte';
 	import { mode, toggleMode } from 'mode-watcher';
 </script>
 
@@ -11,14 +13,19 @@
 	<Sidebar.Trigger class=" size-9" />
 	<Separator orientation="vertical" class="min-h-0 h-6" />
 
-	<!-- <Button class="w-64 ml-auto justify-start px-2" variant="outline">
+	<Button
+		onclick={() => alert('Coming soon!')}
+		class="w-64 ml-auto justify-start px-2 border border-border dark:border-input"
+		variant="ghost"
+	>
 		<Search size={16} />
-		Search Docs...
-	</Button> -->
+		Search...
+	</Button>
+
+	<div class="px-2 font-mono text-sm">v{version}</div>
 
 	<Button
 		size="icon"
-		class="ml-auto"
 		variant="ghost"
 		target="_blank"
 		href="https://github.com/geodask/svelte-reactive-table"

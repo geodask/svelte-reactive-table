@@ -3,28 +3,46 @@
 </script>
 
 <script lang="ts">
+	import { reactiveBreadcrumb, type BreadcrumbItem } from '$shared/lib/breadcrumb.svelte';
+	import { cn } from '$shared/lib/shadcn';
 	import * as Breadcrumb from '$shared/ui/shadcn/breadcrumb';
-	import { BookOpen } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
 
 	const { children }: { children: Snippet } = $props();
+
+	const breadcrumb = reactiveBreadcrumb();
 </script>
+
+{#snippet BreacrumbContent(item: BreadcrumbItem)}
+	{#if item.icon}
+		{@const Icon = item.icon}
+		<Icon class="size-5" />
+	{/if}
+	{item.title}
+{/snippet}
 
 <Breadcrumb.Root class="mb-8">
 	<Breadcrumb.List class="text-base">
-		<Breadcrumb.Item>
-			<Breadcrumb.Link href="/docs/introduction">
-				<BookOpen class="size-5" />
-			</Breadcrumb.Link>
-		</Breadcrumb.Item>
-		<Breadcrumb.Separator />
-		<Breadcrumb.Item>
-			<Breadcrumb.Page class="text-muted-foreground">Getting Started</Breadcrumb.Page>
-		</Breadcrumb.Item>
-		<Breadcrumb.Separator />
-		<Breadcrumb.Item>
-			<Breadcrumb.Page>Introduction</Breadcrumb.Page>
-		</Breadcrumb.Item>
+		{#each breadcrumb.items as item}
+			<Breadcrumb.Item>
+				{#if item.href}
+					<Breadcrumb.Link href={item.href}>
+						{@render BreacrumbContent(item)}
+					</Breadcrumb.Link>
+				{:else}
+					<Breadcrumb.Page
+						class={cn({
+							'text-muted-foreground': item === breadcrumb.items[breadcrumb.items.length - 1]
+						})}
+					>
+						{@render BreacrumbContent(item)}
+					</Breadcrumb.Page>
+				{/if}
+			</Breadcrumb.Item>
+			{#if item !== breadcrumb.items[breadcrumb.items.length - 1]}
+				<Breadcrumb.Separator />
+			{/if}
+		{/each}
 	</Breadcrumb.List>
 </Breadcrumb.Root>
 

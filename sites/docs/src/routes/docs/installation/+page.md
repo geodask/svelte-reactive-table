@@ -6,8 +6,24 @@ slug: installation
 <script lang="ts">
   import Tabs from '$shared/ui/tabs.svelte';
   import TabItem from '$shared/ui/tab-item.svelte';
+  import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
+	import { BookOpen } from '@lucide/svelte';
 
   const items = ['npm', 'pnpm', 'yarn', 'bun'];
+
+	const breadcrumb = reactiveBreadcrumb();
+	breadcrumb.setItems([
+		{
+			icon: BookOpen, 
+			href: '/docs/introduction'
+		},
+		{
+			title: 'Getting Started',
+		},
+		{
+			title: 'Installation'
+		}
+	])
 </script>
 
 # Installation
