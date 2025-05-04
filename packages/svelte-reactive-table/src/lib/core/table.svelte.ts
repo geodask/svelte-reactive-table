@@ -244,15 +244,17 @@ export function reactiveTable<T, Options extends TableOptions<T> = {}>(
 
 	let sortingOutput: ReactiveSortingOutput<T> | undefined;
 	if (options.sorting) {
-		sortingOutput = options.sorting(() => allRows);
-		getDisplayRows = () => sortingOutput!.rows;
+		const output = (sortingOutput = options.sorting(() => allRows));
+		getDisplayRows = () => output.rows;
+		sortingOutput = output;
 	}
 
 	// Add pagination if option is provided
 	let paginationOutput: ReactivePaginationOutput<T> | undefined;
 	if (options.pagination) {
-		paginationOutput = options.pagination(getDisplayRows); // getDisplayRows returns either allRows or sorted rows
-		getDisplayRows = () => paginationOutput!.rows;
+		const output = options.pagination(getDisplayRows); // getDisplayRows returns either allRows or sorted rows
+		getDisplayRows = () => output.rows;
+		paginationOutput = output;
 	}
 
 	// Now create the table object with the proper rows getter
@@ -287,7 +289,7 @@ export function reactiveTable<T, Options extends TableOptions<T> = {}>(
 	};
 
 	// Add features to the table
-	const tableWithFeatures = table as unknown as ReactiveTable<T, Options>;
+	const tableWithFeatures = table as ReactiveTable<T, Options>;
 
 	// Add pagination object to the table if it was provided
 	if (paginationOutput) {

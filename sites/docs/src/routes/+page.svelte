@@ -22,6 +22,7 @@
 	import { Badge } from '$shared/ui/shadcn/badge';
 	import EarlyReleaseAlert from '$widgets/early-release-alert/ui/early-release-alert.svelte';
 	import { fade, fly } from 'svelte/transition';
+	import { useClipboard } from '$shared/lib/clipboard.svelte';
 
 	const features = [
 		{
@@ -68,15 +69,7 @@
 
 	const installCommand = 'npm install svelte-reactive-table';
 
-	let copied = $state(false);
-
-	function copyInstallCommand() {
-		navigator.clipboard.writeText(installCommand);
-		copied = true;
-		setTimeout(() => {
-			copied = false;
-		}, 2000);
-	}
+	const clipboard = useClipboard();
 </script>
 
 <!-- Header Component -->
@@ -110,11 +103,11 @@
 		</p>
 
 		<div in:fly={{ y: 20, duration: 600, delay: 450 }} class="mb-8 flex justify-center">
-			<Button variant="ghost" class="group" onclick={copyInstallCommand}>
+			<Button variant="ghost" class="group" onclick={() => clipboard.copy()}>
 				<span class="select-none text-primary">$</span>
-				<span class="pr-2">{installCommand}</span>
+				<span use:clipboard.readText class="pr-2">{installCommand}</span>
 				<span class="text-xs transition-colors group-hover:text-primary ml-2">
-					{copied ? '✓ Copied!' : 'Copy'}
+					{clipboard.copied ? '✓ Copied!' : 'Copy'}
 				</span>
 			</Button>
 		</div>
