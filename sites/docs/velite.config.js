@@ -10,7 +10,7 @@ export default defineConfig({
 				toc: s.toc({ minDepth: 2 }),
 				path: s.path().transform((path) => {
 					const parts = path.split('/');
-				parts.pop(); // Remove the last part ("+page")
+					parts.pop(); // Remove the last part ("+page")
 					return '/' + parts.join('/'); // Add leading slash
 				})
 			})

@@ -54,13 +54,21 @@
 
 			<!-- Desktop Navigation -->
 			<nav class="hidden md:flex items-center gap-4">
-				<a href="/docs/introduction" class="text-sm font-medium hover:text-primary transition-colors">
+				<a
+					href="/docs/introduction"
+					class="text-sm font-medium hover:text-primary transition-colors"
+				>
 					Documentation
 				</a>
 				<a href="/docs/examples" class="text-sm font-medium hover:text-primary transition-colors">
 					Examples
 				</a>
-				<Button variant="ghost" target="_blank" size="icon" href="https://github.com/geodask/svelte-reactive-table">
+				<Button
+					variant="ghost"
+					target="_blank"
+					size="icon"
+					href="https://github.com/geodask/svelte-reactive-table"
+				>
 					<Github />
 				</Button>
 				<Button size="icon" variant="ghost" onclick={toggleMode}>
