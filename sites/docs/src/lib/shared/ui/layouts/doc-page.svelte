@@ -46,6 +46,6 @@
 	</Breadcrumb.List>
 </Breadcrumb.Root>
 
-<div class="prose prose-base max-w-none relative dark:prose-invert pb-10">
+<div class="prose prose-base max-w-none dark:prose-invert relative pb-10">
 	{@render children()}
 </div>
