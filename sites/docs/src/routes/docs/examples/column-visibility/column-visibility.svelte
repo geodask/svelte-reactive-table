@@ -35,7 +35,7 @@
 					<Button
 						variant={visibilityTable.columnVisibility.isColumnVisible(column.accessor)
 							? 'default'
-							: 'outline'}
+							: 'outline-solid'}
 						size="sm"
 						onclick={() => toggleColumn(column.accessor)}
 						class="shadow-sm"

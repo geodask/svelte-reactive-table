@@ -37,31 +37,33 @@
 			{/if}
 		</Button>
 
-		<pre class="not-prose shiki max-h-[32rem] flex shrink" use:clipboard.readText>
+		<pre class="not-prose shiki max-h-128 flex shrink" use:clipboard.readText>
 			{@render children()}
 		</pre>
 
 		<!-- Scroll indicators with increased fade intensity -->
 		<div
-			class="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-muted via-muted/70 to-transparent pointer-events-none"
+			class="absolute bottom-0 left-0 right-0 h-4 bg-linear-to-t from-muted via-muted/70 to-transparent pointer-events-none"
 			aria-hidden="true"
 		></div>
 		<div
-			class="absolute top-0 left-0 right-0 h-4 bg-gradient-to-b from-muted via-muted/70 to-transparent pointer-events-none"
+			class="absolute top-0 left-0 right-0 h-4 bg-linear-to-b from-muted via-muted/70 to-transparent pointer-events-none"
 			aria-hidden="true"
 		></div>
 		<div
-			class="absolute top-0 bottom-0 right-0 w-4 bg-gradient-to-l from-muted via-muted/70 to-transparent pointer-events-none"
+			class="absolute top-0 bottom-0 right-0 w-4 bg-linear-to-l from-muted via-muted/70 to-transparent pointer-events-none"
 			aria-hidden="true"
 		></div>
 		<div
-			class="absolute top-0 bottom-0 left-0 w-4 bg-gradient-to-r from-muted via-muted/70 to-transparent pointer-events-none"
+			class="absolute top-0 bottom-0 left-0 w-4 bg-linear-to-r from-muted via-muted/70 to-transparent pointer-events-none"
 			aria-hidden="true"
 		></div>
 	</ScrollArea>
 </div>
 
 <style lang="postcss">
+	@reference "tailwindcss";
+
 	:global(pre code) {
 		@apply grow py-4 h-full m-0 block;
 	}

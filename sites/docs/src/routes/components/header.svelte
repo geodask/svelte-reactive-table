@@ -14,7 +14,7 @@
 	}
 </script>
 
-<header class="w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+<header class="w-full bg-background/95 backdrop-blur-sm supports-backdrop-filter:bg-background/60">
 	<div class="container mx-auto px-4">
 		<div class="flex h-16 items-center justify-between">
 			<!-- Logo and Project Name -->

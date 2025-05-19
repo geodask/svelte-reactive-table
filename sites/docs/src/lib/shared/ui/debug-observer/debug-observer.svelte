@@ -17,7 +17,7 @@
 </script>
 
 {#if active && observer}
-	<div class="fixed inset-0 pointer-events-none z-[9999]">
+	<div class="fixed inset-0 pointer-events-none z-9999">
 		<div
 			class="absolute left-0 right-0 bg-red-500/10"
 			style="top: 0; height: {margins.top}px;"

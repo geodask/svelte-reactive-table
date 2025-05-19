@@ -90,7 +90,7 @@
 
 		<h1
 			in:fly={{ y: 20, duration: 600, delay: 300 }}
-			class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-accent-foreground bg-clip-text text-transparent leading-tight"
+			class="text-5xl md:text-6xl font-bold mb-6 bg-linear-to-r from-primary to-accent-foreground bg-clip-text text-transparent leading-tight"
 		>
 			Svelte Reactive Table
 		</h1>
@@ -161,7 +161,7 @@
 
 	<!-- CTA Section -->
 	<section class="w-full text-center mb-8 max-w-2xl">
-		<Card.Root class="p-8 bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/20">
+		<Card.Root class="p-8 bg-linear-to-br from-primary/10 to-accent/10 border border-primary/20">
 			<h2 class="text-2xl font-bold mb-4">Ready to build your perfect table?</h2>
 			<p class="mb-6 text-muted-foreground">
 				Get started with Svelte Reactive Table and take complete control of your data display.

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { WithElementRef } from 'bits-ui';
-	import type { HTMLAttributes } from 'svelte/elements';
-	import { cn } from '$lib/shared/lib/shadcn.js';
+	import type { WithElementRef } from "bits-ui";
+	import type { HTMLAttributes } from "svelte/elements";
+	import { cn } from "$lib/shared/lib/shadcn.js";
 
 	let {
 		ref = $bindable(null),
@@ -11,6 +11,6 @@
 	}: WithElementRef<HTMLAttributes<HTMLDivElement>> = $props();
 </script>
 
-<div bind:this={ref} class={cn('p-6', className)} {...restProps}>
+<div bind:this={ref} class={cn("p-6", className)} {...restProps}>
 	{@render children?.()}
 </div>

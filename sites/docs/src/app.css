@@ -1,6 +1,27 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@plugin "@tailwindcss/typography";
+
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-gray-200, currentcolor);
+	}
+}
+
 @layer base {
 	:root {
 		--background: 204 12.2% 91.96%;
@@ -98,6 +119,49 @@
 	}
 }
 
+@theme inline {
+	/* Radius (for rounded-*) */
+	--radius-sm: calc(var(--radius) - 4px);
+	--radius-md: calc(var(--radius) - 2px);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) + 4px);
+
+	/* Colors */
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-ring: var(--ring);
+	--color-radius: var(--radius);
+	--color-sidebar-background: var(--sidebar-background);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-ring: var(--sidebar-ring);
+
+	/* Animations */
+	--animate-accordion-up: accordion-up 0.2s ease-out;
+	--animate-accordion-down: accordion-down 0.2s ease-out;
+	--animate-caret-blink: caret-blink 1.25s ease-out infinite;
+}
+
 @layer base {
 	* {
 		@apply border-border;
@@ -106,6 +170,39 @@
 
 	body {
 		@apply bg-background text-foreground;
+	}
+}
+
+@keyframes accordion-down {
+	from {
+		height: 0;
+	}
+
+	to {
+		height: var(--bits-accordion-content-height);
+	}
+}
+
+@keyframes accordion-up {
+	from {
+		height: var(--bits-accordion-content-height);
+	}
+
+	to {
+		height: 0;
+	}
+}
+
+@keyframes caret-blink {
+	0%,
+	70%,
+	100% {
+		opacity: 1;
+	}
+
+	20%,
+	50% {
+		opacity: 0;
 	}
 }
 

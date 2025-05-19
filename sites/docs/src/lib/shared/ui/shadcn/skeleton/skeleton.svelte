@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { WithElementRef, WithoutChildren } from 'bits-ui';
-	import type { HTMLAttributes } from 'svelte/elements';
-	import { cn } from '$lib/shared/lib/shadcn.js';
+	import type { WithElementRef, WithoutChildren } from "bits-ui";
+	import type { HTMLAttributes } from "svelte/elements";
+	import { cn } from "$lib/shared/lib/shadcn.js";
 
 	let {
 		ref = $bindable(null),
@@ -12,6 +12,6 @@
 
 <div
 	bind:this={ref}
-	class={cn('bg-primary/10 animate-pulse rounded-md', className)}
+	class={cn("bg-primary/10 animate-pulse rounded-md", className)}
 	{...restProps}
 ></div>
