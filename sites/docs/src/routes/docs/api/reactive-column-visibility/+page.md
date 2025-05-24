@@ -71,7 +71,7 @@ Returns a factory function that creates column visibility functionality when pas
 
 <!-- Column visibility controls -->
 <div>
-	<button on:click={() => table.columnVisibility.toggleColumnVisibility('age')}>
+	<button onclick={() => table.columnVisibility.toggleColumnVisibility('age')}>
 		{table.columnVisibility.isColumnVisible('age') ? 'Hide' : 'Show'} Age
 	</button>
 </div>
@@ -123,15 +123,15 @@ These methods are available on the table's `columnVisibility` object:
 ```svelte
 <div class="column-controls">
 	<!-- Toggle individual column -->
-	<button on:click={() => table.columnVisibility.toggleColumnVisibility('age')}>
+	<button onclick={() => table.columnVisibility.toggleColumnVisibility('age')}>
 		Toggle Age Column
 	</button>
 
 	<!-- Reset all column visibility -->
-	<button on:click={table.columnVisibility.resetColumnVisibility}> Show All Columns </button>
+	<button onclick={table.columnVisibility.resetColumnVisibility}> Show All Columns </button>
 
 	<!-- Show only specific columns -->
-	<button on:click={() => table.columnVisibility.setVisibleColumns(['name', 'email'])}>
+	<button onclick={() => table.columnVisibility.setVisibleColumns(['name', 'email'])}>
 		Show Only Name & Email
 	</button>
 </div>

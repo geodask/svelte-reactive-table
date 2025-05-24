@@ -12,7 +12,7 @@
 		// Check if there's a hash in the URL to set the active tab
 		if (window.location.hash) {
 			const hash = window.location.hash.substring(1);
-			if (['basic', 'columns', 'pagination', 'sorting', 'full'].includes(hash)) {
+			if (['basic', 'columns', 'pagination', 'sorting', 'full', 'plugin'].includes(hash)) {
 				activeTab = hash;
 			}
 		}
@@ -38,7 +38,7 @@
                 {activeTab === 'basic'
 								? 'bg-white text-emerald-700 shadow-sm'
 								: 'text-gray-700 hover:text-gray-900'}"
-							on:click={() => setActiveTab('basic')}
+							onclick={() => setActiveTab('basic')}
 						>
 							Basic
 						</button>
@@ -48,7 +48,7 @@
                 {activeTab === 'columns'
 								? 'bg-white text-emerald-700 shadow-sm'
 								: 'text-gray-700 hover:text-gray-900'}"
-							on:click={() => setActiveTab('columns')}
+							onclick={() => setActiveTab('columns')}
 						>
 							Columns
 						</button>
@@ -58,7 +58,7 @@
                 {activeTab === 'pagination'
 								? 'bg-white text-emerald-700 shadow-sm'
 								: 'text-gray-700 hover:text-gray-900'}"
-							on:click={() => setActiveTab('pagination')}
+							onclick={() => setActiveTab('pagination')}
 						>
 							Pagination
 						</button>
@@ -68,7 +68,7 @@
 							{activeTab === 'sorting'
 								? 'bg-white text-emerald-700 shadow-sm'
 								: 'text-gray-700 hover:text-gray-900'}"
-							on:click={() => setActiveTab('sorting')}
+							onclick={() => setActiveTab('sorting')}
 						>
 							Sorting
 						</button>
@@ -78,7 +78,7 @@
 							{activeTab === 'full'
 								? 'bg-white text-emerald-700 shadow-sm'
 								: 'text-gray-700 hover:text-gray-900'}"
-							on:click={() => setActiveTab('full')}
+							onclick={() => setActiveTab('full')}
 						>
 							Full Example
 						</button>

@@ -3,27 +3,23 @@
 	import { initialData, type Person } from './data.js';
 
 	// Toggle column visibility example
-	const visibilityTable = reactiveTable(
-		initialData,
-		[
-			{ accessor: 'id', header: 'ID', isIdentifier: true },
-			{ accessor: 'name', header: 'Name' },
-			{ accessor: 'age', header: 'Age' },
-			{ accessor: 'city', header: 'City' }
-		],
-		{
-			columnVisibility: reactiveColumnVisibility({
-				hiddenColumns: []
-			})
-		}
+	const visibilityTable = reactiveTable(initialData, [
+		{ accessor: 'id', header: 'ID', isIdentifier: true },
+		{ accessor: 'name', header: 'Name' },
+		{ accessor: 'age', header: 'Age' },
+		{ accessor: 'city', header: 'City' }
+	]).use(
+		reactiveColumnVisibility({
+			hiddenColumns: []
+		})
 	);
 
 	function toggleColumn(accessor: keyof Person) {
-		visibilityTable.columnVisibility.toggleColumnVisibility(accessor);
+		visibilityTable.plugins.columnVisibility.toggleVisibility(accessor);
 	}
 </script>
 
-<section class="max-w-5xl mx-auto my-8 px-4">
+<section class="mx-auto my-8 px-4">
 	<h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Column Visibility</h2>
 
 	<div class="mb-6">
@@ -32,14 +28,14 @@
 			{#each visibilityTable.allColumns as column}
 				<button
 					class="px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
-            {visibilityTable.columnVisibility.isColumnVisible(column.accessor)
+            {visibilityTable.plugins.columnVisibility.isVisible(column.accessor)
 						? 'bg-emerald-100 text-emerald-800 border border-emerald-300 hover:bg-emerald-200'
 						: 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200'}"
 					onclick={() => toggleColumn(column.accessor)}
 				>
 					<div class="flex items-center gap-2">
 						<span class="w-4 h-4 flex items-center justify-center">
-							{#if visibilityTable.columnVisibility.isColumnVisible(column.accessor)}
+							{#if visibilityTable.plugins.columnVisibility.isVisible(column.accessor)}
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 20 20"

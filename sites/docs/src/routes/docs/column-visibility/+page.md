@@ -114,7 +114,7 @@ Here's a practical example of a column selector component:
 			<input
 				type="checkbox"
 				checked={table.columnVisibility.isColumnVisible(column.accessor)}
-				on:change={() => table.columnVisibility.toggleColumnVisibility(column.accessor)}
+				onchange={() => table.columnVisibility.toggleColumnVisibility(column.accessor)}
 			/>
 			{column.header}
 		</label>

@@ -97,9 +97,9 @@ Control which columns are displayed by using the column visibility methods:
 </script>
 
 <div>
-	<button on:click={toggleAgeColumn}>Toggle Age Column</button>
-	<button on:click={() => hideColumn('city')}>Hide City Column</button>
-	<button on:click={() => showColumn('city')}>Show City Column</button>
+	<button onclick={toggleAgeColumn}>Toggle Age Column</button>
+	<button onclick={() => hideColumn('city')}>Hide City Column</button>
+	<button onclick={() => showColumn('city')}>Show City Column</button>
 </div>
 
 <!-- Table as above -->
@@ -151,14 +151,14 @@ Add pagination to your table for handling larger datasets:
 <!-- Pagination controls -->
 <div class="pagination-controls">
 	<button
-		on:click={tableWithPagination.pagination.firstPage}
+		onclick={tableWithPagination.pagination.firstPage}
 		disabled={tableWithPagination.pagination.page === 0}
 	>
 		First
 	</button>
 
 	<button
-		on:click={tableWithPagination.pagination.previousPage}
+		onclick={tableWithPagination.pagination.previousPage}
 		disabled={tableWithPagination.pagination.page === 0}
 	>
 		Previous
@@ -169,14 +169,14 @@ Add pagination to your table for handling larger datasets:
 	</span>
 
 	<button
-		on:click={tableWithPagination.pagination.nextPage}
+		onclick={tableWithPagination.pagination.nextPage}
 		disabled={tableWithPagination.pagination.page === tableWithPagination.pagination.pageCount - 1}
 	>
 		Next
 	</button>
 
 	<button
-		on:click={tableWithPagination.pagination.lastPage}
+		onclick={tableWithPagination.pagination.lastPage}
 		disabled={tableWithPagination.pagination.page === tableWithPagination.pagination.pageCount - 1}
 	>
 		Last
@@ -187,7 +187,7 @@ Add pagination to your table for handling larger datasets:
 		<span>Rows per page:</span>
 		<select
 			value={tableWithPagination.pagination.pageSize}
-			on:change={(e) => setPageSize(Number(e.target.value))}
+			onchange={(e) => setPageSize(Number(e.target.value))}
 		>
 			{#each pageSizeOptions as size}
 				<option value={size}>{size}</option>
@@ -221,7 +221,7 @@ One of the key features of Svelte Reactive Table is that it automatically reacts
 	}
 </script>
 
-<button on:click={addNewRow}>Add New Row</button>
+<button onclick={addNewRow}>Add New Row</button>
 
 <!-- Table as before, but with delete buttons -->
 <table>
@@ -233,7 +233,7 @@ One of the key features of Svelte Reactive Table is that it automatically reacts
 					<td>{cell.value}</td>
 				{/each}
 				<td>
-					<button on:click={() => removeRow(row.id)}>Remove</button>
+					<button onclick={() => removeRow(row.id)}>Remove</button>
 				</td>
 			</tr>
 		{/each}

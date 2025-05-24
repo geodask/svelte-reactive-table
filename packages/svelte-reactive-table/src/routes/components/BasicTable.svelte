@@ -20,7 +20,7 @@
 	}
 </script>
 
-<section class="max-w-5xl mx-auto my-8 px-4">
+<section class="mx-auto my-8 px-4">
 	<h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Data Table</h2>
 
 	<div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">

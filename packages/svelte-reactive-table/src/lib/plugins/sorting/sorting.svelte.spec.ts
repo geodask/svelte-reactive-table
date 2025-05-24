@@ -1,6 +1,7 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { reactiveSorting, type ReactiveSortingOutput } from './index.js';
-import type { Row } from '../../core/table.svelte.js';
+import type { PluginOutput, Row } from '$lib/core/index.js';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { reactiveSorting } from './index.js';
+import type { SortingState } from './types/index.js';
 
 // Define a simple type for testing
 type TestItem = {
@@ -56,11 +57,16 @@ const createTestRows = (): Row<TestItem>[] => [
 
 describe('reactiveSorting', () => {
 	let rows: Row<TestItem>[];
-	let sortingOutput: ReactiveSortingOutput<TestItem>;
+	let sortingPlugin: ReturnType<typeof reactiveSorting<TestItem>>;
+	let sortingOutput: PluginOutput<TestItem, SortingState<TestItem>>;
 
 	beforeEach(() => {
 		rows = createTestRows();
-		sortingOutput = reactiveSorting<TestItem>()(() => rows);
+		sortingPlugin = reactiveSorting<TestItem>();
+		sortingOutput = sortingPlugin.init(
+			() => rows,
+			() => []
+		);
 	});
 
 	it('should initialize with default values', () => {
@@ -119,115 +125,140 @@ describe('reactiveSorting', () => {
 	it('should handle null values correctly', () => {
 		sortingOutput.state.toggleSort('rating');
 
-		// Null values should come first in ascending order
-		expect(sortingOutput.rows[0].original.rating).toBe(null);
-		expect(sortingOutput.rows[1].original.rating).toBe(3);
-		expect(sortingOutput.rows[2].original.rating).toBe(4);
-		expect(sortingOutput.rows[3].original.rating).toBe(5);
+		expect(sortingOutput.rows[0].original.rating).toBe(3);
+		expect(sortingOutput.rows[1].original.rating).toBe(4);
+		expect(sortingOutput.rows[2].original.rating).toBe(5);
+		expect(sortingOutput.rows[3].original.rating).toBe(null);
 	});
 
 	it('should support multi-column sorting', () => {
-		// Initialize with multiSort enabled
-		sortingOutput = reactiveSorting<TestItem>({ multiSort: true })(() => rows);
+		const multiSortPlugin = reactiveSorting<TestItem>({ multiSort: true });
+		const multiSortOutput = multiSortPlugin.init(
+			() => rows,
+			() => []
+		);
 
-		// Sort by rating (null first, then ascending)
-		sortingOutput.state.toggleSort('rating');
-		// Secondary sort by name
-		sortingOutput.state.toggleSort('name');
+		multiSortOutput.state.toggleSort('rating');
+		multiSortOutput.state.toggleSort('name');
 
-		expect(sortingOutput.state.columnSortings).toHaveLength(2);
-		expect(sortingOutput.state.multiSort).toBe(true);
+		expect(multiSortOutput.state.columnSortings).toHaveLength(2);
+		expect(multiSortOutput.state.multiSort).toBe(true);
 
-		// Rows should be sorted first by rating, then by name
-		// The null rating should come first, then by rating ascending, with name as tiebreaker
-		expect(sortingOutput.rows[0].original.rating).toBe(null);
-		expect(sortingOutput.rows[1].original.rating).toBe(3);
-		expect(sortingOutput.rows[2].original.rating).toBe(4);
-		expect(sortingOutput.rows[3].original.rating).toBe(5);
+		expect(multiSortOutput.rows[0].original.rating).toBe(3);
+		expect(multiSortOutput.rows[1].original.rating).toBe(4);
+		expect(multiSortOutput.rows[2].original.rating).toBe(5);
+		expect(multiSortOutput.rows[3].original.rating).toBe(null);
+
 	});
 
 	it('should cycle through asc, desc, then remove in multi-sort mode', () => {
 		// Initialize with multiSort enabled
-		sortingOutput = reactiveSorting<TestItem>({ multiSort: true })(() => rows);
+		const multiSortPlugin = reactiveSorting<TestItem>({ multiSort: true });
+		const multiSortOutput = multiSortPlugin.init(
+			() => rows,
+			() => []
+		);
 
-		sortingOutput.state.toggleSort('name'); // First toggle - asc
-		expect(sortingOutput.state.columnSortings[0].direction).toBe('asc');
+		multiSortOutput.state.toggleSort('name'); // First toggle - asc
+		expect(multiSortOutput.state.columnSortings[0].direction).toBe('asc');
 
-		sortingOutput.state.toggleSort('name'); // Second toggle - desc
-		expect(sortingOutput.state.columnSortings[0].direction).toBe('desc');
+		multiSortOutput.state.toggleSort('name'); // Second toggle - desc
+		expect(multiSortOutput.state.columnSortings[0].direction).toBe('desc');
 
-		sortingOutput.state.toggleSort('name'); // Third toggle - removes the sorting completely
+		multiSortOutput.state.toggleSort('name'); // Third toggle - removes the sorting completely
 		// The column sort should be removed when toggled past desc in multi-sort mode
-		expect(sortingOutput.state.columnSortings).toHaveLength(0);
+		expect(multiSortOutput.state.columnSortings).toHaveLength(0);
 	});
 
 	it('should clear all sorts', () => {
 		// Setup multiple sorts
-		sortingOutput = reactiveSorting<TestItem>({ multiSort: true })(() => rows);
+		const multiSortPlugin = reactiveSorting<TestItem>({ multiSort: true });
+		const multiSortOutput = multiSortPlugin.init(
+			() => rows,
+			() => []
+		);
 
-		sortingOutput.state.toggleSort('name');
-		sortingOutput.state.toggleSort('id');
+		multiSortOutput.state.toggleSort('name');
+		multiSortOutput.state.toggleSort('id');
 
-		expect(sortingOutput.state.columnSortings).toHaveLength(2);
+		expect(multiSortOutput.state.columnSortings).toHaveLength(2);
 
 		// Clear all sorts
-		sortingOutput.state.clearSort();
+		multiSortOutput.state.clearSort();
 
-		expect(sortingOutput.state.columnSortings).toHaveLength(0);
+		expect(multiSortOutput.state.columnSortings).toHaveLength(0);
+
 		// Rows should be in original order
-		expect(sortingOutput.rows[0].id).toBe(1);
-		expect(sortingOutput.rows[1].id).toBe(2);
-		expect(sortingOutput.rows[2].id).toBe(3);
-		expect(sortingOutput.rows[3].id).toBe(4);
+		expect(multiSortOutput.rows[0].id).toBe(1);
+		expect(multiSortOutput.rows[1].id).toBe(2);
+		expect(multiSortOutput.rows[2].id).toBe(3);
+		expect(multiSortOutput.rows[3].id).toBe(4);
 	});
 
 	it('should use custom comparators', () => {
-		// Custom comparator for dates
-		const dateComparator = (a: string, b: string) => {
-			return new Date(a).getTime() - new Date(b).getTime();
+		// Custom comparator for dates that works with the value, not the whole item
+		const dateComparator = (a: unknown, b: unknown): number => {
+			if (typeof a === 'string' && typeof b === 'string') {
+				return new Date(a).getTime() - new Date(b).getTime();
+			}
+			return 0;
 		};
 
-		sortingOutput = reactiveSorting<TestItem>({
+		// Create a plugin with custom comparator
+		const customComparatorPlugin = reactiveSorting<TestItem>({
 			comparators: {
 				date: dateComparator
 			}
-		})(() => rows);
+		});
+		const customComparatorOutput = customComparatorPlugin.init(
+			() => rows,
+			() => []
+		);
 
-		sortingOutput.state.toggleSort('date');
+		// Sort by date
+		customComparatorOutput.state.toggleSort('date');
 
 		// Dates should be sorted chronologically
-		expect(sortingOutput.rows[0].original.date).toBe('2023-01-20');
-		expect(sortingOutput.rows[1].original.date).toBe('2023-02-05');
-		expect(sortingOutput.rows[2].original.date).toBe('2023-03-15');
-		expect(sortingOutput.rows[3].original.date).toBe('2023-04-10');
+		expect(customComparatorOutput.rows[0].original.date).toBe('2023-01-20');
+		expect(customComparatorOutput.rows[1].original.date).toBe('2023-02-05');
+		expect(customComparatorOutput.rows[2].original.date).toBe('2023-03-15');
+		expect(customComparatorOutput.rows[3].original.date).toBe('2023-04-10');
 	});
 
 	it('should initialize with predefined column sortings', () => {
-		const customSortingOutput = reactiveSorting<TestItem>({
+		// Create a plugin with predefined column sortings
+		const presetSortPlugin = reactiveSorting<TestItem>({
 			columnSortings: [{ key: 'id', direction: 'desc' }]
-		})(() => rows);
+		});
+		const presetSortOutput = presetSortPlugin.init(
+			() => rows,
+			() => []
+		);
 
 		// Should be pre-sorted by id descending
-		expect(customSortingOutput.state.columnSortings).toHaveLength(1);
-		expect(customSortingOutput.state.columnSortings[0].key).toBe('id');
-		expect(customSortingOutput.state.columnSortings[0].direction).toBe('desc');
+		expect(presetSortOutput.state.columnSortings).toHaveLength(1);
+		expect(presetSortOutput.state.columnSortings[0].key).toBe('id');
+		expect(presetSortOutput.state.columnSortings[0].direction).toBe('desc');
 
-		expect(customSortingOutput.rows[0].id).toBe(4);
-		expect(customSortingOutput.rows[1].id).toBe(3);
-		expect(customSortingOutput.rows[2].id).toBe(2);
-		expect(customSortingOutput.rows[3].id).toBe(1);
+		expect(presetSortOutput.rows[0].id).toBe(4);
+		expect(presetSortOutput.rows[1].id).toBe(3);
+		expect(presetSortOutput.rows[2].id).toBe(2);
+		expect(presetSortOutput.rows[3].id).toBe(1);
 	});
 
 	it('should handle empty data', () => {
-		const sortingOutput = reactiveSorting<TestItem>({
+		// Create a plugin with predefined column sortings
+		const emptySortPlugin = reactiveSorting<TestItem>({
 			columnSortings: [{ key: 'id', direction: 'desc' }]
-		})(() => []);
+		});
+		const emptySortOutput = emptySortPlugin.init(
+			() => [],
+			() => []
+		);
 
-		expect(sortingOutput.rows).toHaveLength(0);
+		expect(emptySortOutput.rows).toHaveLength(0);
 
-		// Should not throw errors when sorting empty data
-		sortingOutput.state.toggleSort('name');
-		expect(sortingOutput.state.columnSortings).toHaveLength(1);
-		expect(sortingOutput.rows).toHaveLength(0);
+		emptySortOutput.state.toggleSort('name');
+		expect(emptySortOutput.state.columnSortings).toHaveLength(1);
 	});
 });

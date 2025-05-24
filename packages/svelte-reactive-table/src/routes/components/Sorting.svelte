@@ -1,70 +1,55 @@
 <script lang="ts">
-	import type { ColumnSorting } from '$lib/features/sorting/sorting.svelte.js';
-	import { reactiveSorting, reactiveTable } from '$lib/index.js';
+	import { reactiveSorting, reactiveTable, type ColumnSorting } from '$lib/index.js';
 	import { initialData } from './data.js';
 
 	// Sorting example with multiSort enabled
-	const multiSortTable = reactiveTable(
-		initialData,
-		[
-			{ accessor: 'id', header: 'ID', isIdentifier: true },
-			{ accessor: 'name', header: 'Name' },
-			{ accessor: 'age', header: 'Age' },
-			{ accessor: 'city', header: 'City' }
-		],
-		{
-			sorting: reactiveSorting({
-				// Optional: Set initial sorting
-				columnSortings: [{ key: 'name', direction: 'asc' }],
-				// Enable multi-column sorting
-				multiSort: true
-			})
-		}
+	const multiSortTable = reactiveTable(initialData, [
+		{ accessor: 'id', header: 'ID', isIdentifier: true },
+		{ accessor: 'name', header: 'Name' },
+		{ accessor: 'age', header: 'Age' },
+		{ accessor: 'city', header: 'City' }
+	]).use(
+		reactiveSorting({
+			// Optional: Set initial sorting
+			columnSortings: [{ key: 'name', direction: 'asc' }],
+			// Enable multi-column sorting
+			multiSort: true
+		})
 	);
 
 	// Sorting example with multiSort disabled
-	const singleSortTable = reactiveTable(
-		initialData,
-		[
-			{ accessor: 'id', header: 'ID', isIdentifier: true },
-			{ accessor: 'name', header: 'Name' },
-			{ accessor: 'age', header: 'Age' },
-			{ accessor: 'city', header: 'City' }
-		],
-		{
-			sorting: reactiveSorting({
-				// Optional: Set initial sorting
-				columnSortings: [{ key: 'age', direction: 'desc' }],
-				// Disable multi-column sorting
-				multiSort: false
-			})
-		}
+	const singleSortTable = reactiveTable(initialData, [
+		{ accessor: 'id', header: 'ID', isIdentifier: true },
+		{ accessor: 'name', header: 'Name' },
+		{ accessor: 'age', header: 'Age' },
+		{ accessor: 'city', header: 'City' }
+	]).use(
+		reactiveSorting({
+			// Optional: Set initial sorting
+			columnSortings: [{ key: 'age', direction: 'desc' }],
+			// Disable multi-column sorting
+			multiSort: false, 
+		})
 	);
 
 	function handleMultiSort(accessor: keyof (typeof multiSortTable.data)[0]) {
-		multiSortTable.sorting.toggleSort(accessor);
+		multiSortTable.plugins.sorting.toggleSort(accessor);
 	}
 
 	function handleSingleSort(accessor: keyof (typeof singleSortTable.data)[0]) {
-		singleSortTable.sorting.toggleSort(accessor);
+		singleSortTable.plugins.sorting.toggleSort(accessor);
 	}
 
 	function clearMultiSorting() {
-		multiSortTable.sorting.clearSort();
+		multiSortTable.plugins.sorting.clearSort();
 	}
 
 	function clearSingleSorting() {
-		singleSortTable.sorting.clearSort();
-	}
-
-	// Helper function to determine the current sort direction for a column
-	function getSortDirection(table: any, accessor: string) {
-		const sorting = table.sorting.columnSortings.find((s: ColumnSorting) => s.key === accessor);
-		return sorting ? sorting.direction : 'none';
+		singleSortTable.plugins.sorting.clearSort();
 	}
 </script>
 
-<section class="max-w-5xl mx-auto my-8 px-4">
+<section class="mx-auto my-8 px-4">
 	<h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Sortable Data Tables</h2>
 
 	<!-- Multi-Sort Table Example -->
@@ -77,7 +62,7 @@
 			</p>
 			<button
 				class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-				on:click={clearMultiSorting}
+				onclick={clearMultiSorting}
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -99,10 +84,10 @@
 		<div class="mb-4 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
 			<h4 class="text-md font-semibold mb-2 text-gray-700">Active Sorting</h4>
 			<div class="h-[100px] relative flex flex-col">
-				{#if multiSortTable.sorting.columnSortings.length > 0}
+				{#if multiSortTable.plugins.sorting.columnSortings.length > 0}
 					<div class="overflow-y-auto custom-scrollbar pr-1">
 						<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-							{#each multiSortTable.sorting.columnSortings as sorting, i}
+							{#each multiSortTable.plugins.sorting.columnSortings as sorting, i}
 								<div class="bg-gray-50 p-3 rounded-md border border-gray-200">
 									<div class="flex justify-between items-center">
 										<div class="flex items-center gap-2">
@@ -162,13 +147,13 @@
 								<!-- svelte-ignore a11y-no-static-element-interactions -->
 								<th
 									class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors duration-150"
-									on:click={() => handleMultiSort(column.accessor)}
+									onclick={() => handleMultiSort(column.accessor)}
 								>
 									<div class="flex items-center gap-2">
 										<span>{column.header}</span>
-										{#if getSortDirection(multiSortTable, column.accessor) !== 'none'}
+										{#if multiSortTable.plugins.sorting.getSortDirection(column.accessor) !== 'none'}
 											<span class="text-emerald-600">
-												{#if getSortDirection(multiSortTable, column.accessor) === 'asc'}
+												{#if multiSortTable.plugins.sorting.getSortDirection(column.accessor) === 'asc'}
 													<svg
 														xmlns="http://www.w3.org/2000/svg"
 														class="h-4 w-4"
@@ -236,7 +221,7 @@
 			</p>
 			<button
 				class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-				on:click={clearSingleSorting}
+				onclick={clearSingleSorting}
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -258,9 +243,9 @@
 		<div class="mb-4 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
 			<h4 class="text-md font-semibold mb-2 text-gray-700">Active Sorting</h4>
 			<div class="h-[80px] relative flex flex-col">
-				{#if singleSortTable.sorting.columnSortings.length > 0}
+				{#if singleSortTable.plugins.sorting.columnSortings.length > 0}
 					<div class="bg-gray-50 p-3 rounded-md border border-gray-200 shadow-sm max-w-md">
-						{#each singleSortTable.sorting.columnSortings as sorting}
+						{#each singleSortTable.plugins.sorting.columnSortings as sorting}
 							<div class="flex justify-between items-center">
 								<span class="font-medium text-gray-700">
 									{sorting.key.charAt(0).toUpperCase() + sorting.key.slice(1)}
@@ -310,13 +295,13 @@
 								<!-- svelte-ignore a11y-no-static-element-interactions -->
 								<th
 									class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors duration-150"
-									on:click={() => handleSingleSort(column.accessor)}
+									onclick={() => handleSingleSort(column.accessor)}
 								>
 									<div class="flex items-center gap-2">
 										<span>{column.header}</span>
-										{#if getSortDirection(singleSortTable, column.accessor) !== 'none'}
+										{#if singleSortTable.plugins.sorting.getSortDirection(column.accessor) !== 'none'}
 											<span class="text-emerald-600">
-												{#if getSortDirection(singleSortTable, column.accessor) === 'asc'}
+												{#if singleSortTable.plugins.sorting.getSortDirection(column.accessor) === 'asc'}
 													<svg
 														xmlns="http://www.w3.org/2000/svg"
 														class="h-4 w-4"

@@ -3,31 +3,27 @@
 	import { initialData } from './data.js';
 
 	// Pagination example
-	const table = reactiveTable(
-		initialData,
-		[
-			{ accessor: 'id', header: 'ID', isIdentifier: true },
-			{ accessor: 'name', header: 'Name' },
-			{ accessor: 'age', header: 'Age' },
-			{ accessor: 'city', header: 'City' }
-		],
-		{
-			pagination: reactivePagination({
-				pageSize: 3,
-				page: 0
-			})
-		}
+	const table = reactiveTable(initialData, [
+		{ accessor: 'id', header: 'ID', isIdentifier: true },
+		{ accessor: 'name', header: 'Name' },
+		{ accessor: 'age', header: 'Age' },
+		{ accessor: 'city', header: 'City' }
+	]).use(
+		reactivePagination({
+			pageSize: 3,
+			page: 0
+		})
 	);
 
 	// Page size options
 	const pageSizeOptions = [3, 5, 10];
 
 	function setPageSize(size: number) {
-		table.pagination.setPageSize(size);
+		table.plugins.pagination.setPageSize(size);
 	}
 </script>
 
-<section class="max-w-5xl mx-auto my-8 px-4">
+<section class="max-w-6xl mx-auto my-8 px-4">
 	<h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Data Table with Pagination</h2>
 
 	<div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
@@ -40,13 +36,13 @@
 					{#each pageSizeOptions as size}
 						<button
 							class="px-3 py-1.5 text-sm font-medium
-                {table.pagination.pageSize === size
+                {table.plugins.pagination.pageSize === size
 								? 'bg-emerald-600 text-white border-emerald-600 z-10'
 								: 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}
                 {pageSizeOptions.indexOf(size) === 0 ? 'rounded-l-md' : ''}
                 {pageSizeOptions.indexOf(size) === pageSizeOptions.length - 1 ? 'rounded-r-md' : ''}
                 border focus:z-10 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 transition-colors"
-							on:click={() => setPageSize(size)}
+							onclick={() => setPageSize(size)}
 						>
 							{size}
 						</button>
@@ -99,19 +95,19 @@
 			class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex flex-wrap items-center justify-between gap-4"
 		>
 			<div class="text-sm text-gray-600">
-				Page <span class="font-medium">{table.pagination.page + 1}</span> of
-				<span class="font-medium">{table.pagination.pageCount}</span>
+				Page <span class="font-medium">{table.plugins.pagination.page + 1}</span> of
+				<span class="font-medium">{table.plugins.pagination.pageCount}</span>
 			</div>
 
 			<div class="inline-flex rounded-md shadow-sm" role="group">
 				<button
 					class="relative inline-flex items-center px-3 py-2 text-sm font-medium rounded-l-md border
-            {table.pagination.page === 0
+            {table.plugins.pagination.isFirstPage
 						? 'bg-gray-50 text-gray-400 cursor-not-allowed'
 						: 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'}
             focus:z-10 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 transition-colors"
-					on:click={table.pagination.firstPage}
-					disabled={table.pagination.page === 0}
+					onclick={table.plugins.pagination.goToFirstPage}
+					disabled={table.plugins.pagination.isFirstPage}
 					aria-label="First page"
 				>
 					<svg
@@ -129,12 +125,12 @@
 				</button>
 				<button
 					class="relative inline-flex items-center px-3 py-2 text-sm font-medium border-t border-b
-            {table.pagination.page === 0
+            {table.plugins.pagination.isFirstPage
 						? 'bg-gray-50 text-gray-400 cursor-not-allowed'
 						: 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'}
             focus:z-10 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 transition-colors"
-					on:click={table.pagination.previousPage}
-					disabled={table.pagination.page === 0}
+					onclick={() => table.plugins.pagination.goToPreviousPage()}
+					disabled={table.plugins.pagination.isFirstPage}
 					aria-label="Previous page"
 				>
 					<svg
@@ -152,12 +148,12 @@
 				</button>
 				<button
 					class="relative inline-flex items-center px-3 py-2 text-sm font-medium border-t border-b
-            {table.pagination.page === table.pagination.pageCount - 1
+            {table.plugins.pagination.isLastPage
 						? 'bg-gray-50 text-gray-400 cursor-not-allowed'
 						: 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'}
             focus:z-10 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 transition-colors"
-					on:click={table.pagination.nextPage}
-					disabled={table.pagination.page === table.pagination.pageCount - 1}
+					onclick={() => table.plugins.pagination.goToNextPage()}
+					disabled={table.plugins.pagination.isLastPage}
 					aria-label="Next page"
 				>
 					<svg
@@ -175,12 +171,12 @@
 				</button>
 				<button
 					class="relative inline-flex items-center px-3 py-2 text-sm font-medium rounded-r-md border
-            {table.pagination.page === table.pagination.pageCount - 1
+            {table.plugins.pagination.isLastPage
 						? 'bg-gray-50 text-gray-400 cursor-not-allowed'
 						: 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'}
             focus:z-10 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 transition-colors"
-					on:click={table.pagination.lastPage}
-					disabled={table.pagination.page === table.pagination.pageCount - 1}
+					onclick={table.plugins.pagination.goToLastPage}
+					disabled={table.plugins.pagination.isLastPage}
 					aria-label="Last page"
 				>
 					<svg

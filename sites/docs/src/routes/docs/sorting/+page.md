@@ -101,7 +101,7 @@ Here's an example of creating sortable column headers:
 <thead>
 	<tr>
 		{#each table.columns as column}
-			<th on:click={() => table.sorting.toggleSort(column.accessor)}>
+			<th onclick={() => table.sorting.toggleSort(column.accessor)}>
 				{column.header}
 				{#if table.sorting.columnSortings.some((sort) => sort.key === column.accessor)}
 					{#if table.sorting.columnSortings.find((sort) => sort.key === column.accessor)?.direction === 'asc'}

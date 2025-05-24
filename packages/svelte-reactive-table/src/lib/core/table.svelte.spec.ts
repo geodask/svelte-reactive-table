@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { reactivePagination } from '../features/pagination/index.js';
+import { reactivePagination } from '../plugins/pagination/index.js';
 import { reactiveTable, type ColumnDef, type ReactiveTable } from './index.js';
-import { reactiveColumnVisibility } from '../features/column-visibility/index.js';
-import { reactiveSorting } from '$lib/features/sorting/sorting.svelte.js';
+import { reactiveColumnVisibility } from '../plugins/column-visibility/index.js';
+import { reactiveSorting } from '$lib/plugins/sorting/sorting.svelte.js';
 
 type Person = {
 	id: number;
@@ -212,38 +212,36 @@ describe('reactiveTable', () => {
 	});
 
 	it('should add pagination feature when option is provided', () => {
-		const tableWithPagination = reactiveTable(sampleData, columns, {
-			pagination: reactivePagination({ pageSize: 2 })
-		});
+		const tableWithPagination = reactiveTable(sampleData, columns).use(
+			reactivePagination({ pageSize: 2 })
+		);
 
-		expect(tableWithPagination.pagination).toBeDefined();
-		expect(tableWithPagination.pagination.pageSize).toBe(2);
-		expect(tableWithPagination.pagination.pageCount).toBe(2);
+		expect(tableWithPagination.plugins.pagination).toBeDefined();
+		expect(tableWithPagination.plugins.pagination.pageSize).toBe(2);
+		expect(tableWithPagination.plugins.pagination.pageCount).toBe(2);
 		expect(tableWithPagination.rows).toHaveLength(2); // First 2 rows
 	});
 
 	it('should add column visibility feature when option is provided', () => {
-		const tableWithColumnVisvibility = reactiveTable(sampleData, columns, {
-			columnVisibility: reactiveColumnVisibility({
-				hiddenColumns: ['age']
-			})
-		});
+		const tableWithColumnVisvibility = reactiveTable(sampleData, columns).use(
+			reactiveColumnVisibility({ hiddenColumns: ['age'] })
+		);
 
-		expect(tableWithColumnVisvibility.columnVisibility).toBeDefined();
-		expect(tableWithColumnVisvibility.columnVisibility.hiddenColumns).toEqual(['age']);
+		expect(tableWithColumnVisvibility.plugins.columnVisibility).toBeDefined();
+		expect(tableWithColumnVisvibility.plugins.columnVisibility.hiddenColumns).toEqual(['age']);
 		expect(tableWithColumnVisvibility.columns).toHaveLength(3);
 	});
 
 	it('should add sorting feature when option is provided', () => {
-		const tableWithSorting = reactiveTable(sampleData, columns, {
-			sorting: reactiveSorting({
+		const tableWithSorting = reactiveTable(sampleData, columns).use(
+			reactiveSorting({
 				columnSortings: [{ key: 'name', direction: 'asc' }]
 			})
-		});
+		);
 
-		expect(tableWithSorting.sorting).toBeDefined();
-		expect(tableWithSorting.sorting.columnSortings).toHaveLength(1);
-		expect(tableWithSorting.sorting.columnSortings[0].key).toBe('name');
-		expect(tableWithSorting.sorting.columnSortings[0].direction).toBe('asc');
+		expect(tableWithSorting.plugins.sorting).toBeDefined();
+		expect(tableWithSorting.plugins.sorting.columnSortings).toHaveLength(1);
+		expect(tableWithSorting.plugins.sorting.columnSortings[0].key).toBe('name');
+		expect(tableWithSorting.plugins.sorting.columnSortings[0].direction).toBe('asc');
 	});
 });

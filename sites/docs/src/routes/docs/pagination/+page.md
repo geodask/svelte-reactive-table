@@ -127,11 +127,11 @@ Here's a practical example of pagination controls:
 ```svelte
 <div class="pagination">
 	<!-- Navigation buttons -->
-	<button on:click={table.pagination.firstPage} disabled={table.pagination.page === 0}>
+	<button onclick={table.pagination.firstPage} disabled={table.pagination.page === 0}>
 		First
 	</button>
 
-	<button on:click={table.pagination.previousPage} disabled={table.pagination.page === 0}>
+	<button onclick={table.pagination.previousPage} disabled={table.pagination.page === 0}>
 		Previous
 	</button>
 
@@ -140,14 +140,14 @@ Here's a practical example of pagination controls:
 	</span>
 
 	<button
-		on:click={table.pagination.nextPage}
+		onclick={table.pagination.nextPage}
 		disabled={table.pagination.page === table.pagination.pageCount - 1}
 	>
 		Next
 	</button>
 
 	<button
-		on:click={table.pagination.lastPage}
+		onclick={table.pagination.lastPage}
 		disabled={table.pagination.page === table.pagination.pageCount - 1}
 	>
 		Last
@@ -156,7 +156,7 @@ Here's a practical example of pagination controls:
 	<!-- Page size selector -->
 	<select
 		value={table.pagination.pageSize}
-		on:change={(e) => table.pagination.setPageSize(Number(e.target.value))}
+		onchange={(e) => table.pagination.setPageSize(Number(e.target.value))}
 	>
 		<option value="5">5 per page</option>
 		<option value="10">10 per page</option>

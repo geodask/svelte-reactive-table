@@ -110,14 +110,14 @@ These methods are available on the table's `pagination` object:
 
 ```svelte
 <div class="pagination">
-	<button on:click={table.pagination.previousPage} disabled={table.pagination.page === 0}>
+	<button onclick={table.pagination.previousPage} disabled={table.pagination.page === 0}>
 		Previous
 	</button>
 
 	<span>Page {table.pagination.page + 1} of {table.pagination.pageCount}</span>
 
 	<button
-		on:click={table.pagination.nextPage}
+		onclick={table.pagination.nextPage}
 		disabled={table.pagination.page === table.pagination.pageCount - 1}
 	>
 		Next
@@ -125,7 +125,7 @@ These methods are available on the table's `pagination` object:
 
 	<select
 		value={table.pagination.pageSize}
-		on:change={(e) => table.pagination.setPageSize(Number(e.target.value))}
+		onchange={(e) => table.pagination.setPageSize(Number(e.target.value))}
 	>
 		<option value="5">5 per page</option>
 		<option value="10">10 per page</option>
