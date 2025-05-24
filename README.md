@@ -17,12 +17,13 @@ Svelte Reactive Table is designed to give you complete control over your data ta
 
   // Your data array
   const data = [
-    { name: 'John Doe', age: 30, city: 'New York' },
-    { name: 'Jane Smith', age: 25, city: 'Los Angeles' },
+    { id: 1, name: 'John Doe', age: 30, city: 'New York' },
+    { id: 2, name: 'Jane Smith', age: 25, city: 'Los Angeles' },
   ];
 
   // Define your columns
   const columns = [
+    { accessor: 'id', header: 'ID', isIdentifier: true },
     { accessor: 'name', header: 'Name' },
     { accessor: 'age', header: 'Age' },
     { accessor: 'city', header: 'City' }
@@ -63,10 +64,10 @@ Svelte Reactive Table is designed to give you complete control over your data ta
   - ⬜ Custom header rendering
 - ⚡ **Reactive Core**
   - ✅ Reactive data binding
-  - ✅ Column visibility control
+  - ✅ Plugin architecture
   - ⬜ Dynamic column updates
   - ⬜ Computed columns
-- 🔄 **Sorting**
+- 🔄 **Sorting Plugin**
   - ✅ Column-based sorting
   - ✅ Multi-column sort
   - ✅ Custom comparators
@@ -74,7 +75,7 @@ Svelte Reactive Table is designed to give you complete control over your data ta
   - ⬜ Global search
   - ⬜ Column filters
   - ⬜ Custom filter functions
-- 📊 **Pagination**
+- 📊 **Pagination Plugin**
   - ✅ Page size control
   - ✅ Page navigation
   - ✅ First/last page navigation
@@ -86,7 +87,7 @@ Svelte Reactive Table is designed to give you complete control over your data ta
 - 🔗 **Column Management**
   - ⬜ Column resizing
   - ⬜ Column reordering
-  - ✅ Column visibility toggle
+  - ✅ Column visibility plugin
 
 ## Project Structure
 

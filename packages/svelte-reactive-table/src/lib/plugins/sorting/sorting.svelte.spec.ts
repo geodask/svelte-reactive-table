@@ -148,7 +148,6 @@ describe('reactiveSorting', () => {
 		expect(multiSortOutput.rows[1].original.rating).toBe(4);
 		expect(multiSortOutput.rows[2].original.rating).toBe(5);
 		expect(multiSortOutput.rows[3].original.rating).toBe(null);
-
 	});
 
 	it('should cycle through asc, desc, then remove in multi-sort mode', () => {

@@ -23,12 +23,14 @@ layout: docPage
 
 # reactivePagination
 
-The `reactivePagination` function creates pagination functionality for Svelte Reactive Table, enabling navigation through large datasets by dividing them into manageable pages.
+The `reactivePagination` function creates a pagination plugin for Svelte Reactive Table, enabling navigation through large datasets by dividing them into manageable pages.
 
 ## Signature
 
 ```ts
-function reactivePagination<T>(options?: PaginationOptions): ReactivePaginationFactory<T>;
+function reactivePagination<T>(
+	options?: PaginationOptions
+): TablePlugin<T, PaginationState, 'pagination'>;
 ```
 
 ## Parameters
@@ -46,7 +48,7 @@ function reactivePagination<T>(options?: PaginationOptions): ReactivePaginationF
 
 ## Return Value
 
-Returns a factory function that creates pagination functionality when passed to `reactiveTable`.
+Returns a TablePlugin that adds pagination functionality when passed to the `use` method of the table.
 
 ## Basic Usage
 
@@ -61,12 +63,16 @@ Returns a factory function that creates pagination functionality when passed to 
 		/* Your column definitions */
 	];
 
-	const table = reactiveTable(data, columns, {
-		pagination: reactivePagination({
+	// Create a table with pagination plugin
+	const table = reactiveTable(data, columns).use(
+		reactivePagination({
 			pageSize: 10,
 			page: 0
 		})
-	});
+	);
+
+	// Access the pagination API through table.plugins
+	const { pagination } = table.plugins;
 </script>
 
 <table>
@@ -87,49 +93,45 @@ Returns a factory function that creates pagination functionality when passed to 
 
 When pagination is enabled, these properties are available:
 
-| Property                     | Type     | Description                  |
-| ---------------------------- | -------- | ---------------------------- |
-| `table.pagination.page`      | `number` | Current page index (0-based) |
-| `table.pagination.pageSize`  | `number` | Number of items per page     |
-| `table.pagination.pageCount` | `number` | Total number of pages        |
+| Property                     | Type      | Description                                |
+| ---------------------------- | --------- | ------------------------------------------ |
+| `pagination.page`            | `number`  | Current page index (0-based)               |
+| `pagination.pageSize`        | `number`  | Number of items per page                   |
+| `pagination.pageCount`       | `number`  | Total number of pages                      |
+| `pagination.isFirstPage`     | `boolean` | Whether current page is the first page     |
+| `pagination.isLastPage`      | `boolean` | Whether current page is the last page      |
+| `pagination.hasPreviousPage` | `boolean` | Whether there is a previous page available |
+| `pagination.hasNextPage`     | `boolean` | Whether there is a next page available     |
 
 ## Pagination Methods
 
-These methods are available on the table's `pagination` object:
+These methods are available on the pagination plugin state:
 
 | Method                                           | Return Type | Description                                  |
 | ------------------------------------------------ | ----------- | -------------------------------------------- |
 | `setPage(page: number)`                          | `void`      | Go to a specific page                        |
 | `setPageSize(size: number, resetPage?: boolean)` | `void`      | Change page size (with optional page reset)  |
-| `nextPage()`                                     | `boolean`   | Go to next page (returns success status)     |
-| `previousPage()`                                 | `boolean`   | Go to previous page (returns success status) |
-| `firstPage()`                                    | `void`      | Go to the first page                         |
-| `lastPage()`                                     | `void`      | Go to the last page                          |
+| `goToNextPage()`                                 | `boolean`   | Go to next page (returns success status)     |
+| `goToPreviousPage()`                             | `boolean`   | Go to previous page (returns success status) |
+| `goToFirstPage()`                                | `void`      | Go to the first page                         |
+| `goToLastPage()`                                 | `void`      | Go to the last page                          |
 
 ## Example Controls
 
 ```svelte
 <div class="pagination">
-	<button onclick={table.pagination.previousPage} disabled={table.pagination.page === 0}>
+	<button click={() => pagination.goToPreviousPage()} disabled={!pagination.hasPreviousPage}>
 		Previous
 	</button>
 
-	<span>Page {table.pagination.page + 1} of {table.pagination.pageCount}</span>
+	<span>Page {pagination.page + 1} of {pagination.pageCount}</span>
 
-	<button
-		onclick={table.pagination.nextPage}
-		disabled={table.pagination.page === table.pagination.pageCount - 1}
-	>
-		Next
-	</button>
+	<button click={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}> Next </button>
 
-	<select
-		value={table.pagination.pageSize}
-		onchange={(e) => table.pagination.setPageSize(Number(e.target.value))}
-	>
-		<option value="5">5 per page</option>
-		<option value="10">10 per page</option>
-		<option value="25">25 per page</option>
+	<select bind:value={pagination.pageSize}>
+		<option value={5}>5 per page</option>
+		<option value={10}>10 per page</option>
+		<option value={25}>25 per page</option>
 	</select>
 </div>
 ```
@@ -137,13 +139,16 @@ These methods are available on the table's `pagination` object:
 ## TypeScript Support
 
 ```ts
+import { reactiveTable, reactivePagination } from 'svelte-reactive-table';
+
 type User = {
 	id: number;
 	name: string;
 	age: number;
 };
 
-const pagination = reactivePagination<User>({ pageSize: 10 });
+const table = reactiveTable<User>(users, columns).use(reactivePagination({ pageSize: 10 }));
 
-const table = reactiveTable<User>(users, columns, { pagination });
+// TypeScript will infer the correct pagination state type
+const { pagination } = table.plugins;
 ```

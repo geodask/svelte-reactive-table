@@ -38,26 +38,23 @@ This example shows basic sorting functionality with only one sortable column at 
 	import { initialData } from '../data';
 
 	// Sorting example with multiSort disabled
-	const singleSortTable = reactiveTable(
-		initialData,
-		[
-			{ accessor: 'id', header: 'ID', isIdentifier: true },
-			{ accessor: 'name', header: 'Name' },
-			{ accessor: 'age', header: 'Age' },
-			{ accessor: 'city', header: 'City' }
-		],
-		{
-			sorting: reactiveSorting({
-				// Optional: Set initial sorting
-				columnSortings: [{ key: 'age', direction: 'desc' }],
-				// Disable multi-column sorting
-				multiSort: false
-			})
-		}
+	const singleSortTable = reactiveTable(initialData, [
+		{ accessor: 'id', header: 'ID', isIdentifier: true },
+		{ accessor: 'name', header: 'Name' },
+		{ accessor: 'age', header: 'Age' },
+		{ accessor: 'city', header: 'City' }
+	]).use(
+		reactiveSorting({
+			// Optional: Set initial sorting
+			columnSortings: [{ key: 'age', direction: 'desc' }],
+			// Disable multi-column sorting
+			multiSort: false
+		})
 	);
 
 	function clearSingleSorting() {
-		singleSortTable.sorting.clearSort();
+		const { sorting } = singleSortTable.plugins;
+		sorting.clearSort();
 	}
 
 	// Helper function to determine the current sort direction for a column
@@ -72,7 +69,7 @@ This example shows basic sorting functionality with only one sortable column at 
 		<p class="text-sm text-muted-foreground">
 			Click on column headers to sort. Only one column can be sorted at a time.
 		</p>
-		<Button variant="outline" size="sm" onclick={clearSingleSorting} class="shadow-sm">
+		<Button variant="outline" size="sm" click={clearSingleSorting} class="shadow-sm">
 			<RotateCcw class="mr-2 h-4 w-4" />
 			Clear Sorting
 		</Button>
@@ -85,7 +82,10 @@ This example shows basic sorting functionality with only one sortable column at 
 					{#each singleSortTable.allColumns as column}
 						<Table.Head class="p-2">
 							<Button
-								onclick={() => singleSortTable.sorting.toggleSort(column.accessor)}
+								click={() => {
+									const { sorting } = singleSortTable.plugins;
+									sorting.toggleSort(column.accessor);
+								}}
 								size="sm"
 								variant="ghost"
 							>
@@ -158,26 +158,23 @@ This example demonstrates how to enable multi-column sorting, allowing users to 
 	import { initialData } from '../data';
 
 	// Sorting example with multiSort enabled
-	const multiSortTable = reactiveTable(
-		initialData,
-		[
-			{ accessor: 'id', header: 'ID', isIdentifier: true },
-			{ accessor: 'name', header: 'Name' },
-			{ accessor: 'age', header: 'Age' },
-			{ accessor: 'city', header: 'City' }
-		],
-		{
-			sorting: reactiveSorting({
-				// Optional: Set initial sorting
-				columnSortings: [{ key: 'name', direction: 'asc' }],
-				// Enable multi-column sorting
-				multiSort: true
-			})
-		}
+	const multiSortTable = reactiveTable(initialData, [
+		{ accessor: 'id', header: 'ID', isIdentifier: true },
+		{ accessor: 'name', header: 'Name' },
+		{ accessor: 'age', header: 'Age' },
+		{ accessor: 'city', header: 'City' }
+	]).use(
+		reactiveSorting({
+			// Optional: Set initial sorting
+			columnSortings: [{ key: 'name', direction: 'asc' }],
+			// Enable multi-column sorting
+			multiSort: true
+		})
 	);
 
 	function clearMultiSorting() {
-		multiSortTable.sorting.clearSort();
+		const { sorting } = multiSortTable.plugins;
+		sorting.clearSort();
 	}
 
 	// Helper function to determine the current sort direction for a column
@@ -192,7 +189,7 @@ This example demonstrates how to enable multi-column sorting, allowing users to 
 		<p class="text-sm text-muted-foreground">
 			Click on column headers to sort. Multiple columns can be sorted simultaneously.
 		</p>
-		<Button variant="outline" size="sm" onclick={clearMultiSorting} class="shadow-sm">
+		<Button variant="outline" size="sm" click={clearMultiSorting} class="shadow-sm">
 			<RotateCcw class="mr-2 h-4 w-4" />
 			Clear All Sorting
 		</Button>
@@ -205,7 +202,10 @@ This example demonstrates how to enable multi-column sorting, allowing users to 
 					{#each multiSortTable.allColumns as column}
 						<Table.Head class="py-2">
 							<Button
-								onclick={() => multiSortTable.sorting.toggleSort(column.accessor)}
+								click={() => {
+									const { sorting } = multiSortTable.plugins;
+									sorting.toggleSort(column.accessor);
+								}}
 								size="sm"
 								variant="ghost"
 							>

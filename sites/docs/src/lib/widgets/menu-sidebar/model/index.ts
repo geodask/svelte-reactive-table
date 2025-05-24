@@ -24,6 +24,10 @@ export const data = {
 			url: '/docs/core-concepts',
 			items: [
 				{
+					title: 'Basic Usage',
+					url: '/docs/basic-usage'
+				},
+				{
 					title: 'Reactivity',
 					url: '/docs/reactivity'
 				},
@@ -94,6 +98,16 @@ export const data = {
 				{
 					title: 'Full Featured Table',
 					url: '/docs/examples/full-featured-table'
+				}
+			]
+		},
+		{
+			title: 'Help',
+			url: '/docs/help',
+			items: [
+				{
+					title: 'Troubleshooting',
+					url: '/docs/troubleshooting'
 				}
 			]
 		}

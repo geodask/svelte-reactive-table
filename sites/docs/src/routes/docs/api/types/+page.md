@@ -312,3 +312,81 @@ if (table.pagination) {
 // Access the current page of rows
 const currentPageRows = table.rows;
 ```
+
+## Plugin Types
+
+### TablePlugin
+
+Core interface for implementing plugins:
+
+```ts
+interface TablePlugin<T, TPluginState, TPluginId extends string = string> {
+	readonly id: TPluginId;
+	init(getRows: () => Row<T>[], getColumns: () => Column<T>[]): PluginOutput<T, TPluginState>;
+}
+```
+
+| Type Parameter | Description                          |
+| -------------- | ------------------------------------ |
+| `T`            | Type of data items in the table      |
+| `TPluginState` | Type of state managed by this plugin |
+| `TPluginId`    | String literal type for plugin ID    |
+
+#### Properties
+
+| Name | Type        | Description                      |
+| ---- | ----------- | -------------------------------- |
+| `id` | `TPluginId` | Unique identifier for the plugin |
+
+#### Methods
+
+| Name   | Parameters                                                   | Return Type                     | Description                                                |
+| ------ | ------------------------------------------------------------ | ------------------------------- | ---------------------------------------------------------- |
+| `init` | `getRows: () => Row<T>[]`<br>`getColumns: () => Column<T>[]` | `PluginOutput<T, TPluginState>` | Initialize plugin and return its state and transformations |
+
+### PluginOutput
+
+Interface defining plugin initialization output:
+
+```ts
+interface PluginOutput<T, TPluginState = unknown> {
+	state: TPluginState;
+	rows: Row<T>[];
+	columns: Column<T>[];
+}
+```
+
+| Property  | Type           | Description                                                  |
+| --------- | -------------- | ------------------------------------------------------------ |
+| `state`   | `TPluginState` | Plugin state that will be accessible via `table.plugins[id]` |
+| `rows`    | `Row<T>[]`     | Transformed rows that will be used for rendering             |
+| `columns` | `Column<T>[]`  | Transformed columns that will be used for rendering          |
+
+### ReactiveTableWithPlugins
+
+Type definition for a table instance with plugins:
+
+```ts
+type ReactiveTableWithPlugins<
+	T,
+	TPluginsMap extends Record<string, unknown> = EmptyPluginsMap
+> = ReactiveTable<T> & {
+	plugins: TPluginsMap;
+	use<TPluginId extends string, TPluginState>(
+		plugin: TablePlugin<T, TPluginState, TPluginId>
+	): ReactiveTableWithPlugins<T, TPluginsMap & Record<TPluginId, TPluginState>>;
+};
+```
+
+| Property  | Type                                                                                                     | Description                                            |
+| --------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `plugins` | `TPluginsMap`                                                                                            | Registry of installed plugins and their state          |
+| `use`     | `<TPluginId, TPluginState>(plugin: TablePlugin<T, TPluginState, TPluginId>) => ReactiveTableWithPlugins` | Install a new plugin and return updated table instance |
+
+### EmptyPluginsMap
+
+Type representing an empty plugin registry:
+
+```ts
+type EmptyPluginsMap = Record<string, never>;
+```

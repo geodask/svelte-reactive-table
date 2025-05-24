@@ -14,9 +14,10 @@ export interface TablePlugin<T, TPluginState, TPluginId extends string = string>
 	readonly id: TPluginId;
 
 	/**
-	 * Initialize the plugin and attach it to the table
+	 * Initialize the plugin state
 	 *
-	 * @param table - The table instance to attach to
+	 * @param getRows - Function to retrieve the current rows of the table
+	 * @param getColumns - Function to retrieve the current columns of the table
 	 * @returns The plugin state and any enhancements to the table
 	 */
 	init(getRows: () => Row<T>[], getColumns: () => Column<T>[]): PluginOutput<T, TPluginState>;
@@ -33,9 +34,14 @@ export interface PluginOutput<T, TPluginState = unknown> {
 	 * The state of the plugin which will be accessible via table.plugins[id]
 	 */
 	state: TPluginState;
-
+	/**
+	 * The rows transformed by the plugin
+	 */
 	rows: Row<T>[];
 
+	/**
+	 * The columns transformed by the plugin
+	 */
 	columns: Column<T>[];
 }
 

@@ -23,11 +23,21 @@ layout: docPage
 
 # Pagination
 
-Pagination is essential for handling large datasets efficiently. Svelte Reactive Table provides an intuitive pagination system that makes it easy to navigate through data.
+When you're dealing with hundreds or thousands of rows, pagination becomes essential. Svelte Reactive Table makes pagination both powerful and simple to implement.
 
-## Adding Pagination
+## Why Pagination Matters
 
-Pagination is optional and added using the `reactivePagination` function:
+Without pagination, large datasets can:
+
+- Slow down your app's performance
+- Overwhelm users with too much information
+- Make it hard to find specific data
+
+With pagination, you get fast, user-friendly tables that handle any amount of data gracefully.
+
+## Adding Pagination to Your Table
+
+Pagination is optional and added using the `reactivePagination` plugin:
 
 ```svelte
 <script lang="ts">
@@ -41,18 +51,23 @@ Pagination is optional and added using the `reactivePagination` function:
 	];
 
 	// Create a table with pagination
-	const table = reactiveTable(data, columns, {
-		pagination: reactivePagination({
+	const table = reactiveTable(data, columns).use(
+		reactivePagination({
 			pageSize: 10, // Items per page
 			page: 0 // Starting page (0-based)
 		})
-	});
+	);
+
+	// Access the pagination API through table.plugins
+	const { pagination } = table.plugins;
 </script>
 ```
 
-## Displaying Paginated Data
+The `table.rows` property automatically contains only the current page's data. You don't need to change your template at all.
 
-The `table.rows` property is smart - it automatically adapts based on the features you've enabled. When pagination is added, `table.rows` automatically contains only the current page of data:
+## The Smart `table.rows` Property
+
+The `table.rows` property automatically adapts based on your active features. With pagination enabled, it contains exactly the rows for the current page:
 
 ```svelte
 <tbody>
@@ -72,32 +87,32 @@ If you need to access all rows regardless of pagination, you can use `table.allR
 
 ## Navigation Controls
 
-The pagination feature provides simple navigation methods:
+The pagination plugin provides simple navigation methods:
 
 ```svelte
 <script>
 	// Go to next page (returns false if already on last page)
 	function nextPage() {
-		return table.pagination.nextPage();
+		return pagination.goToNextPage();
 	}
 
 	// Go to previous page (returns false if already on first page)
 	function previousPage() {
-		return table.pagination.previousPage();
+		return pagination.goToPreviousPage();
 	}
 
 	// Go to first or last page
 	function firstPage() {
-		table.pagination.firstPage();
+		pagination.goToFirstPage();
 	}
 
 	function lastPage() {
-		table.pagination.lastPage();
+		pagination.goToLastPage();
 	}
 
 	// Go to specific page
 	function goToPage(pageIndex) {
-		table.pagination.setPage(pageIndex);
+		pagination.setPage(pageIndex);
 	}
 </script>
 ```
@@ -110,12 +125,12 @@ Adjust how many items are displayed per page:
 <script>
 	// Change page size and reset to first page
 	function changePageSize(newSize) {
-		table.pagination.setPageSize(newSize);
+		pagination.setPageSize(newSize);
 	}
 
 	// Change page size but stay on current page (if possible)
 	function changePageSizeWithoutReset(newSize) {
-		table.pagination.setPageSize(newSize, false);
+		pagination.setPageSize(newSize, false);
 	}
 </script>
 ```
@@ -127,51 +142,42 @@ Here's a practical example of pagination controls:
 ```svelte
 <div class="pagination">
 	<!-- Navigation buttons -->
-	<button onclick={table.pagination.firstPage} disabled={table.pagination.page === 0}>
+	<button click={() => pagination.goToFirstPage()} disabled={pagination.isFirstPage}>
 		First
 	</button>
 
-	<button onclick={table.pagination.previousPage} disabled={table.pagination.page === 0}>
+	<button click={() => pagination.goToPreviousPage()} disabled={!pagination.hasPreviousPage}>
 		Previous
 	</button>
 
 	<span>
-		Page {table.pagination.page + 1} of {table.pagination.pageCount}
+		Page {pagination.page + 1} of {pagination.pageCount}
 	</span>
 
-	<button
-		onclick={table.pagination.nextPage}
-		disabled={table.pagination.page === table.pagination.pageCount - 1}
-	>
-		Next
-	</button>
+	<button click={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}> Next </button>
 
-	<button
-		onclick={table.pagination.lastPage}
-		disabled={table.pagination.page === table.pagination.pageCount - 1}
-	>
-		Last
-	</button>
+	<button click={() => pagination.goToLastPage()} disabled={pagination.isLastPage}> Last </button>
 
 	<!-- Page size selector -->
-	<select
-		value={table.pagination.pageSize}
-		onchange={(e) => table.pagination.setPageSize(Number(e.target.value))}
-	>
-		<option value="5">5 per page</option>
-		<option value="10">10 per page</option>
-		<option value="25">25 per page</option>
+	<select bind:value={pagination.pageSize}>
+		<option value={5}>5 per page</option>
+		<option value={10}>10 per page</option>
+		<option value={25}>25 per page</option>
 	</select>
 </div>
 ```
 
 ## Pagination Properties
 
-The pagination feature provides these reactive properties:
+The pagination plugin provides these reactive properties:
 
-- `table.pagination.page`: Current page index (0-based)
-- `table.pagination.pageSize`: Number of items per page
-- `table.pagination.pageCount`: Total number of pages
+- `pagination.page`: Current page index (0-based)
+- `pagination.pageSize`: Number of items per page
+- `pagination.pageCount`: Total number of pages
+- `pagination.isFirstPage`: Whether the current page is the first page
+- `pagination.isLastPage`: Whether the current page is the last page
+- `pagination.hasPreviousPage`: Whether there is a previous page available
+- `pagination.hasNextPage`: Whether there is a next page available
 - `table.rows`: Automatically contains the rows for the current page
 - `table.allRows`: All rows across all pages (unaffected by pagination)
 

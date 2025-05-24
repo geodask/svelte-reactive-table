@@ -13,8 +13,7 @@ layout: docPage
 
 # Basic Table Example
 
-This example demonstrates how to create a simple, functional table using svelte-reactive-table. The basic implementation
-includes displaying data in rows and columns with the ability to add new rows dynamically through a button click.
+This example demonstrates creating a simple, functional table using Svelte Reactive Table. The basic implementation includes displaying data in rows and columns with the ability to add new rows dynamically.
 
 The basic table provides core functionality including:
 
@@ -57,16 +56,16 @@ The basic table provides core functionality including:
 			basicTable.data.pop();
 		}
 	}
-</s>
+</script>
 
 <div class="not-prose">
 	<div class="flex mb-2 gap-2 justify-end">
-		<Button size="sm" onclick={() => addNewRow()} class="shadow-sm">
+		<Button size="sm" click={() => addNewRow()} class="shadow-sm">
 			<Plus />
 			Add New Row
 		</Button>
 
-		<Button size="sm" variant="destructive" onclick={() => removeRow()} class="shadow-sm">
+		<Button size="sm" variant="destructive" click={() => removeRow()} class="shadow-sm">
 			<Trash2 />
 			Remove Row
 		</Button>

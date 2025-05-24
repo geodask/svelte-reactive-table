@@ -6,26 +6,23 @@
 	import { initialData } from '../data';
 
 	// Sorting example with multiSort enabled
-	const multiSortTable = reactiveTable(
-		initialData,
-		[
-			{ accessor: 'id', header: 'ID', isIdentifier: true },
-			{ accessor: 'name', header: 'Name' },
-			{ accessor: 'age', header: 'Age' },
-			{ accessor: 'city', header: 'City' }
-		],
-		{
-			sorting: reactiveSorting({
-				// Optional: Set initial sorting
-				columnSortings: [{ key: 'name', direction: 'asc' }],
-				// Enable multi-column sorting
-				multiSort: true
-			})
-		}
+	const multiSortTable = reactiveTable(initialData, [
+		{ accessor: 'id', header: 'ID', isIdentifier: true },
+		{ accessor: 'name', header: 'Name' },
+		{ accessor: 'age', header: 'Age' },
+		{ accessor: 'city', header: 'City' }
+	]).use(
+		reactiveSorting({
+			// Optional: Set initial sorting
+			columnSortings: [{ key: 'name', direction: 'asc' }],
+			// Enable multi-column sorting
+			multiSort: true
+		})
 	);
 
 	function clearMultiSorting() {
-		multiSortTable.sorting.clearSort();
+		const { sorting } = multiSortTable.plugins;
+		sorting.clearSort();
 	}
 
 	// Helper function to determine the current sort direction for a column
@@ -53,7 +50,10 @@
 					{#each multiSortTable.allColumns as column}
 						<Table.Head class="py-2">
 							<Button
-								onclick={() => multiSortTable.sorting.toggleSort(column.accessor)}
+								onclick={() => {
+									const { sorting } = multiSortTable.plugins;
+									sorting.toggleSort(column.accessor);
+								}}
 								size="sm"
 								variant="ghost"
 							>

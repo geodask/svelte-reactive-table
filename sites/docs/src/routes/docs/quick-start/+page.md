@@ -23,11 +23,13 @@ layout: docPage
 
 # Quick Start
 
-This guide will show you how to use Svelte Reactive Table's core features to build flexible, reactive tables.
+Welcome! This guide shows you how to add powerful features to your Svelte Reactive Table. We'll start with a basic table and progressively add pagination, column visibility, sorting, and more.
 
-## Basic Table
+> New to Svelte Reactive Table? Start with [Basic Usage](/docs/basic-usage) to learn how to create your first table, then come back here to add features.
 
-First, create a simple table by providing your data and column definitions to the `reactiveTable` function:
+## Creating a Basic Table
+
+Let's assume you already have a working table like this:
 
 ```svelte
 <script lang="ts">
@@ -72,64 +74,62 @@ First, create a simple table by providing your data and column definitions to th
 </table>
 ```
 
-## Column Visibility
+Perfect! Now let's enhance this table with some powerful features.
 
-Control which columns are displayed by using the column visibility methods:
+## Controlling Column Visibility
+
+Let users show and hide columns with the `reactiveColumnVisibility` plugin:
 
 ```svelte
 <script lang="ts">
-	// Same setup as above
+	import { reactiveTable, reactiveColumnVisibility } from 'svelte-reactive-table';
 
-	function toggleAgeColumn() {
-		// Toggle visibility of the age column
-		table.toggleColumnVisibility('age');
-	}
+	// Same data and columns as above
 
-	function hideColumn(column) {
-		// Hide a specific column
-		table.setColumnVisibility(column, false);
-	}
+	// Create a table with column visibility plugin
+	const table = reactiveTable(data, columns).use(
+		reactiveColumnVisibility({
+			hiddenColumns: ['age'] // Initially hide the age column
+		})
+	);
 
-	function showColumn(column) {
-		// Show a specific column
-		table.setColumnVisibility(column, true);
-	}
+	// Access the column visibility API through table.plugins
+	const { columnVisibility } = table.plugins;
 </script>
 
 <div>
-	<button onclick={toggleAgeColumn}>Toggle Age Column</button>
-	<button onclick={() => hideColumn('city')}>Hide City Column</button>
-	<button onclick={() => showColumn('city')}>Show City Column</button>
+	<button click={() => columnVisibility.toggleVisibility('age')}>
+		{columnVisibility.isVisible('age') ? 'Hide' : 'Show'} Age Column
+	</button>
+	<button click={() => columnVisibility.hideColumn('city')}> Hide City Column </button>
+	<button click={() => columnVisibility.showColumn('city')}> Show City Column </button>
 </div>
 
 <!-- Table as above -->
 ```
 
-## Pagination
+The plugin automatically handles the visibility state, and your table updates instantly when columns are toggled.
 
-Add pagination to your table for handling larger datasets:
+## Implementing Pagination
+
+For large datasets, pagination is essential. Here's how to add it:
 
 ```svelte
 <script lang="ts">
 	import { reactiveTable, reactivePagination } from 'svelte-reactive-table';
 
-	// Define your data and columns as before
+	// Same data and columns as above
 
-	// Create a table with pagination
-	const tableWithPagination = reactiveTable(data, columns, {
-		pagination: reactivePagination({
-			pageSize: 10, // Number of items per page
-			page: 0 // 0-based index for the starting page
+	// Create a table with pagination plugin
+	const table = reactiveTable(data, columns).use(
+		reactivePagination({
+			pageSize: 10,
+			page: 0 // Start at the first page (0-based)
 		})
-	});
+	);
 
-	// Optional: define page size options
-	const pageSizeOptions = [5, 10, 25, 50];
-
-	// Function to change page size
-	function setPageSize(size) {
-		tableWithPagination.pagination.setPageSize(size);
-	}
+	// Access the pagination API through table.plugins
+	const { pagination } = table.plugins;
 </script>
 
 <!-- Table with paginated rows -->
@@ -138,7 +138,7 @@ Add pagination to your table for handling larger datasets:
 		<!-- headers as before -->
 	</thead>
 	<tbody>
-		{#each tableWithPagination.rows as row}
+		{#each table.rows as row}
 			<tr>
 				{#each row.cells as cell}
 					<td>{cell.value}</td>
@@ -150,46 +150,27 @@ Add pagination to your table for handling larger datasets:
 
 <!-- Pagination controls -->
 <div class="pagination-controls">
-	<button
-		onclick={tableWithPagination.pagination.firstPage}
-		disabled={tableWithPagination.pagination.page === 0}
-	>
+	<button click={() => pagination.goToFirstPage()} disabled={pagination.isFirstPage}>
 		First
 	</button>
 
-	<button
-		onclick={tableWithPagination.pagination.previousPage}
-		disabled={tableWithPagination.pagination.page === 0}
-	>
+	<button click={() => pagination.goToPreviousPage()} disabled={!pagination.hasPreviousPage}>
 		Previous
 	</button>
 
 	<span>
-		Page {tableWithPagination.pagination.page + 1} of {tableWithPagination.pagination.pageCount}
+		Page {pagination.page + 1} of {pagination.pageCount}
 	</span>
 
-	<button
-		onclick={tableWithPagination.pagination.nextPage}
-		disabled={tableWithPagination.pagination.page === tableWithPagination.pagination.pageCount - 1}
-	>
-		Next
-	</button>
+	<button click={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}> Next </button>
 
-	<button
-		onclick={tableWithPagination.pagination.lastPage}
-		disabled={tableWithPagination.pagination.page === tableWithPagination.pagination.pageCount - 1}
-	>
-		Last
-	</button>
+	<button click={() => pagination.goToLastPage()} disabled={pagination.isLastPage}> Last </button>
 
 	<!-- Page size selector -->
 	<div>
 		<span>Rows per page:</span>
-		<select
-			value={tableWithPagination.pagination.pageSize}
-			onchange={(e) => setPageSize(Number(e.target.value))}
-		>
-			{#each pageSizeOptions as size}
+		<select bind:value={pagination.pageSize}>
+			{#each [5, 10, 25, 50] as size}
 				<option value={size}>{size}</option>
 			{/each}
 		</select>
@@ -197,9 +178,11 @@ Add pagination to your table for handling larger datasets:
 </div>
 ```
 
-## Reactive Data Updates
+Notice how `table.rows` automatically contains only the current page's data. The table handles all the pagination logic for you!
 
-One of the key features of Svelte Reactive Table is that it automatically reacts to data changes:
+## Leveraging Reactivity for Data Updates
+
+One of the most powerful features is automatic reactivity. Your table updates instantly when data changes:
 
 ```svelte
 <script lang="ts">
@@ -221,19 +204,19 @@ One of the key features of Svelte Reactive Table is that it automatically reacts
 	}
 </script>
 
-<button onclick={addNewRow}>Add New Row</button>
+<button click={addNewRow}>Add New Row</button>
 
 <!-- Table as before, but with delete buttons -->
 <table>
 	<!-- thead as before -->
 	<tbody>
-		{#each table.allRows as row}
+		{#each table.rows as row}
 			<tr>
 				{#each row.cells as cell}
 					<td>{cell.value}</td>
 				{/each}
 				<td>
-					<button onclick={() => removeRow(row.id)}>Remove</button>
+					<button click={() => removeRow(row.id)}>Remove</button>
 				</td>
 			</tr>
 		{/each}
@@ -241,17 +224,102 @@ One of the key features of Svelte Reactive Table is that it automatically reacts
 </table>
 ```
 
-## TypeScript Support
+No manual updates needed - the table automatically reflects your data changes. This works with pagination, sorting, and all other features too!
 
-The library is fully typed and provides comprehensive TypeScript support:
+## Adding Sorting Capabilities
+
+Let users organize data by adding sorting capabilities:
+
+```svelte
+<script lang="ts">
+	import { reactiveTable, reactiveSorting } from 'svelte-reactive-table';
+
+	// Same data and columns as above
+
+	// Create a table with sorting plugin
+	const table = reactiveTable(data, columns).use(
+		reactiveSorting({
+			columnSortings: [{ key: 'name', direction: 'asc' }], // Initial sort
+			multiSort: true // Allow sorting by multiple columns simultaneously
+		})
+	);
+
+	// Access the sorting API through table.plugins
+	const { sorting } = table.plugins;
+</script>
+
+<table>
+	<thead>
+		<tr>
+			{#each table.columns as column}
+				<th click={() => sorting.toggleSort(column.accessor)}>
+					{column.header}
+					{#if sorting.getSortDirection(column.accessor) !== 'none'}
+						{sorting.getSortDirection(column.accessor) === 'asc' ? '↑' : '↓'}
+					{/if}
+				</th>
+			{/each}
+		</tr>
+	</thead>
+	<tbody>
+		<!-- Table body -->
+	</tbody>
+</table>
+```
+
+Click any column header to sort, click again to reverse the order, and once more to remove sorting.
+
+## Combining Multiple Features
+
+The real power comes from combining multiple features. Here's a fully-featured table:
+
+```svelte
+<script lang="ts">
+	import {
+		reactiveTable,
+		reactiveColumnVisibility,
+		reactivePagination,
+		reactiveSorting
+	} from 'svelte-reactive-table';
+
+	// Same data and columns as above
+
+	// Create a table with multiple plugins
+	const table = reactiveTable(data, columns)
+		.use(reactiveColumnVisibility())
+		.use(
+			reactiveSorting({
+				multiSort: true
+			})
+		)
+		.use(
+			reactivePagination({
+				pageSize: 5
+			})
+		);
+
+	// Access all plugin APIs
+	const { columnVisibility, sorting, pagination } = table.plugins;
+</script>
+
+<!-- Include controls for all features -->
+<!-- Render the table -->
+```
+
+Now you have a table with column visibility controls, multi-column sorting, and pagination - all working together seamlessly!
+
+## Utilizing TypeScript Support
+
+The library provides comprehensive TypeScript support for a better development experience:
 
 ```ts
 import {
 	reactiveTable,
 	reactivePagination,
+	reactiveColumnVisibility,
+	reactiveSorting,
 	type ColumnDef,
-	type ReactiveTable,
-	type ReactivePagination
+	type ReactiveTableWithPlugins
 } from 'svelte-reactive-table';
 
 // Define your data type
@@ -271,13 +339,29 @@ const columns: ColumnDef<Person>[] = [
 ];
 
 // Create a typed table
-const table: ReactiveTable<Person> = reactiveTable(data, columns);
+const table = reactiveTable<Person>(data, columns);
 
-// Create a typed table with pagination
-const paginatedTable: ReactiveTable<Person, { pagination: ReactivePagination<Person> }> =
-	reactiveTable(data, columns, { pagination: reactivePagination<Person>({ pageSize: 10 }) });
+// Create a table with typed plugins
+const tableWithPlugins = reactiveTable<Person>(data, columns)
+	.use(reactiveColumnVisibility())
+	.use(reactiveSorting())
+	.use(reactivePagination({ pageSize: 10 }));
+
+// TypeScript will infer the correct plugin state types
+const { columnVisibility, sorting, pagination } = tableWithPlugins.plugins;
 ```
 
-## Next Steps
+## Congratulations!
+
+You've just learned the fundamentals of Svelte Reactive Table! You now know how to:
+
+- Create basic reactive tables
+- Add column visibility controls
+- Implement pagination
+- Handle data updates reactively
+- Add sorting functionality
+- Combine multiple features
+
+## Summary
 
 This guide covers the basics of using Svelte Reactive Table. Explore the library's capabilities by checking the other documentation sections and API references, or by looking at the example components in the codebase.

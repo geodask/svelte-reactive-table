@@ -17,61 +17,62 @@
 		reactiveColumnVisibility,
 		reactivePagination,
 		reactiveSorting,
-		reactiveTable,
-		type ColumnSorting
+		reactiveTable
 	} from 'svelte-reactive-table';
 	import { initialData, type Person } from '../data';
 
 	// Create a fully featured table with all available features enabled
-	const table = reactiveTable(
-		initialData,
-		[
-			{ accessor: 'id', header: 'ID', isIdentifier: true },
-			{ accessor: 'name', header: 'Name' },
-			{ accessor: 'age', header: 'Age' },
-			{ accessor: 'city', header: 'City' }
-		],
-		{
-			// Column visibility feature
-			columnVisibility: reactiveColumnVisibility({
+	const table = reactiveTable(initialData, [
+		{ accessor: 'id', header: 'ID', isIdentifier: true },
+		{ accessor: 'name', header: 'Name' },
+		{ accessor: 'age', header: 'Age' },
+		{ accessor: 'city', header: 'City' }
+	])
+		// Add column visibility plugin
+		.use(
+			reactiveColumnVisibility({
 				hiddenColumns: [] // No hidden columns by default
-			}),
-			// Pagination feature
-			pagination: reactivePagination({
+			})
+		)
+		.use(
+			reactivePagination({
 				pageSize: 5, // Default page size
 				page: 0 // Start at first page
-			}),
-			// Sorting feature
-			sorting: reactiveSorting({
+			})
+		)
+		.use(
+			reactiveSorting({
 				// Initial sorting by name ascending
 				columnSortings: [{ key: 'name', direction: 'asc' }],
 				// Enable multi-column sorting
 				multiSort: true
 			})
-		}
-	);
+		);
 
 	// Page size options
 	const pageSizeOptions = [3, 5, 10];
 
 	// Column visibility toggle
 	function toggleColumn(accessor: keyof Person) {
-		table.columnVisibility.toggleColumnVisibility(accessor);
+		const { columnVisibility } = table.plugins;
+		columnVisibility.toggleVisibility(accessor);
 	}
 
 	// Set page size
 	function setPageSize(size: number) {
-		table.pagination.setPageSize(size);
+		const { pagination } = table.plugins;
+		pagination.setPageSize(size);
 	}
 
 	function clearSorting() {
-		table.sorting.clearSort();
+		const { sorting } = table.plugins;
+		sorting.clearSort();
 	}
 
 	// Helper function to determine the current sort direction for a column
-	function getSortDirection(accessor: string) {
-		const sorting = table.sorting.columnSortings.find((s: ColumnSorting) => s.key === accessor);
-		return sorting ? sorting.direction : 'none';
+	function getSortDirection(accessor: keyof Person) {
+		const { sorting } = table.plugins;
+		return sorting.getSortDirection(accessor);
 	}
 </script>
 
@@ -97,7 +98,7 @@
 				<DropdownMenu.Content align="end" class="w-40">
 					{#each table.allColumns as column}
 						<DropdownMenu.CheckboxItem
-							checked={table.columnVisibility.isColumnVisible(column.accessor)}
+							checked={table.plugins.columnVisibility.isVisible(column.accessor)}
 							onCheckedChange={() => toggleColumn(column.accessor)}
 						>
 							{column.header}
@@ -114,7 +115,10 @@
 				{#each table.columns as column}
 					<Table.Head class="p-2">
 						<Button
-							onclick={() => table.sorting.toggleSort(column.accessor)}
+							onclick={() => {
+								const { sorting } = table.plugins;
+								sorting.toggleSort(column.accessor);
+							}}
 							size="sm"
 							variant="ghost"
 						>
@@ -164,12 +168,13 @@
 					type="single"
 					name="pageSize"
 					onValueChange={(value) => {
-						table.pagination.setPageSize(parseInt(value));
+						const { pagination } = table.plugins;
+						pagination.setPageSize(parseInt(value));
 					}}
-					value={table.pagination.pageSize.toString()}
+					value={table.plugins.pagination.pageSize.toString()}
 				>
 					<Select.Trigger class="text-xs h-7 p-2">
-						{table.pagination.pageSize}
+						{table.plugins.pagination.pageSize}
 					</Select.Trigger>
 					<Select.Content side="bottom" align="end">
 						{#each pageSizeOptions as pageSize (pageSize)}
@@ -191,16 +196,19 @@
 		<div class="flex items-center gap-1">
 			<div class="text-xs text-muted-foreground mr-1">
 				<span>Page</span>
-				<span class="font-medium">{table.pagination.page + 1}</span>
+				<span class="font-medium">{table.plugins.pagination.page + 1}</span>
 				<span>of</span>
-				<span class="font-medium">{table.pagination.pageCount}</span>
+				<span class="font-medium">{table.plugins.pagination.pageCount}</span>
 			</div>
 
 			<Button
 				variant="outline"
 				size="sm"
-				onclick={table.pagination.firstPage}
-				disabled={table.pagination.page === 0}
+				onclick={() => {
+					const { pagination } = table.plugins;
+					pagination.goToFirstPage();
+				}}
+				disabled={table.plugins.pagination.isFirstPage}
 				aria-label="First page"
 				class="h-7 w-7 p-0"
 			>
@@ -209,8 +217,11 @@
 			<Button
 				variant="outline"
 				size="sm"
-				onclick={table.pagination.previousPage}
-				disabled={table.pagination.page === 0}
+				onclick={() => {
+					const { pagination } = table.plugins;
+					pagination.goToPreviousPage();
+				}}
+				disabled={!table.plugins.pagination.hasPreviousPage}
 				aria-label="Previous page"
 				class="h-7 w-7 p-0"
 			>
@@ -219,8 +230,11 @@
 			<Button
 				variant="outline"
 				size="sm"
-				onclick={table.pagination.nextPage}
-				disabled={table.pagination.page === table.pagination.pageCount - 1}
+				onclick={() => {
+					const { pagination } = table.plugins;
+					pagination.goToNextPage();
+				}}
+				disabled={!table.plugins.pagination.hasNextPage}
 				aria-label="Next page"
 				class="h-7 w-7 p-0"
 			>
@@ -229,8 +243,11 @@
 			<Button
 				variant="outline"
 				size="sm"
-				onclick={table.pagination.lastPage}
-				disabled={table.pagination.page === table.pagination.pageCount - 1}
+				onclick={() => {
+					const { pagination } = table.plugins;
+					pagination.goToLastPage();
+				}}
+				disabled={table.plugins.pagination.isLastPage}
 				aria-label="Last page"
 				class="h-7 w-7 p-0"
 			>

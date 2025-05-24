@@ -23,11 +23,11 @@ layout: docPage
 
 # Sorting
 
-Sorting allows users to organize table data in ascending or descending order. Svelte Reactive Table provides flexible, reactive sorting capabilities that work with both single-column and multi-column approaches.
+Svelte Reactive Table provides flexible, reactive sorting capabilities that work seamlessly with both single-column and multi-column approaches.
 
-## Adding Sorting
+## Adding Sorting to Your Table
 
-Sorting is optional and added using the `reactiveSorting` function:
+Sorting is optional and added using the `reactiveSorting` plugin:
 
 ```svelte
 <script lang="ts">
@@ -40,9 +40,9 @@ Sorting is optional and added using the `reactiveSorting` function:
 		/* Your column definitions */
 	];
 
-	// Create a table with sorting
-	const table = reactiveTable(data, columns, {
-		sorting: reactiveSorting({
+	// Create a table with sorting plugin
+	const table = reactiveTable(data, columns).use(
+		reactiveSorting({
 			// Optional: Initial column sorting state
 			columnSortings: [{ key: 'name', direction: 'asc' }],
 			// Optional: Enable multi-column sorting
@@ -53,7 +53,10 @@ Sorting is optional and added using the `reactiveSorting` function:
 				createdAt: (a, b) => new Date(a).getTime() - new Date(b).getTime()
 			}
 		})
-	});
+	);
+
+	// Access the sorting API through table.plugins
+	const { sorting } = table.plugins;
 </script>
 ```
 
@@ -75,20 +78,25 @@ The `table.rows` property automatically contains data sorted according to the cu
 
 No special handling is needed in your templates - the table handles transforming the rows based on the active sort state.
 
-## Managing Sorting
+## Managing Sorting State
 
-The sorting feature provides these main methods:
+The sorting plugin provides these intuitive methods for controlling sort behavior:
 
 ```svelte
 <script>
 	// Toggle sort direction for a column (asc → desc → none)
 	function toggleSort(columnKey) {
-		table.sorting.toggleSort(columnKey);
+		sorting.toggleSort(columnKey);
 	}
 
 	// Remove all sorting
 	function clearSort() {
-		table.sorting.clearSort();
+		sorting.clearSort();
+	}
+
+	// Get the current sort direction for a column
+	function getSortDirection(columnKey) {
+		return sorting.getSortDirection(columnKey); // Returns 'asc', 'desc', or 'none'
 	}
 </script>
 ```
@@ -101,14 +109,10 @@ Here's an example of creating sortable column headers:
 <thead>
 	<tr>
 		{#each table.columns as column}
-			<th onclick={() => table.sorting.toggleSort(column.accessor)}>
+			<th click={() => sorting.toggleSort(column.accessor)}>
 				{column.header}
-				{#if table.sorting.columnSortings.some((sort) => sort.key === column.accessor)}
-					{#if table.sorting.columnSortings.find((sort) => sort.key === column.accessor)?.direction === 'asc'}
-						↑
-					{:else}
-						↓
-					{/if}
+				{#if sorting.getSortDirection(column.accessor) !== 'none'}
+					{sorting.getSortDirection(column.accessor) === 'asc' ? '↑' : '↓'}
 				{/if}
 			</th>
 		{/each}
@@ -123,11 +127,10 @@ By default, sorting is single-column only, meaning when you sort by a new column
 To enable multi-column sorting:
 
 ```svelte
-const table = reactiveTable(data, columns, {
-	sorting: reactiveSorting({
+const table = reactiveTable(data, columns)
+	.use(reactiveSorting({
 		multiSort: true
-	})
-});
+	}));
 ```
 
 With multi-column sorting enabled:
@@ -138,11 +141,11 @@ With multi-column sorting enabled:
 
 ## Custom Sort Functions
 
-For complex data types or custom sorting logic, provide your own comparator functions:
+For complex data types or custom sorting logic, you can provide your own comparator functions:
 
 ```svelte
-const table = reactiveTable(data, columns, {
-	sorting: reactiveSorting({
+const table = reactiveTable(data, columns)
+	.use(reactiveSorting({
 		comparators: {
 			// Case-insensitive string comparison
 			name: (a, b) => a.toLowerCase().localeCompare(b.toLowerCase()),
@@ -157,16 +160,15 @@ const table = reactiveTable(data, columns, {
 				return a - b;
 			}
 		}
-	})
-});
+	}));
 ```
 
 ## Sorting Properties
 
-The sorting feature provides these reactive properties:
+The sorting plugin provides these reactive properties:
 
-- `table.sorting.columnSortings`: Array of active column sorts (each with `key` and `direction`)
-- `table.sorting.multiSort`: Whether multi-column sorting is enabled
+- `sorting.columnSortings`: Array of active column sorts (each with `key` and `direction`)
+- `sorting.multiSort`: Whether multi-column sorting is enabled
 - `table.rows`: Automatically contains the sorted rows based on current sort state
 
 ## Automatic Reactivity
@@ -178,3 +180,30 @@ The sorting system automatically:
 - Works seamlessly with other features like pagination
 
 With the sorting feature, you can provide a rich user experience for data organization while keeping your code clean and reactive.
+
+## TypeScript Support
+
+Sorting is fully typed to work with your data structure:
+
+```ts
+import { reactiveTable, reactiveSorting } from 'svelte-reactive-table';
+
+type User = {
+	id: number;
+	name: string;
+	registeredAt: string;
+};
+
+const table = reactiveTable<User>(users, columns).use(
+	reactiveSorting<User>({
+		columnSortings: [{ key: 'name', direction: 'asc' }],
+		comparators: {
+			// TypeScript ensures you only reference valid columns
+			registeredAt: (a, b) => new Date(a).getTime() - new Date(b).getTime()
+		}
+	})
+);
+
+// Access the sorting API with type safety
+const { sorting } = table.plugins;
+```

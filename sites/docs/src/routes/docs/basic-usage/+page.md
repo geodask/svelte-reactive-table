@@ -1,0 +1,227 @@
+---
+layout: docPage
+---
+
+<script lang="ts">
+	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
+	import { BookOpen } from '@lucide/svelte';
+
+	const breadcrumb = reactiveBreadcrumb();
+	breadcrumb.setItems([
+		{
+			icon: BookOpen, 
+			href: '/docs/introduction'
+		},
+		{
+			title: 'Core Concepts',
+		},
+		{
+			title: 'Basic Usage'
+		}
+	])
+</script>
+
+# Basic Usage
+
+Now that you've installed Svelte Reactive Table, let's create your first table! This guide focuses on the fundamentals - getting a simple, working table up and running quickly.
+
+## Your First Table
+
+Creating a table requires just three things:
+
+1. Your data (an array of objects)
+2. Column definitions (what to display)
+3. The `reactiveTable` function
+
+Here's the simplest possible example:
+
+```svelte
+<script lang="ts">
+	import { reactiveTable } from 'svelte-reactive-table';
+
+	// 1. Your data
+	const users = [
+		{ id: 1, name: 'Alice Johnson', email: 'alice@example.com' },
+		{ id: 2, name: 'Bob Smith', email: 'bob@example.com' },
+		{ id: 3, name: 'Charlie Brown', email: 'charlie@example.com' }
+	];
+
+	// 2. Column definitions
+	const columns = [
+		{ accessor: 'id', header: 'ID', isIdentifier: true },
+		{ accessor: 'name', header: 'Name' },
+		{ accessor: 'email', header: 'Email' }
+	];
+
+	// 3. Create the table
+	const table = reactiveTable(users, columns);
+</script>
+
+<!-- 4. Render the table -->
+<table>
+	<thead>
+		<tr>
+			{#each table.headers as header}
+				<th>{header}</th>
+			{/each}
+		</tr>
+	</thead>
+	<tbody>
+		{#each table.rows as row}
+			<tr>
+				{#each row.cells as cell}
+					<td>{cell.value}</td>
+				{/each}
+			</tr>
+		{/each}
+	</tbody>
+</table>
+```
+
+That's it! You now have a fully functional, reactive table.
+
+## Understanding the Structure
+
+Let's break down what's happening:
+
+### Data Format
+
+Your data should be an array of objects where each object represents a row:
+
+```js
+const data = [
+	{ id: 1, name: 'Alice', age: 30 }, // Row 1
+	{ id: 2, name: 'Bob', age: 25 } // Row 2
+];
+```
+
+### Column Definitions
+
+Each column needs an `accessor` (the property name) and a `header` (display text):
+
+```js
+const columns = [
+	{ accessor: 'id', header: 'User ID', isIdentifier: true },
+	{ accessor: 'name', header: 'Full Name' },
+	{ accessor: 'age', header: 'Age' }
+];
+```
+
+> **Pro tip**: Always mark one column as `isIdentifier: true`. This helps the table track rows efficiently.
+
+### Table Properties
+
+The `reactiveTable` function returns an object with several useful properties:
+
+- `table.headers` - Array of column headers for the `<thead>`
+- `table.rows` - Array of row objects for the `<tbody>`
+- `table.data` - Your original data (reactive!)
+- `table.columns` - Your column definitions
+
+## Adding Dynamic Behavior
+
+One of the most powerful features is automatic reactivity. Watch what happens when you modify the data:
+
+```svelte
+<script>
+	// Same table setup as above...
+
+	function addUser() {
+		// Just push to the array - the table updates automatically!
+		table.data.push({
+			id: table.data.length + 1,
+			name: 'New User',
+			email: 'newuser@example.com'
+		});
+	}
+
+	function removeUser(userId) {
+		// Filter the array - the table updates automatically!
+		table.data = table.data.filter((user) => user.id !== userId);
+	}
+</script>
+
+<button click={addUser}>Add User</button>
+
+<table>
+	<!-- Same table structure as above -->
+	<tbody>
+		{#each table.rows as row}
+			<tr>
+				{#each row.cells as cell}
+					<td>{cell.value}</td>
+				{/each}
+				<td>
+					<button click={() => removeUser(row.id)}>Remove</button>
+				</td>
+			</tr>
+		{/each}
+	</tbody>
+</table>
+```
+
+No manual updates needed - the table automatically reflects any changes to your data!
+
+## Styling Your Table
+
+Since Svelte Reactive Table is headless, you have complete control over styling. Here's an example with some basic CSS:
+
+```svelte
+<table class="user-table">
+	<thead>
+		<tr>
+			{#each table.headers as header}
+				<th>{header}</th>
+			{/each}
+		</tr>
+	</thead>
+	<tbody>
+		{#each table.rows as row}
+			<tr>
+				{#each row.cells as cell}
+					<td>{cell.value}</td>
+				{/each}
+			</tr>
+		{/each}
+	</tbody>
+</table>
+
+<style>
+	.user-table {
+		width: 100%;
+		border-collapse: collapse;
+	}
+
+	.user-table th,
+	.user-table td {
+		padding: 12px;
+		text-align: left;
+		border-bottom: 1px solid #ddd;
+	}
+
+	.user-table th {
+		background-color: #f8f9fa;
+		font-weight: 600;
+	}
+
+	.user-table tr:hover {
+		background-color: #f8f9fa;
+	}
+</style>
+```
+
+## Handling Empty States
+
+Don't forget to handle the case when there's no data:
+
+```svelte
+{#if table.rows.length > 0}
+	<table>
+		<!-- Your table structure -->
+	</table>
+{:else}
+	<div class="empty-state">
+		<p>No data available</p>
+	</div>
+{/if}
+```

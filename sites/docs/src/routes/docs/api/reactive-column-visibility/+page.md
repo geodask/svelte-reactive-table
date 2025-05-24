@@ -23,31 +23,31 @@ layout: docPage
 
 # reactiveColumnVisibility
 
-The `reactiveColumnVisibility` function creates column visibility management functionality for Svelte Reactive Table, allowing you to show and hide specific columns dynamically.
+The `reactiveColumnVisibility` function creates a column visibility plugin for Svelte Reactive Table, allowing you to show and hide specific columns dynamically.
 
 ## Signature
 
 ```ts
 function reactiveColumnVisibility<T>(
-	options?: ColumnVisibilityOptions
-): ReactiveColumnVisibilityFactory<T>;
+	options?: ColumnVisibilityOptions<T>
+): TablePlugin<T, ColumnVisibilityState<T>, 'columnVisibility'>;
 ```
 
 ## Parameters
 
-| Parameter | Type                      | Description                                           |
-| --------- | ------------------------- | ----------------------------------------------------- |
-| `options` | `ColumnVisibilityOptions` | Optional configuration for column visibility behavior |
+| Parameter | Type                         | Description                                           |
+| --------- | ---------------------------- | ----------------------------------------------------- |
+| `options` | `ColumnVisibilityOptions<T>` | Optional configuration for column visibility behavior |
 
 ### ColumnVisibilityOptions
 
-| Property        | Type       | Default | Description                            |
-| --------------- | ---------- | ------- | -------------------------------------- |
-| `hiddenColumns` | `string[]` | `[]`    | Array of column keys to hide initially |
+| Property        | Type          | Default | Description                            |
+| --------------- | ------------- | ------- | -------------------------------------- |
+| `hiddenColumns` | `(keyof T)[]` | `[]`    | Array of column keys to hide initially |
 
 ## Return Value
 
-Returns a factory function that creates column visibility functionality when passed to `reactiveTable`.
+Returns a TablePlugin that adds column visibility functionality when passed to the `use` method of the table.
 
 ## Basic Usage
 
@@ -62,17 +62,21 @@ Returns a factory function that creates column visibility functionality when pas
 		/* Your column definitions */
 	];
 
-	const table = reactiveTable(data, columns, {
-		columnVisibility: reactiveColumnVisibility({
+	// Create a table with column visibility plugin
+	const table = reactiveTable(data, columns).use(
+		reactiveColumnVisibility({
 			hiddenColumns: ['age'] // Initially hide the age column
 		})
-	});
+	);
+
+	// Access the column visibility API through table.plugins
+	const { columnVisibility } = table.plugins;
 </script>
 
 <!-- Column visibility controls -->
 <div>
-	<button onclick={() => table.columnVisibility.toggleColumnVisibility('age')}>
-		{table.columnVisibility.isColumnVisible('age') ? 'Hide' : 'Show'} Age
+	<button click={() => columnVisibility.toggleVisibility('age')}>
+		{columnVisibility.isVisible('age') ? 'Hide' : 'Show'} Age
 	</button>
 </div>
 
@@ -98,40 +102,40 @@ Returns a factory function that creates column visibility functionality when pas
 
 ## Column Visibility Properties
 
-When column visibility is enabled, these properties are available:
+When column visibility plugin is used, these properties are available:
 
-| Property                               | Type          | Description                      |
-| -------------------------------------- | ------------- | -------------------------------- |
-| `table.columnVisibility.hiddenColumns` | `(keyof T)[]` | Array of hidden column accessors |
+| Property                         | Type          | Description                      |
+| -------------------------------- | ------------- | -------------------------------- |
+| `columnVisibility.hiddenColumns` | `(keyof T)[]` | Array of hidden column accessors |
 
 ## Column Visibility Methods
 
-These methods are available on the table's `columnVisibility` object:
+These methods are available on the columnVisibility plugin state:
 
-| Method                                                       | Return Type | Description                                    |
-| ------------------------------------------------------------ | ----------- | ---------------------------------------------- |
-| `isColumnVisible(accessor: keyof T)`                         | `boolean`   | Check if a specific column is visible          |
-| `setColumnVisibility(accessor: keyof T, isVisible: boolean)` | `void`      | Set a specific column's visibility             |
-| `toggleColumnVisibility(accessor: keyof T)`                  | `void`      | Toggle visibility of a specific column         |
-| `showColumns(accessors: (keyof T)[])`                        | `void`      | Make multiple columns visible                  |
-| `hideColumns(accessors: (keyof T)[])`                        | `void`      | Hide multiple columns                          |
-| `setVisibleColumns(accessors: (keyof T)[])`                  | `void`      | Show only specified columns, hiding all others |
-| `resetColumnVisibility()`                                    | `void`      | Reset all columns to their default visibility  |
+| Method                                                 | Return Type | Description                                    |
+| ------------------------------------------------------ | ----------- | ---------------------------------------------- |
+| `isVisible(accessor: keyof T)`                         | `boolean`   | Check if a specific column is visible          |
+| `setVisibility(accessor: keyof T, isVisible: boolean)` | `void`      | Set a specific column's visibility             |
+| `toggleVisibility(accessor: keyof T)`                  | `void`      | Toggle visibility of a specific column         |
+| `showColumn(accessor: keyof T)`                        | `void`      | Make a column visible                          |
+| `hideColumn(accessor: keyof T)`                        | `void`      | Hide a column                                  |
+| `showColumns(accessors: (keyof T)[])`                  | `void`      | Make multiple columns visible                  |
+| `hideColumns(accessors: (keyof T)[])`                  | `void`      | Hide multiple columns                          |
+| `setVisibleColumns(accessors: (keyof T)[])`            | `void`      | Show only specified columns, hiding all others |
+| `resetVisibility()`                                    | `void`      | Reset all columns to their default visibility  |
 
 ## Example Controls
 
 ```svelte
 <div class="column-controls">
 	<!-- Toggle individual column -->
-	<button onclick={() => table.columnVisibility.toggleColumnVisibility('age')}>
-		Toggle Age Column
-	</button>
+	<button click={() => columnVisibility.toggleVisibility('age')}> Toggle Age Column </button>
 
 	<!-- Reset all column visibility -->
-	<button onclick={table.columnVisibility.resetColumnVisibility}> Show All Columns </button>
+	<button click={columnVisibility.resetVisibility}> Show All Columns </button>
 
 	<!-- Show only specific columns -->
-	<button onclick={() => table.columnVisibility.setVisibleColumns(['name', 'email'])}>
+	<button click={() => columnVisibility.setVisibleColumns(['name', 'email'])}>
 		Show Only Name & Email
 	</button>
 </div>
@@ -140,6 +144,8 @@ These methods are available on the table's `columnVisibility` object:
 ## TypeScript Support
 
 ```ts
+import { reactiveTable, reactiveColumnVisibility } from 'svelte-reactive-table';
+
 type User = {
 	id: number;
 	name: string;
@@ -147,9 +153,12 @@ type User = {
 	email: string;
 };
 
-const columnVisibility = reactiveColumnVisibility<User>({
-	hiddenColumns: ['email']
-});
+const table = reactiveTable<User>(users, columns).use(
+	reactiveColumnVisibility<User>({
+		hiddenColumns: ['email']
+	})
+);
 
-const table = reactiveTable<User>(users, columns, { columnVisibility });
+// TypeScript will infer the correct column visibility state type
+const { columnVisibility } = table.plugins;
 ```

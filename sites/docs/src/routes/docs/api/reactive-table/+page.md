@@ -4,6 +4,7 @@ layout: docPage
 
 <script lang="ts">
 	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
+	import WhatsNext from '$widgets/whats-next/whats-next.svelte'
 	import { BookOpen } from '@lucide/svelte';
 
 	const breadcrumb = reactiveBreadcrumb();
@@ -24,29 +25,27 @@ layout: docPage
 
 # reactiveTable
 
-The `reactiveTable` function is the core API of Svelte Reactive Table. It creates a fully reactive table instance that automatically updates when your data changes.
+The `reactiveTable` function is the core of Svelte Reactive Table. It creates a fully reactive table instance that automatically updates when your data changes and can be extended with plugins to add features like sorting, pagination, and column visibility.
 
 ## Signature
 
 ```ts
-function reactiveTable<T, Options extends TableOptions<T> = {}>(
+function reactiveTable<T>(
 	initialData: T[],
-	columnDefs: ColumnDef<T>[],
-	options?: Options
-): ReactiveTable<T, Options>;
+	columnDefs: ColumnDef<T>[]
+): ReactiveTableWithPlugins<T>;
 ```
 
 ## Parameters
 
-| Parameter     | Type              | Description                                        |
-| ------------- | ----------------- | -------------------------------------------------- |
-| `initialData` | `T[]`             | Array of data items to populate the table          |
-| `columnDefs`  | `ColumnDef<T>[]`  | Column definitions specifying what data to display |
-| `options`     | `TableOptions<T>` | Optional configuration settings (e.g., pagination) |
+| Parameter     | Type             | Description                                        |
+| ------------- | ---------------- | -------------------------------------------------- |
+| `initialData` | `T[]`            | Array of data items to populate the table          |
+| `columnDefs`  | `ColumnDef<T>[]` | Column definitions specifying what data to display |
 
 ## Return Value
 
-Returns a `ReactiveTable<T, Options>` instance with reactive properties and methods.
+Returns a `ReactiveTableWithPlugins<T>` instance with reactive properties, methods, and plugin support.
 
 ## Basic Usage
 
@@ -88,20 +87,23 @@ Returns a `ReactiveTable<T, Options>` instance with reactive properties and meth
 </table>
 ```
 
-## Adding Pagination
+## Adding Plugins
 
-To add pagination to your table:
+Svelte Reactive Table uses a flexible plugin architecture to extend functionality. Plugins are added using the `use` method:
 
 ```svelte
 <script>
 	import { reactiveTable, reactivePagination } from 'svelte-reactive-table';
 
-	const table = reactiveTable(data, columns, {
-		pagination: reactivePagination({
+	const table = reactiveTable(data, columns).use(
+		reactivePagination({
 			pageSize: 10,
 			page: 0
 		})
-	});
+	);
+
+	// Access the pagination API through table.plugins
+	const { pagination } = table.plugins;
 </script>
 ```
 
@@ -109,22 +111,22 @@ For detailed pagination properties and methods, see the [reactivePagination API 
 
 ## Properties
 
-| Property     | Type             | Description                                                     |
-| ------------ | ---------------- | --------------------------------------------------------------- |
-| `data`       | `T[]`            | Current data array (reactive)                                   |
-| `columnDefs` | `ColumnDef<T>[]` | Current column definitions (reactive)                           |
-| `allColumns` | `Column<T>[]`    | All columns with their full configuration                       |
-| `columns`    | `Column<T>[]`    | Only columns that are currently visible                         |
-| `headers`    | `string[]`       | Array of header texts from visible columns                      |
-| `allRows`    | `Row<T>[]`       | Array of all rows with their cells                              |
-| `rows`       | `Row<T>[]`       | Rows after applying active features (pagination, sorting, etc.) |
+| Property     | Type                      | Description                                                     |
+| ------------ | ------------------------- | --------------------------------------------------------------- |
+| `data`       | `T[]`                     | Current data array (reactive)                                   |
+| `columnDefs` | `ColumnDef<T>[]`          | Current column definitions (reactive)                           |
+| `allColumns` | `Column<T>[]`             | All columns with their full configuration                       |
+| `columns`    | `Column<T>[]`             | Only columns that are currently visible                         |
+| `headers`    | `string[]`                | Array of header texts from visible columns                      |
+| `allRows`    | `Row<T>[]`                | Array of all rows with their cells                              |
+| `rows`       | `Row<T>[]`                | Rows after applying active features (pagination, sorting, etc.) |
+| `plugins`    | `Record<string, unknown>` | Registry of all installed plugins and their state               |
 
 ## Methods
 
-| Method                                                       | Return Type | Description                            |
-| ------------------------------------------------------------ | ----------- | -------------------------------------- |
-| `setColumnVisibility(accessor: keyof T, isVisible: boolean)` | `void`      | Show or hide a specific column         |
-| `toggleColumnVisibility(accessor: keyof T)`                  | `void`      | Toggle visibility of a specific column |
+| Method        | Return Type                   | Description                   |
+| ------------- | ----------------------------- | ----------------------------- |
+| `use(plugin)` | `ReactiveTableWithPlugins<T>` | Install a plugin to the table |
 
 ## Examples
 
@@ -134,21 +136,27 @@ For detailed pagination properties and methods, see the [reactivePagination API 
 const table = reactiveTable(data, columns);
 ```
 
-### With Pagination
+### With Plugins
 
 ```svelte
-const table = reactiveTable(
-  data,
-  columns,
-  {
-    pagination: reactivePagination({ pageSize: 10 })
-  }
-);
+const table = reactiveTable(data, columns)
+  .use(reactiveColumnVisibility())
+  .use(reactiveSorting())
+  .use(reactivePagination({ pageSize: 10 }));
+
+// Access plugins through the plugins property
+const { columnVisibility, sorting, pagination } = table.plugins;
 ```
 
 ### With TypeScript
 
 ```ts
+import {
+	reactiveTable,
+	type ColumnDef,
+	type ReactiveTableWithPlugins
+} from 'svelte-reactive-table';
+
 type User = {
 	id: number;
 	name: string;

@@ -50,9 +50,20 @@ layout: docPage
 
 # Examples
 
+Ready to see Svelte Reactive Table in action? These examples show you exactly how to implement different features, from basic tables to full-featured data grids.
+
+## Start Here: See It Working
+
+Each example includes:
+
+- ✅ **Live Preview** - See the table in action
+- ✅ **Complete Source Code** - Copy-paste ready implementations
+- ✅ **Step-by-Step Explanations** - Understand how it works
+- ✅ **Styling Examples** - Modern, accessible UI components
+
 ## Table Features
 
-This section provides practical examples of Svelte Reactive Table in action, from basic implementations to full-featured tables. Each example demonstrates different aspects of the library and comes with both source code and live previews.
+Whether you're building your first table or adding advanced features, these examples have you covered:
 
 <div class="not-prose grid gap-6 pt-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
   {#each examples as example}

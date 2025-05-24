@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { WithElementRef } from "bits-ui";
-	import type { HTMLAttributes } from "svelte/elements";
-	import { cn } from "$lib/shared/lib/shadcn.js";
+	import type { WithElementRef } from 'bits-ui';
+	import type { HTMLAttributes } from 'svelte/elements';
+	import { cn } from '$lib/shared/lib/shadcn.js';
 
 	let {
 		ref = $bindable(null),
@@ -16,7 +16,7 @@
 	role="link"
 	aria-disabled="true"
 	aria-current="page"
-	class={cn("text-foreground font-normal", className)}
+	class={cn('text-foreground font-normal', className)}
 	{...restProps}
 >
 	{@render children?.()}

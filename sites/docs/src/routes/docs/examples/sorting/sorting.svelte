@@ -6,26 +6,23 @@
 	import { initialData } from '../data';
 
 	// Sorting example with multiSort disabled
-	const singleSortTable = reactiveTable(
-		initialData,
-		[
-			{ accessor: 'id', header: 'ID', isIdentifier: true },
-			{ accessor: 'name', header: 'Name' },
-			{ accessor: 'age', header: 'Age' },
-			{ accessor: 'city', header: 'City' }
-		],
-		{
-			sorting: reactiveSorting({
-				// Optional: Set initial sorting
-				columnSortings: [{ key: 'age', direction: 'desc' }],
-				// Disable multi-column sorting
-				multiSort: false
-			})
-		}
+	const singleSortTable = reactiveTable(initialData, [
+		{ accessor: 'id', header: 'ID', isIdentifier: true },
+		{ accessor: 'name', header: 'Name' },
+		{ accessor: 'age', header: 'Age' },
+		{ accessor: 'city', header: 'City' }
+	]).use(
+		reactiveSorting({
+			// Optional: Set initial sorting
+			columnSortings: [{ key: 'age', direction: 'desc' }],
+			// Disable multi-column sorting
+			multiSort: false
+		})
 	);
 
 	function clearSingleSorting() {
-		singleSortTable.sorting.clearSort();
+		const { sorting } = singleSortTable.plugins;
+		sorting.clearSort();
 	}
 
 	// Helper function to determine the current sort direction for a column
@@ -53,7 +50,10 @@
 					{#each singleSortTable.allColumns as column}
 						<Table.Head class="p-2">
 							<Button
-								onclick={() => singleSortTable.sorting.toggleSort(column.accessor)}
+								onclick={() => {
+									const { sorting } = singleSortTable.plugins;
+									sorting.toggleSort(column.accessor);
+								}}
 								size="sm"
 								variant="ghost"
 							>

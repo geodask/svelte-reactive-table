@@ -23,38 +23,40 @@ layout: docPage
 
 # reactiveSorting
 
-The `reactiveSorting` function creates sorting functionality for Svelte Reactive Table, enabling users to sort data in ascending or descending order across one or multiple columns.
+The `reactiveSorting` function creates a sorting plugin for Svelte Reactive Table, enabling users to sort data in ascending or descending order across one or multiple columns.
 
 ## Signature
 
 ```ts
-function reactiveSorting<T>(options?: SortingOptions): ReactiveSortingFactory<T>;
+function reactiveSorting<T>(
+	options?: SortingOptions<T>
+): TablePlugin<T, SortingState<T>, 'sorting'>;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                     |
-| --------- | ---------------- | ----------------------------------------------- |
-| `options` | `SortingOptions` | Optional configuration for the sorting behavior |
+| Parameter | Type                | Description                                     |
+| --------- | ------------------- | ----------------------------------------------- |
+| `options` | `SortingOptions<T>` | Optional configuration for the sorting behavior |
 
 ### SortingOptions
 
-| Property         | Type                         | Default | Description                             |
-| ---------------- | ---------------------------- | ------- | --------------------------------------- |
-| `columnSortings` | `ColumnSorting[]`            | `[]`    | Initial column sorting states           |
-| `multiSort`      | `boolean`                    | `false` | Whether multi-column sorting is enabled |
-| `comparators`    | `Record<string, Comparator>` | `{}`    | Custom comparison functions for columns |
+| Property         | Type                                      | Default | Description                             |
+| ---------------- | ----------------------------------------- | ------- | --------------------------------------- |
+| `columnSortings` | `ColumnSorting<T>[]`                      | `[]`    | Initial column sorting states           |
+| `multiSort`      | `boolean`                                 | `false` | Whether multi-column sorting is enabled |
+| `comparators`    | `Record<keyof T, Comparator<T[keyof T]>>` | `{}`    | Custom comparison functions for columns |
 
 ### ColumnSorting
 
 | Property    | Type           | Description                      |
 | ----------- | -------------- | -------------------------------- |
-| `key`       | `string`       | The key of the column to sort by |
+| `key`       | `keyof T`      | The key of the column to sort by |
 | `direction` | `'asc'⎮'desc'` | The direction of the sort        |
 
 ## Return Value
 
-Returns a factory function that creates sorting functionality when passed to `reactiveTable`.
+Returns a TablePlugin that adds sorting functionality when passed to the `use` method of the table.
 
 ## Basic Usage
 
@@ -69,26 +71,26 @@ Returns a factory function that creates sorting functionality when passed to `re
 		/* Your column definitions */
 	];
 
-	const table = reactiveTable(data, columns, {
-		sorting: reactiveSorting({
+	// Create a table with sorting plugin
+	const table = reactiveTable(data, columns).use(
+		reactiveSorting({
 			columnSortings: [{ key: 'name', direction: 'asc' }],
 			multiSort: false
 		})
-	});
+	);
+
+	// Access the sorting API through table.plugins
+	const { sorting } = table.plugins;
 </script>
 
 <table>
 	<thead>
 		<tr>
 			{#each table.columns as column}
-				<th onclick={() => table.sorting.toggleSort(column.accessor)}>
+				<th click={() => sorting.toggleSort(column.accessor)}>
 					{column.header}
-					{#if table.sorting.columnSortings.some((sort) => sort.key === column.accessor)}
-						{#if table.sorting.columnSortings.find((sort) => sort.key === column.accessor)?.direction === 'asc'}
-							↑
-						{:else}
-							↓
-						{/if}
+					{#if sorting.getSortDirection(column.accessor) !== 'none'}
+						{sorting.getSortDirection(column.accessor) === 'asc' ? '↑' : '↓'}
 					{/if}
 				</th>
 			{/each}
@@ -108,21 +110,22 @@ Returns a factory function that creates sorting functionality when passed to `re
 
 ## Sorting Properties
 
-When sorting is enabled, these properties are available:
+When sorting plugin is used, these properties are available:
 
-| Property                       | Type              | Description                             |
-| ------------------------------ | ----------------- | --------------------------------------- |
-| `table.sorting.columnSortings` | `ColumnSorting[]` | Current active column sorting states    |
-| `table.sorting.multiSort`      | `boolean`         | Whether multi-column sorting is enabled |
+| Property                 | Type                 | Description                             |
+| ------------------------ | -------------------- | --------------------------------------- |
+| `sorting.columnSortings` | `ColumnSorting<T>[]` | Current active column sorting states    |
+| `sorting.multiSort`      | `boolean`            | Whether multi-column sorting is enabled |
 
 ## Sorting Methods
 
-These methods are available on the table's `sorting` object:
+These methods are available on the sorting plugin state:
 
-| Method                          | Return Type | Description                        |
-| ------------------------------- | ----------- | ---------------------------------- |
-| `toggleSort(accessor: keyof T)` | `void`      | Toggle sort direction for a column |
-| `clearSort()`                   | `void`      | Remove all sorting                 |
+| Method                                | Return Type                 | Description                                 |
+| ------------------------------------- | --------------------------- | ------------------------------------------- |
+| `toggleSort(accessor: keyof T)`       | `void`                      | Toggle sort direction for a column          |
+| `clearSort()`                         | `void`                      | Remove all sorting                          |
+| `getSortDirection(accessor: keyof T)` | `'asc' \| 'desc' \| 'none'` | Get the current sort direction for a column |
 
 ## Custom Comparators
 
@@ -130,8 +133,8 @@ You can provide custom comparison functions for specific columns:
 
 ```svelte
 <script>
-	const table = reactiveTable(data, columns, {
-		sorting: reactiveSorting({
+	const table = reactiveTable(data, columns).use(
+		reactiveSorting({
 			comparators: {
 				// Case-insensitive string comparison
 				name: (a, b) => a.toLowerCase().localeCompare(b.toLowerCase()),
@@ -140,7 +143,7 @@ You can provide custom comparison functions for specific columns:
 				createdAt: (a, b) => new Date(a).getTime() - new Date(b).getTime()
 			}
 		})
-	});
+	);
 </script>
 ```
 
@@ -150,17 +153,19 @@ Multi-column sorting allows sorting by multiple columns with precedence:
 
 ```svelte
 <script>
-	const table = reactiveTable(data, columns, {
-		sorting: reactiveSorting({
+	const table = reactiveTable(data, columns).use(
+		reactiveSorting({
 			multiSort: true
 		})
-	});
+	);
+
+	const { sorting } = table.plugins;
 </script>
 
 <!-- Example for how users can see multi-column sort state -->
 <div class="active-sorts">
 	Active sorts:
-	{#each table.sorting.columnSortings as sort, i}
+	{#each sorting.columnSortings as sort, i}
 		<span>
 			{i + 1}. {sort.key} ({sort.direction})
 		</span>
@@ -171,18 +176,23 @@ Multi-column sorting allows sorting by multiple columns with precedence:
 ## TypeScript Support
 
 ```ts
+import { reactiveTable, reactiveSorting } from 'svelte-reactive-table';
+
 type User = {
 	id: number;
 	name: string;
 	age: number;
 };
 
-const sorting = reactiveSorting<User>({
-	columnSortings: [{ key: 'name', direction: 'asc' }],
-	comparators: {
-		age: (a, b) => a - b
-	}
-});
+const table = reactiveTable<User>(users, columns).use(
+	reactiveSorting<User>({
+		columnSortings: [{ key: 'name', direction: 'asc' }],
+		comparators: {
+			age: (a, b) => a - b
+		}
+	})
+);
 
-const table = reactiveTable<User>(users, columns, { sorting });
+// TypeScript will infer the correct sorting state type
+const { sorting } = table.plugins;
 ```

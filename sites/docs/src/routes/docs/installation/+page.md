@@ -28,14 +28,19 @@ slug: installation
 
 # Installation
 
-This guide will help you install the Svelte Reactive Table library in your Svelte project.
+Ready to add powerful, reactive tables to your Svelte project? Let's get you set up in just a few minutes!
 
-## Prerequisites
+## Before You Start
 
-- Node.js and any package manager (`npm`, `pnpm`, `yarn`, or `bun`)
-- Svelte version `5.0.0` or higher
+Make sure you have:
 
-## Installing the Package
+- **Node.js** installed on your system
+- A **Svelte 5.0.0+** project (the library takes advantage of Svelte 5's new runes system)
+- Your favorite package manager ready to go
+
+## Add the Package to Your Project
+
+Choose your preferred package manager and run the installation command:
 
 <Tabs {items}>
 <TabItem value="npm">
@@ -68,19 +73,30 @@ bun add svelte-reactive-table
 </TabItem>
 </Tabs>
 
-## Basic Import
+## Import and Use
 
-Once installed, you can import the library in your Svelte files:
+Once installed, importing the library is straightforward:
 
 ```svelte
 <script lang="ts">
 	import { reactiveTable } from 'svelte-reactive-table';
 
-	// Optional pagination functionality
-	import { reactivePagination } from 'svelte-reactive-table';
+	// Optional: Import plugins as needed
+	import {
+		reactivePagination,
+		reactiveColumnVisibility,
+		reactiveSorting
+	} from 'svelte-reactive-table';
 </script>
 ```
 
-## Next Steps
+> **TypeScript users**: The library is built with TypeScript and includes full type definitions out of the box!
 
-Now that you've installed the library, check out the [Quick Start guide](/docs/quick-start) to learn how to create and customize your tables.
+## All Set!
+
+That's it - you're ready to build reactive tables! The installation gives you access to:
+
+- Core table functionality
+- All available plugins (pagination, sorting, column visibility)
+- Full TypeScript support
+- Comprehensive API for customization

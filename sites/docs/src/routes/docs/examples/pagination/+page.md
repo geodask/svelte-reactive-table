@@ -36,28 +36,20 @@ The pagination feature provides:
 	import { initialData } from '../data';
 
 	// Pagination example
-	const table = reactiveTable(
-		initialData,
-		[
-			{ accessor: 'id', header: 'ID', isIdentifier: true },
-			{ accessor: 'name', header: 'Name' },
-			{ accessor: 'age', header: 'Age' },
-			{ accessor: 'city', header: 'City' }
-		],
-		{
-			pagination: reactivePagination({
-				pageSize: 3,
-				page: 0
-			})
-		}
+	const table = reactiveTable(initialData, [
+		{ accessor: 'id', header: 'ID', isIdentifier: true },
+		{ accessor: 'name', header: 'Name' },
+		{ accessor: 'age', header: 'Age' },
+		{ accessor: 'city', header: 'City' }
+	]).use(
+		reactivePagination({
+			pageSize: 3,
+			page: 0
+		})
 	);
 
 	// Page size options
 	const pageSizeOptions = [3, 5, 10];
-
-	function setPageSize(size: number) {
-		table.pagination.setPageSize(size);
-	}
 </script>
 
 <div class="not-prose">
@@ -101,12 +93,12 @@ The pagination feature provides:
 						type="single"
 						name="pageSize"
 						onValueChange={(value) => {
-							table.pagination.setPageSize(parseInt(value));
+							table.plugins.pagination.setPageSize(parseInt(value));
 						}}
-						value={table.pagination.pageSize.toString()}
+						value={table.plugins.pagination.pageSize.toString()}
 					>
 						<Select.Trigger class="text-xs h-7 p-2">
-							{table.pagination.pageSize}
+							{table.plugins.pagination.pageSize}
 						</Select.Trigger>
 						<Select.Content side="bottom" align="end">
 							{#each pageSizeOptions as pageSize (pageSize)}
@@ -128,16 +120,16 @@ The pagination feature provides:
 			<div class="flex items-center gap-1">
 				<div class="text-xs text-muted-foreground mr-1">
 					<span>Page</span>
-					<span class="font-medium">{table.pagination.page + 1}</span>
+					<span class="font-medium">{table.plugins.pagination.page + 1}</span>
 					<span>of</span>
-					<span class="font-medium">{table.pagination.pageCount}</span>
+					<span class="font-medium">{table.plugins.pagination.pageCount}</span>
 				</div>
 
 				<Button
 					variant="outline"
 					size="sm"
-					onclick={table.pagination.firstPage}
-					disabled={table.pagination.page === 0}
+					onclick={() => table.plugins.pagination.goToFirstPage()}
+					disabled={table.plugins.pagination.isFirstPage}
 					aria-label="First page"
 					class="h-7 w-7 p-0"
 				>
@@ -146,8 +138,8 @@ The pagination feature provides:
 				<Button
 					variant="outline"
 					size="sm"
-					onclick={table.pagination.previousPage}
-					disabled={table.pagination.page === 0}
+					onclick={() => table.plugins.pagination.goToPreviousPage()}
+					disabled={table.plugins.pagination.isFirstPage}
 					aria-label="Previous page"
 					class="h-7 w-7 p-0"
 				>
@@ -156,8 +148,8 @@ The pagination feature provides:
 				<Button
 					variant="outline"
 					size="sm"
-					onclick={table.pagination.nextPage}
-					disabled={table.pagination.page === table.pagination.pageCount - 1}
+					onclick={() => table.plugins.pagination.goToNextPage()}
+					disabled={table.plugins.pagination.isLastPage}
 					aria-label="Next page"
 					class="h-7 w-7 p-0"
 				>
@@ -166,8 +158,8 @@ The pagination feature provides:
 				<Button
 					variant="outline"
 					size="sm"
-					onclick={table.pagination.lastPage}
-					disabled={table.pagination.page === table.pagination.pageCount - 1}
+					onclick={() => table.plugins.pagination.goToLastPage()}
+					disabled={table.plugins.pagination.isLastPage}
 					aria-label="Last page"
 					class="h-7 w-7 p-0"
 				>

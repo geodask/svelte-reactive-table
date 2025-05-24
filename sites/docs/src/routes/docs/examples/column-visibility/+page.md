@@ -34,23 +34,22 @@ The column visibility feature provides:
 	import { initialData, type Person } from '../data';
 
 	// Toggle column visibility example
-	const visibilityTable = reactiveTable(
-		initialData,
-		[
-			{ accessor: 'id', header: 'ID', isIdentifier: true },
-			{ accessor: 'name', header: 'Name' },
-			{ accessor: 'age', header: 'Age' },
-			{ accessor: 'city', header: 'City' }
-		],
-		{
-			columnVisibility: reactiveColumnVisibility({
-				hiddenColumns: []
-			})
-		}
+	const visibilityTable = reactiveTable(initialData, [
+		{ accessor: 'id', header: 'ID', isIdentifier: true },
+		{ accessor: 'name', header: 'Name' },
+		{ accessor: 'age', header: 'Age' },
+		{ accessor: 'city', header: 'City' }
+	]).use(
+		reactiveColumnVisibility({
+			hiddenColumns: []
+		})
 	);
 
+	// Access the column visibility API through table.plugins
+	const { columnVisibility } = visibilityTable.plugins;
+
 	function toggleColumn(accessor: keyof Person) {
-		visibilityTable.columnVisibility.toggleColumnVisibility(accessor);
+		columnVisibility.toggleVisibility(accessor);
 	}
 </script>
 
@@ -61,14 +60,12 @@ The column visibility feature provides:
 			<div class="flex flex-wrap gap-2">
 				{#each visibilityTable.allColumns as column}
 					<Button
-						variant={visibilityTable.columnVisibility.isColumnVisible(column.accessor)
-							? 'default'
-							: 'outline-solid'}
+						variant={columnVisibility.isVisible(column.accessor) ? 'default' : 'outline'}
 						size="sm"
-						onclick={() => toggleColumn(column.accessor)}
+						click={() => toggleColumn(column.accessor)}
 						class="shadow-sm"
 					>
-						{#if visibilityTable.columnVisibility.isColumnVisible(column.accessor)}
+						{#if columnVisibility.isVisible(column.accessor)}
 							<Check class="mr-2 h-4 w-4" />
 						{:else}
 							<X class="mr-2 h-4 w-4" />

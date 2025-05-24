@@ -23,14 +23,29 @@ layout: docPage
 
 # Column Definition
 
-Defining columns is a fundamental step in creating tables with Svelte Reactive Table. Column definitions determine what data is displayed and how it's identified.
+Column definitions are the blueprint for your table - they tell Svelte Reactive Table what data to display and how to organize it. Don't worry, it's simpler than it sounds!
 
-## Basic Column Definition
+## Quick Reference
 
-At its simplest, a column definition requires:
+Every column needs just two things:
 
-- `accessor`: The property key in your data objects
-- `header`: The text to display in the column header
+- **`accessor`**: The property name from your data (like `'name'` or `'email'`)
+- **`header`**: The text to show in the column header (like `'Full Name'` or `'Email Address'`)
+
+```js
+const columns = [
+	{ accessor: 'name', header: 'Name' },
+	{ accessor: 'email', header: 'Email' }
+];
+```
+
+That's it for the basics! Let's dive into the details.
+
+## Your First Column Definition
+
+## Your First Column Definition
+
+Here's how simple it is to set up columns for your data:
 
 ```svelte
 <script lang="ts">
@@ -52,9 +67,11 @@ At its simplest, a column definition requires:
 </script>
 ```
 
-## Identifying Rows
+Each column maps directly to a property in your data objects. The `accessor` tells the table which data to show, and the `header` is what your users see at the top of each column.
 
-For reliable row identification, mark one column as the identifier:
+## The Important Bit: Row Identification
+
+For the best experience, mark one column as your row identifier:
 
 ```svelte
 const columns = [
@@ -64,15 +81,13 @@ const columns = [
 ];
 ```
 
-If no column is marked as the identifier, the first column will be used by default. The identifier helps with:
+> **Why does this matter?** The identifier helps the table track individual rows reliably, especially when data changes. Think of it like a unique ID for each row.
 
-- Generating stable keys for each row
-- Observing rows across data updates
-- Supporting row operations like selection (in future versions)
+If you don't specify an identifier, the first column becomes the identifier by default - but it's better to be explicit!
 
-## Initial Column Visibility
+## Controlling Initial Visibility
 
-To control initial column visibility, use the `reactiveColumnVisibility` function when creating your table:
+Want some columns hidden when the table first loads? Use the column visibility plugin:
 
 ```svelte
 import { reactiveTable, reactiveColumnVisibility } from 'svelte-reactive-table';

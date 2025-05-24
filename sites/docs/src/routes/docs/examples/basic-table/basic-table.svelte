@@ -4,7 +4,6 @@
 	import { initialData } from '../data';
 	import { Inbox, Plus, Trash2 } from '@lucide/svelte';
 	import { Button } from '$shared/ui/shadcn/button';
-
 	// Basic table example
 	const basicTable = reactiveTable(initialData, [
 		{ accessor: 'id', header: 'ID', isIdentifier: true },

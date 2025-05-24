@@ -28,7 +28,7 @@
 			// Optional: Set initial sorting
 			columnSortings: [{ key: 'age', direction: 'desc' }],
 			// Disable multi-column sorting
-			multiSort: false, 
+			multiSort: false
 		})
 	);
 
