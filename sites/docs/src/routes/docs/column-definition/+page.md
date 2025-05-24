@@ -43,8 +43,6 @@ That's it for the basics! Let's dive into the details.
 
 ## Your First Column Definition
 
-## Your First Column Definition
-
 Here's how simple it is to set up columns for your data:
 
 ```svelte
