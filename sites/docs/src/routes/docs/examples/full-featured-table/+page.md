@@ -13,14 +13,14 @@ layout: docPage
 
 # Full Featured Table Example
 
-This example demonstrates how to combine all the features of svelte-reactive-table into a comprehensive, full-featured table implementation.
+This example demonstrates how to combine all the plugins of svelte-reactive-table into a comprehensive, full-featured table implementation.
 
 The full-featured table includes:
 
 - Column visibility toggles
 - Pagination with configurable page sizes
 - Multi-column sorting
-- All features working together seamlessly
+- All plugins working together seamlessly
 
 <Tabs value="Code" {items}>
 
@@ -51,7 +51,7 @@ The full-featured table includes:
 	} from 'svelte-reactive-table';
 	import { initialData, type Person } from '../data';
 
-	// Create a fully featured table with all available features enabled
+	// Create a fully featured table with all available plugins enabled
 	const table = reactiveTable(initialData, [
 		{ accessor: 'id', header: 'ID', isIdentifier: true },
 		{ accessor: 'name', header: 'Name' },
@@ -147,7 +147,7 @@ The full-featured table includes:
 				{#each table.columns as column}
 					<Table.Head class="p-2">
 						<Button
-							click={() => {
+							onclick={() => {
 								const { sorting } = table.plugins;
 								sorting.toggleSort(column.accessor);
 							}}
@@ -236,7 +236,7 @@ The full-featured table includes:
 			<Button
 				variant="outline"
 				size="sm"
-				click={() => {
+				onclick={() => {
 					const { pagination } = table.plugins;
 					pagination.goToFirstPage();
 				}}
@@ -249,7 +249,7 @@ The full-featured table includes:
 			<Button
 				variant="outline"
 				size="sm"
-				click={() => {
+				onclick={() => {
 					const { pagination } = table.plugins;
 					pagination.goToPreviousPage();
 				}}
@@ -262,7 +262,7 @@ The full-featured table includes:
 			<Button
 				variant="outline"
 				size="sm"
-				click={() => {
+				onclick={() => {
 					const { pagination } = table.plugins;
 					pagination.goToNextPage();
 				}}
@@ -275,7 +275,7 @@ The full-featured table includes:
 			<Button
 				variant="outline"
 				size="sm"
-				click={() => {
+				onclick={() => {
 					const { pagination } = table.plugins;
 					pagination.goToLastPage();
 				}}
@@ -297,7 +297,3 @@ The full-featured table includes:
 </TabItem>
 
 </Tabs>
-
-## Congratulations!
-
-You've seen how all the features of Svelte Reactive Table work together to create a powerful, user-friendly data table. This combination of sorting, pagination, and column visibility provides a complete solution for most table needs.

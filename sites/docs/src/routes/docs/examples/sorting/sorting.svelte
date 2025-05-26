@@ -20,15 +20,16 @@
 		})
 	);
 
+	const { sorting } = singleSortTable.plugins;
+
 	function clearSingleSorting() {
-		const { sorting } = singleSortTable.plugins;
 		sorting.clearSort();
 	}
 
 	// Helper function to determine the current sort direction for a column
-	function getSortDirection(table: any, accessor: string) {
-		const sorting = table.sorting.columnSortings.find((s: ColumnSorting) => s.key === accessor);
-		return sorting ? sorting.direction : 'none';
+	function getSortDirection(accessor: string) {
+		const columnSorting = sorting.columnSortings.find((s: ColumnSorting) => s.key === accessor);
+		return columnSorting ? columnSorting.direction : 'none';
 	}
 </script>
 
@@ -59,9 +60,9 @@
 							>
 								<span class="font-medium">{column.header}</span>
 								<span class="text-muted-foreground/70">
-									{#if getSortDirection(singleSortTable, column.accessor) === 'asc'}
+									{#if getSortDirection(column.accessor) === 'asc'}
 										<ArrowUp class="h-4 text-primary" />
-									{:else if getSortDirection(singleSortTable, column.accessor) === 'desc'}
+									{:else if getSortDirection(column.accessor) === 'desc'}
 										<ArrowDown class="h-4 text-primary" />
 									{:else}
 										<ArrowUpDown class="h-4 w-4" />

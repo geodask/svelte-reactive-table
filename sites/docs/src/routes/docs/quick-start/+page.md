@@ -23,13 +23,13 @@ layout: docPage
 
 # Quick Start
 
-Welcome! This guide shows you how to add powerful features to your Svelte Reactive Table. We'll start with a basic table and progressively add pagination, column visibility, sorting, and more.
+This guide demonstrates how to enhance your Svelte Reactive Table with plugins for pagination, column visibility, and sorting. Each plugin adds specific functionality while maintaining the table's reactive behavior.
 
-> New to Svelte Reactive Table? Start with [Basic Usage](/docs/basic-usage) to learn how to create your first table, then come back here to add features.
+> New to Svelte Reactive Table? Start with [Basic Usage](/docs/basic-usage) to learn table creation fundamentals, then return here to add plugins.
 
-## Creating a Basic Table
+## Starting Point
 
-Let's assume you already have a working table like this:
+This guide assumes you have a basic table setup:
 
 ```svelte
 <script lang="ts">
@@ -53,7 +53,7 @@ Let's assume you already have a working table like this:
 	const table = reactiveTable(data, columns);
 </script>
 
-<!-- Render your table with complete styling freedom -->
+<!-- Render your table -->
 <table>
 	<thead>
 		<tr>
@@ -63,7 +63,7 @@ Let's assume you already have a working table like this:
 		</tr>
 	</thead>
 	<tbody>
-		{#each table.allRows as row}
+		{#each table.rows as row}
 			<tr>
 				{#each row.cells as cell}
 					<td>{cell.value}</td>
@@ -74,11 +74,11 @@ Let's assume you already have a working table like this:
 </table>
 ```
 
-Perfect! Now let's enhance this table with some powerful features.
+Now let's enhance this table with plugins.
 
-## Controlling Column Visibility
+## Adding Column Visibility Controls
 
-Let users show and hide columns with the `reactiveColumnVisibility` plugin:
+The `reactiveColumnVisibility` plugin allows users to show and hide columns:
 
 ```svelte
 <script lang="ts">
@@ -98,11 +98,11 @@ Let users show and hide columns with the `reactiveColumnVisibility` plugin:
 </script>
 
 <div>
-	<button click={() => columnVisibility.toggleVisibility('age')}>
+	<button onclick={() => columnVisibility.toggleVisibility('age')}>
 		{columnVisibility.isVisible('age') ? 'Hide' : 'Show'} Age Column
 	</button>
-	<button click={() => columnVisibility.hideColumn('city')}> Hide City Column </button>
-	<button click={() => columnVisibility.showColumn('city')}> Show City Column </button>
+	<button onclick={() => columnVisibility.hideColumn('city')}> Hide City Column </button>
+	<button onclick={() => columnVisibility.showColumn('city')}> Show City Column </button>
 </div>
 
 <!-- Table as above -->

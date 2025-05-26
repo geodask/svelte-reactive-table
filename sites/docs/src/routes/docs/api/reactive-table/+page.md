@@ -25,7 +25,7 @@ layout: docPage
 
 # reactiveTable
 
-The `reactiveTable` function is the core of Svelte Reactive Table. It creates a fully reactive table instance that automatically updates when your data changes and can be extended with plugins to add features like sorting, pagination, and column visibility.
+The `reactiveTable` function creates a reactive table instance that automatically updates when your data changes. It can be extended with plugins to add features like sorting, pagination, and column visibility.
 
 ## Signature
 

@@ -23,14 +23,14 @@ layout: docPage
 
 # Column Definition
 
-Column definitions are the blueprint for your table - they tell Svelte Reactive Table what data to display and how to organize it. Don't worry, it's simpler than it sounds!
+Column definitions specify what data to display and how to organize your table. This guide covers the essential properties and configuration options.
 
-## Quick Reference
+## Basic Requirements
 
-Every column needs just two things:
+Every column definition requires two properties:
 
-- **`accessor`**: The property name from your data (like `'name'` or `'email'`)
-- **`header`**: The text to show in the column header (like `'Full Name'` or `'Email Address'`)
+- **`accessor`**: The property name from your data (e.g., `'name'` or `'email'`)
+- **`header`**: The text to display in the column header (e.g., `'Full Name'` or `'Email Address'`)
 
 ```js
 const columns = [
@@ -39,11 +39,9 @@ const columns = [
 ];
 ```
 
-That's it for the basics! Let's dive into the details.
+## Creating Column Definitions
 
-## Your First Column Definition
-
-Here's how simple it is to set up columns for your data:
+Here's how to set up columns for your data:
 
 ```svelte
 <script lang="ts">
@@ -65,11 +63,11 @@ Here's how simple it is to set up columns for your data:
 </script>
 ```
 
-Each column maps directly to a property in your data objects. The `accessor` tells the table which data to show, and the `header` is what your users see at the top of each column.
+Each column maps directly to a property in your data objects. The `accessor` specifies which data to display, and the `header` defines what users see in the column header.
 
-## The Important Bit: Row Identification
+## Row Identification
 
-For the best experience, mark one column as your row identifier:
+Mark one column as the row identifier for optimal performance:
 
 ```svelte
 const columns = [
@@ -97,11 +95,11 @@ const columns = [
   { accessor: 'email', header: 'Email' }
 ];
 
-const table = reactiveTable(data, columns, {
-  columnVisibility: reactiveColumnVisibility({
+const table = reactiveTable(data, columns).use(
+  reactiveColumnVisibility({
     hiddenColumns: ['email'] // Initially hide the email column
   })
-});
+);
 ```
 
 See the [Column Visibility](/docs/column-visibility) section for more details on managing column visibility.

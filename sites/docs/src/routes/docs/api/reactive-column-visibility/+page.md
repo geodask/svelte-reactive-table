@@ -23,7 +23,7 @@ layout: docPage
 
 # reactiveColumnVisibility
 
-The `reactiveColumnVisibility` function creates a column visibility plugin for Svelte Reactive Table, allowing you to show and hide specific columns dynamically.
+The `reactiveColumnVisibility` function creates a column visibility plugin for table instances, enabling dynamic control over which columns are displayed.
 
 ## Signature
 
@@ -75,7 +75,7 @@ Returns a TablePlugin that adds column visibility functionality when passed to t
 
 <!-- Column visibility controls -->
 <div>
-	<button click={() => columnVisibility.toggleVisibility('age')}>
+	<button onclick={() => columnVisibility.toggleVisibility('age')}>
 		{columnVisibility.isVisible('age') ? 'Hide' : 'Show'} Age
 	</button>
 </div>
@@ -129,15 +129,113 @@ These methods are available on the columnVisibility plugin state:
 ```svelte
 <div class="column-controls">
 	<!-- Toggle individual column -->
-	<button click={() => columnVisibility.toggleVisibility('age')}> Toggle Age Column </button>
+	<button onclick={() => columnVisibility.toggleVisibility('age')}> Toggle Age Column </button>
 
 	<!-- Reset all column visibility -->
-	<button click={columnVisibility.resetVisibility}> Show All Columns </button>
+	<button onclick={columnVisibility.resetVisibility}> Show All Columns </button>
 
 	<!-- Show only specific columns -->
-	<button click={() => columnVisibility.setVisibleColumns(['name', 'email'])}>
+	<button onclick={() => columnVisibility.setVisibleColumns(['name', 'email'])}>
 		Show Only Name & Email
 	</button>
+</div>
+```
+
+## Column Selector Interface
+
+Complete implementation of a column visibility selector:
+
+```svelte
+<div class="column-selector">
+	<h3>Visible Columns</h3>
+	<div class="column-checkboxes">
+		{#each table.allColumns as column}
+			<label class="column-toggle">
+				<input
+					type="checkbox"
+					checked={columnVisibility.isVisible(column.accessor)}
+					onchange={() => columnVisibility.toggleVisibility(column.accessor)}
+				/>
+				<span>{column.header}</span>
+			</label>
+		{/each}
+	</div>
+	
+	<div class="column-actions">
+		<button onclick={columnVisibility.resetVisibility}>
+			Show All
+		</button>
+		<button onclick={() => columnVisibility.hideColumns(['age', 'email'])}>
+			Hide Personal Info
+		</button>
+	</div>
+</div>
+
+<style>
+	.column-selector {
+		padding: 1rem;
+		border: 1px solid #e2e8f0;
+		border-radius: 0.5rem;
+		background: #f8fafc;
+	}
+	
+	.column-checkboxes {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		margin: 1rem 0;
+	}
+	
+	.column-toggle {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		cursor: pointer;
+	}
+	
+	.column-actions {
+		display: flex;
+		gap: 0.5rem;
+	}
+</style>
+```
+
+## Batch Operations Example
+
+```svelte
+<script>
+	// Predefined column groups for quick toggling
+	const columnGroups = {
+		personal: ['name', 'age', 'email'],
+		work: ['department', 'position', 'salary'],
+		contact: ['email', 'phone', 'address']
+	};
+	
+	function showGroup(groupName) {
+		const columns = columnGroups[groupName];
+		columnVisibility.showColumns(columns);
+	}
+	
+	function hideGroup(groupName) {
+		const columns = columnGroups[groupName];
+		columnVisibility.hideColumns(columns);
+	}
+	
+	function showOnlyGroup(groupName) {
+		const columns = columnGroups[groupName];
+		columnVisibility.setVisibleColumns(columns);
+	}
+</script>
+
+<div class="group-controls">
+	{#each Object.keys(columnGroups) as groupName}
+		<div class="group-actions">
+			<span>{groupName}:</span>
+			<button onclick={() => showGroup(groupName)}>Show</button>
+			<button onclick={() => hideGroup(groupName)}>Hide</button>
+			<button onclick={() => showOnlyGroup(groupName)}>Only</button>
+		</div>
+	{/each}
 </div>
 ```
 

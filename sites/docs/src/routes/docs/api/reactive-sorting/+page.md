@@ -23,7 +23,7 @@ layout: docPage
 
 # reactiveSorting
 
-The `reactiveSorting` function creates a sorting plugin for Svelte Reactive Table, enabling users to sort data in ascending or descending order across one or multiple columns.
+The `reactiveSorting` function creates a sorting plugin for table instances, enabling data sorting in ascending or descending order across single or multiple columns.
 
 ## Signature
 
@@ -87,7 +87,7 @@ Returns a TablePlugin that adds sorting functionality when passed to the `use` m
 	<thead>
 		<tr>
 			{#each table.columns as column}
-				<th click={() => sorting.toggleSort(column.accessor)}>
+				<th onclick={() => sorting.toggleSort(column.accessor)}>
 					{column.header}
 					{#if sorting.getSortDirection(column.accessor) !== 'none'}
 						{sorting.getSortDirection(column.accessor) === 'asc' ? '↑' : '↓'}
@@ -140,14 +140,22 @@ You can provide custom comparison functions for specific columns:
 				name: (a, b) => a.toLowerCase().localeCompare(b.toLowerCase()),
 
 				// Date comparison
-				createdAt: (a, b) => new Date(a).getTime() - new Date(b).getTime()
+				createdAt: (a, b) => new Date(a).getTime() - new Date(b).getTime(),
+
+				// Numeric comparison with null handling
+				price: (a, b) => {
+					if (a === null && b === null) return 0;
+					if (a === null) return -1;
+					if (b === null) return 1;
+					return a - b;
+				}
 			}
 		})
 	);
 </script>
 ```
 
-## Multi-Column Sorting
+## Multi-Column Sorting Examples
 
 Multi-column sorting allows sorting by multiple columns with precedence:
 
@@ -155,22 +163,66 @@ Multi-column sorting allows sorting by multiple columns with precedence:
 <script>
 	const table = reactiveTable(data, columns).use(
 		reactiveSorting({
-			multiSort: true
+			multiSort: true,
+			columnSortings: [
+				{ key: 'department', direction: 'asc' },
+				{ key: 'name', direction: 'asc' }
+			]
 		})
 	);
 
 	const { sorting } = table.plugins;
+	
+	// Display active sorts
+	function getActiveSorts() {
+		return sorting.columnSortings.map((sort, index) => 
+			`${index + 1}. ${sort.key} (${sort.direction})`
+		).join(', ');
+	}
 </script>
 
-<!-- Example for how users can see multi-column sort state -->
-<div class="active-sorts">
-	Active sorts:
-	{#each sorting.columnSortings as sort, i}
-		<span>
-			{i + 1}. {sort.key} ({sort.direction})
-		</span>
-	{/each}
+<!-- Show current sort state -->
+<div class="sort-info">
+	{#if sorting.columnSortings.length > 0}
+		Active sorts: {getActiveSorts()}
+	{:else}
+		No sorting applied
+	{/if}
 </div>
+```
+
+## Sortable Headers Example
+
+```svelte
+<thead>
+	<tr>
+		{#each table.columns as column}
+			<th 
+				onclick={() => sorting.toggleSort(column.accessor)}
+				class="sortable-header"
+			>
+				{column.header}
+				{#if sorting.getSortDirection(column.accessor) !== 'none'}
+					<span class="sort-indicator">
+						{sorting.getSortDirection(column.accessor) === 'asc' ? '↑' : '↓'}
+					</span>
+				{/if}
+			</th>
+		{/each}
+	</tr>
+</thead>
+
+<style>
+	.sortable-header {
+		cursor: pointer;
+		user-select: none;
+	}
+	
+	.sort-indicator {
+		margin-left: 4px;
+		opacity: 0.7;
+	}
+</style>
 ```
 
 ## TypeScript Support

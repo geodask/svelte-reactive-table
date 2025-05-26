@@ -23,13 +23,13 @@ layout: docPage
 
 # Reactivity
 
-One of the most powerful aspects of Svelte Reactive Table is how it automatically keeps your UI in sync with your data. Built on Svelte 5's runes system, the library makes your tables reactive without any extra work from you.
+Svelte Reactive Table automatically keeps your UI synchronized with your data through Svelte 5's runes system. Changes to your data propagate to the table interface without manual intervention.
 
-## How it works
+## How Reactivity Works
 
-When you create a table with `reactiveTable`, something special happens: the library establishes reactive connections to your data. This means any changes you make to your data automatically flow through to your table's display.
+When you create a table instance with `reactiveTable`, the library establishes reactive connections to your data. Changes to your data automatically update the table display.
 
-Here's what this looks like in practice:
+Example implementation:
 
 ```svelte
 <script lang="ts">
@@ -49,7 +49,7 @@ Here's what this looks like in practice:
 
 	const table = reactiveTable(data, columns);
 
-	// Adding a row will automatically update the table
+	// Adding a row automatically updates the table display
 	function addPerson() {
 		table.data.push({
 			id: table.data.length + 1,
@@ -60,24 +60,24 @@ Here's what this looks like in practice:
 </script>
 ```
 
-Pretty amazing, right? Just by pushing new data to the array, the table automatically shows the new row. No manual updates, no complex state management - it just works!
+Adding new data to the array automatically displays the new row without manual updates or complex state management.
 
-## What Updates Automatically
+## Reactive Properties
 
-The table provides several reactive properties that stay perfectly in sync:
+The table instance provides several reactive properties that automatically update:
 
 - `data`: The source data array
 - `columnDefs`: Column definitions array
 - `headers`: Array of visible column headers
 - `allRows`: Array of all rows with their cells
-- `rows`: Rows after applying active features (pagination, sorting, etc.)
-- `columns`: Array of currently visible columns
+- `rows`: Rows after applying active plugins (pagination, sorting, etc.)
+- `columns`: Columns after applying active plugins (column visibility etc.)
 
-When these properties change, your UI updates automatically. It's like having a personal assistant that keeps everything organized for you!
+When these properties change, your UI updates automatically.
 
-## All the Ways You Can Update Data
+## Data Update Patterns
 
-You have complete freedom in how you modify your table's data. Here are some common patterns:
+You can modify your table's data using various approaches:
 
 ```svelte
 <script>
@@ -101,48 +101,46 @@ You have complete freedom in how you modify your table's data. Here are some com
 </script>
 ```
 
-Every approach works perfectly - choose whatever feels most natural for your application!
+All approaches work with the reactive system - choose what fits your application best.
 
-## Features Are Reactive Too
+## Plugin Reactivity
 
-It's not just data that's reactive. All table features respond instantly to changes:
+All table plugins respond automatically to changes:
 
 ```svelte
 <script>
-	// The UI automatically updates when visibility changes
+	// UI updates automatically when visibility changes
 	function toggleAgeColumn() {
-		table.toggleColumnVisibility('age');
+		table.plugins.columnVisibility.toggleVisibility('age');
 	}
 </script>
 ```
 
-With pagination enabled, all pagination state is reactive:
+With pagination enabled, pagination state is reactive:
 
 ```svelte
 <script>
-	// This expression automatically updates when pagination changes
+	// Expression automatically updates when pagination changes
 	const pageInfo = $derived(
-		`Showing page ${table.pagination.page + 1} of ${table.pagination.pageCount}`
+		`Showing page ${table.plugins.pagination.page + 1} of ${table.plugins.pagination.pageCount}`
 	);
 </script>
 
 <div>{pageInfo}</div>
 ```
 
-## Why This Matters
+## Benefits of Reactive Tables
 
-This automatic reactivity provides several huge advantages for you as a developer:
+Automatic reactivity provides several advantages:
 
-1. **Write Less Code**: No manual UI updates when data changes - the table handles it all
-2. **Fewer Bugs**: No synchronization issues between your data and what users see
-3. **Better Performance**: Only the parts that actually changed get updated
-4. **Focus on Your App**: Spend time on features, not on managing table state
+1. **Reduced Code**: No manual UI updates when data changes
+2. **Fewer Bugs**: No synchronization issues between data and display
+3. **Better Performance**: Only changed parts get updated
+4. **Focus on Features**: Spend time on application logic, not table state management
 
-The table stays automatically in sync with your data, letting you focus on building amazing user experiences rather than wrestling with table mechanics.
+## Reactive Patterns
 
-## Pro Tips for Reactive Tables
-
-Here are some patterns that work particularly well with reactive tables:
+Effective patterns for reactive tables:
 
 ```svelte
 <script>
@@ -152,14 +150,14 @@ Here are some patterns that work particularly well with reactive tables:
 		table.data.reduce((sum, user) => sum + user.age, 0) / table.data.length
 	);
 
-	// Reactive filtering (the table updates automatically)
+	// Reactive filtering updates table automatically
 	function filterAdults() {
 		table.data = table.data.filter((user) => user.age >= 18);
 	}
 
-	// Batch updates work perfectly
+	// Batch updates work efficiently
 	function loadNewDataset(newUsers) {
-		table.data = newUsers; // One update, perfect reactivity
+		table.data = newUsers; // Single update, automatic reactivity
 	}
 </script>
 
@@ -169,4 +167,4 @@ Here are some patterns that work particularly well with reactive tables:
 </div>
 ```
 
-The beauty of Svelte Reactive Table is that it gets out of your way and lets Svelte's reactivity do what it does best - keep your UI perfectly in sync with your data.
+Svelte Reactive Table leverages Svelte's reactivity system to keep your UI synchronized with your data automatically.

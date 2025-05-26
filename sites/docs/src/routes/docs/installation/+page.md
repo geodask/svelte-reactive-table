@@ -28,19 +28,19 @@ slug: installation
 
 # Installation
 
-Ready to add powerful, reactive tables to your Svelte project? Let's get you set up in just a few minutes!
+This guide covers how to install and set up Svelte Reactive Table in your project.
 
-## Before You Start
+## Prerequisites
 
-Make sure you have:
+Before installing, ensure you have:
 
 - **Node.js** installed on your system
-- A **Svelte 5.0.0+** project (the library takes advantage of Svelte 5's new runes system)
-- Your favorite package manager ready to go
+- A **Svelte 5.0.0+** project (the library uses Svelte 5's runes system)
+- A package manager (npm, pnpm, yarn, or bun)
 
-## Add the Package to Your Project
+## Installing the Package
 
-Choose your preferred package manager and run the installation command:
+Install the library using your preferred package manager:
 
 <Tabs {items}>
 <TabItem value="npm">

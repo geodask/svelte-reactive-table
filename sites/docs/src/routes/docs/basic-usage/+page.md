@@ -23,17 +23,17 @@ layout: docPage
 
 # Basic Usage
 
-Now that you've installed Svelte Reactive Table, let's create your first table! This guide focuses on the fundamentals - getting a simple, working table up and running quickly.
+This guide covers the fundamentals of creating and working with Svelte Reactive Table. You'll learn how to set up a simple table and understand its core concepts.
 
-## Your First Table
+## Creating Your First Table
 
-Creating a table requires just three things:
+Creating a table requires three components:
 
 1. Your data (an array of objects)
-2. Column definitions (what to display)
+2. Column definitions (specify what to display)
 3. The `reactiveTable` function
 
-Here's the simplest possible example:
+Here's a minimal example:
 
 ```svelte
 <script lang="ts">
@@ -57,7 +57,7 @@ Here's the simplest possible example:
 	const table = reactiveTable(users, columns);
 </script>
 
-<!-- 4. Render the table -->
+<!-- Render the table -->
 <table>
 	<thead>
 		<tr>
@@ -78,7 +78,7 @@ Here's the simplest possible example:
 </table>
 ```
 
-That's it! You now have a fully functional, reactive table.
+This creates a fully functional, reactive table instance.
 
 ## Understanding the Structure
 
@@ -111,23 +111,23 @@ const columns = [
 
 ### Table Properties
 
-The `reactiveTable` function returns an object with several useful properties:
+The table instance provides several reactive properties:
 
 - `table.headers` - Array of column headers for the `<thead>`
 - `table.rows` - Array of row objects for the `<tbody>`
-- `table.data` - Your original data (reactive!)
+- `table.data` - Your original data (reactive)
 - `table.columns` - Your column definitions
 
-## Adding Dynamic Behavior
+## Working with Dynamic Data
 
-One of the most powerful features is automatic reactivity. Watch what happens when you modify the data:
+The table automatically updates when your data changes. Here's how to add and remove rows:
 
 ```svelte
 <script>
 	// Same table setup as above...
 
 	function addUser() {
-		// Just push to the array - the table updates automatically!
+		// Push to the array - the table updates automatically
 		table.data.push({
 			id: table.data.length + 1,
 			name: 'New User',
@@ -136,12 +136,12 @@ One of the most powerful features is automatic reactivity. Watch what happens wh
 	}
 
 	function removeUser(userId) {
-		// Filter the array - the table updates automatically!
+		// Filter the array - the table updates automatically
 		table.data = table.data.filter((user) => user.id !== userId);
 	}
 </script>
 
-<button click={addUser}>Add User</button>
+<button onclick={addUser}>Add User</button>
 
 <table>
 	<!-- Same table structure as above -->
@@ -152,15 +152,15 @@ One of the most powerful features is automatic reactivity. Watch what happens wh
 					<td>{cell.value}</td>
 				{/each}
 				<td>
-					<button click={() => removeUser(row.id)}>Remove</button>
+					<button onclick={() => removeUser(row.id)}>Remove</button>
 				</td>
 			</tr>
 		{/each}
-	</tbody>
+		</tbody>
 </table>
 ```
 
-No manual updates needed - the table automatically reflects any changes to your data!
+The table automatically reflects any changes to your data without manual updates.
 
 ## Styling Your Table
 

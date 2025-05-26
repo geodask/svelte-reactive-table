@@ -12,9 +12,9 @@ layout: docPage
 	const items = ['Code', 'Preview'];
 </script>
 
-# Sorting Examples
+# Sorting Example
 
-The sorting feature in svelte-reactive-table provides powerful ways to organize your data. This page demonstrates both single-column and multi-column sorting options.
+The sorting feature in Svelte Reactive Table provides powerful ways to organize your data. This page demonstrates both single-column and multi-column sorting options.
 
 ## Basic Sorting
 
@@ -52,15 +52,16 @@ This example shows basic sorting functionality with only one sortable column at 
 		})
 	);
 
+	const { sorting } = singleSortTable.plugins;
+
 	function clearSingleSorting() {
-		const { sorting } = singleSortTable.plugins;
 		sorting.clearSort();
 	}
 
 	// Helper function to determine the current sort direction for a column
-	function getSortDirection(table: any, accessor: string) {
-		const sorting = table.sorting.columnSortings.find((s: ColumnSorting) => s.key === accessor);
-		return sorting ? sorting.direction : 'none';
+	function getSortDirection(accessor: string) {
+		const columnSorting = sorting.columnSortings.find((s: ColumnSorting) => s.key === accessor);
+		return columnSorting ? columnSorting.direction : 'none';
 	}
 </script>
 
@@ -69,7 +70,7 @@ This example shows basic sorting functionality with only one sortable column at 
 		<p class="text-sm text-muted-foreground">
 			Click on column headers to sort. Only one column can be sorted at a time.
 		</p>
-		<Button variant="outline" size="sm" click={clearSingleSorting} class="shadow-sm">
+		<Button variant="outline" size="sm" onclick={clearSingleSorting} class="shadow-sm">
 			<RotateCcw class="mr-2 h-4 w-4" />
 			Clear Sorting
 		</Button>
@@ -82,7 +83,7 @@ This example shows basic sorting functionality with only one sortable column at 
 					{#each singleSortTable.allColumns as column}
 						<Table.Head class="p-2">
 							<Button
-								click={() => {
+								onclick={() => {
 									const { sorting } = singleSortTable.plugins;
 									sorting.toggleSort(column.accessor);
 								}}
@@ -91,9 +92,9 @@ This example shows basic sorting functionality with only one sortable column at 
 							>
 								<span class="font-medium">{column.header}</span>
 								<span class="text-muted-foreground/70">
-									{#if getSortDirection(singleSortTable, column.accessor) === 'asc'}
+									{#if getSortDirection(column.accessor) === 'asc'}
 										<ArrowUp class="h-4 text-primary" />
-									{:else if getSortDirection(singleSortTable, column.accessor) === 'desc'}
+									{:else if getSortDirection(column.accessor) === 'desc'}
 										<ArrowDown class="h-4 text-primary" />
 									{:else}
 										<ArrowUpDown class="h-4 w-4" />
@@ -172,15 +173,15 @@ This example demonstrates how to enable multi-column sorting, allowing users to 
 		})
 	);
 
+	const { sorting } = multiSortTable.plugins;
+
 	function clearMultiSorting() {
-		const { sorting } = multiSortTable.plugins;
 		sorting.clearSort();
 	}
-
 	// Helper function to determine the current sort direction for a column
-	function getSortDirection(table: any, accessor: string) {
-		const sorting = table.sorting.columnSortings.find((s: ColumnSorting) => s.key === accessor);
-		return sorting ? sorting.direction : 'none';
+	function getSortDirection(accessor: string) {
+		const columnSorting = sorting.columnSortings.find((s: ColumnSorting) => s.key === accessor);
+		return columnSorting ? columnSorting.direction : 'none';
 	}
 </script>
 
@@ -189,7 +190,7 @@ This example demonstrates how to enable multi-column sorting, allowing users to 
 		<p class="text-sm text-muted-foreground">
 			Click on column headers to sort. Multiple columns can be sorted simultaneously.
 		</p>
-		<Button variant="outline" size="sm" click={clearMultiSorting} class="shadow-sm">
+		<Button variant="outline" size="sm" onclick={clearMultiSorting} class="shadow-sm">
 			<RotateCcw class="mr-2 h-4 w-4" />
 			Clear All Sorting
 		</Button>
@@ -202,7 +203,7 @@ This example demonstrates how to enable multi-column sorting, allowing users to 
 					{#each multiSortTable.allColumns as column}
 						<Table.Head class="py-2">
 							<Button
-								click={() => {
+								onclick={() => {
 									const { sorting } = multiSortTable.plugins;
 									sorting.toggleSort(column.accessor);
 								}}
@@ -211,9 +212,9 @@ This example demonstrates how to enable multi-column sorting, allowing users to 
 							>
 								<span class="font-medium">{column.header}</span>
 								<span class="text-muted-foreground/70">
-									{#if getSortDirection(multiSortTable, column.accessor) === 'asc'}
+									{#if getSortDirection(column.accessor) === 'asc'}
 										<ArrowUp class="h-4 text-primary" />
-									{:else if getSortDirection(multiSortTable, column.accessor) === 'desc'}
+									{:else if getSortDirection(column.accessor) === 'desc'}
 										<ArrowDown class="h-4 text-primary" />
 									{:else}
 										<ArrowUpDown class="h-4 w-4" />

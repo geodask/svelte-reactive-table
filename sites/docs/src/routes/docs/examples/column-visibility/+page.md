@@ -62,7 +62,7 @@ The column visibility feature provides:
 					<Button
 						variant={columnVisibility.isVisible(column.accessor) ? 'default' : 'outline'}
 						size="sm"
-						click={() => toggleColumn(column.accessor)}
+						onclick={() => toggleColumn(column.accessor)}
 						class="shadow-sm"
 					>
 						{#if columnVisibility.isVisible(column.accessor)}

@@ -13,7 +13,7 @@ layout: docPage
 			href: '/docs/introduction'
 		},
 		{
-			title: 'Core Concepts',
+			title: 'Plugins',
 		},
 		{
 			title: 'Pagination'
@@ -23,21 +23,19 @@ layout: docPage
 
 # Pagination
 
-When you're dealing with hundreds or thousands of rows, pagination becomes essential. Svelte Reactive Table makes pagination both powerful and simple to implement.
+Pagination enables efficient handling of large datasets by displaying data in smaller, manageable chunks. The pagination plugin provides comprehensive controls for navigating through data pages.
 
-## Why Pagination Matters
+## Pagination Benefits
 
-Without pagination, large datasets can:
+Pagination provides several advantages for large datasets:
 
-- Slow down your app's performance
-- Overwhelm users with too much information
-- Make it hard to find specific data
+- Improved performance by limiting rendered rows
+- Better user experience with manageable data chunks
+- Efficient navigation through large datasets
 
-With pagination, you get fast, user-friendly tables that handle any amount of data gracefully.
+## Enable Pagination
 
-## Adding Pagination to Your Table
-
-Pagination is optional and added using the `reactivePagination` plugin:
+Add pagination using the `reactivePagination` plugin:
 
 ```svelte
 <script lang="ts">
@@ -50,7 +48,7 @@ Pagination is optional and added using the `reactivePagination` plugin:
 		/* Your column definitions */
 	];
 
-	// Create a table with pagination
+	// Create table instance with pagination
 	const table = reactiveTable(data, columns).use(
 		reactivePagination({
 			pageSize: 10, // Items per page
@@ -58,16 +56,16 @@ Pagination is optional and added using the `reactivePagination` plugin:
 		})
 	);
 
-	// Access the pagination API through table.plugins
+	// Access pagination controls through plugins
 	const { pagination } = table.plugins;
 </script>
 ```
 
-The `table.rows` property automatically contains only the current page's data. You don't need to change your template at all.
+The `table.rows` property automatically contains only the current page's data.
 
-## The Smart `table.rows` Property
+## Automatic Row Management
 
-The `table.rows` property automatically adapts based on your active features. With pagination enabled, it contains exactly the rows for the current page:
+The `table.rows` property adapts based on active plugins. With pagination enabled, it contains only the current page's rows:
 
 ```svelte
 <tbody>
@@ -81,27 +79,25 @@ The `table.rows` property automatically adapts based on your active features. Wi
 </tbody>
 ```
 
-This means you always use `table.rows` in your templates regardless of which features are active. The table handles transforming the rows based on pagination, sorting, or filtering (once implemented).
+Always use `table.rows` in templates regardless of active plugins. Access all rows with `table.allRows` when needed.
 
-If you need to access all rows regardless of pagination, you can use `table.allRows`.
+## Navigation Methods
 
-## Navigation Controls
-
-The pagination plugin provides simple navigation methods:
+The pagination plugin provides navigation controls:
 
 ```svelte
 <script>
-	// Go to next page (returns false if already on last page)
+	// Navigate to next page (returns false if on last page)
 	function nextPage() {
 		return pagination.goToNextPage();
 	}
 
-	// Go to previous page (returns false if already on first page)
+	// Navigate to previous page (returns false if on first page)
 	function previousPage() {
 		return pagination.goToPreviousPage();
 	}
 
-	// Go to first or last page
+	// Navigate to first or last page
 	function firstPage() {
 		pagination.goToFirstPage();
 	}
@@ -110,16 +106,16 @@ The pagination plugin provides simple navigation methods:
 		pagination.goToLastPage();
 	}
 
-	// Go to specific page
+	// Navigate to specific page
 	function goToPage(pageIndex) {
 		pagination.setPage(pageIndex);
 	}
 </script>
 ```
 
-## Changing Page Size
+## Configure Page Size
 
-Adjust how many items are displayed per page:
+Adjust the number of items displayed per page:
 
 ```svelte
 <script>
@@ -128,16 +124,16 @@ Adjust how many items are displayed per page:
 		pagination.setPageSize(newSize);
 	}
 
-	// Change page size but stay on current page (if possible)
+	// Change page size but maintain current page if possible
 	function changePageSizeWithoutReset(newSize) {
 		pagination.setPageSize(newSize, false);
 	}
 </script>
 ```
 
-## Complete Pagination UI Example
+## Pagination Controls Example
 
-Here's a practical example of pagination controls:
+Complete pagination interface implementation:
 
 ```svelte
 <div class="pagination">
@@ -154,9 +150,13 @@ Here's a practical example of pagination controls:
 		Page {pagination.page + 1} of {pagination.pageCount}
 	</span>
 
-	<button click={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}> Next </button>
+	<button click={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}> 
+		Next 
+	</button>
 
-	<button click={() => pagination.goToLastPage()} disabled={pagination.isLastPage}> Last </button>
+	<button click={() => pagination.goToLastPage()} disabled={pagination.isLastPage}> 
+		Last 
+	</button>
 
 	<!-- Page size selector -->
 	<select bind:value={pagination.pageSize}>
@@ -167,26 +167,14 @@ Here's a practical example of pagination controls:
 </div>
 ```
 
-## Pagination Properties
-
-The pagination plugin provides these reactive properties:
-
-- `pagination.page`: Current page index (0-based)
-- `pagination.pageSize`: Number of items per page
-- `pagination.pageCount`: Total number of pages
-- `pagination.isFirstPage`: Whether the current page is the first page
-- `pagination.isLastPage`: Whether the current page is the last page
-- `pagination.hasPreviousPage`: Whether there is a previous page available
-- `pagination.hasNextPage`: Whether there is a next page available
-- `table.rows`: Automatically contains the rows for the current page
-- `table.allRows`: All rows across all pages (unaffected by pagination)
-
-## Automatic Reactivity
+## Automatic Updates
 
 The pagination system automatically:
 
 - Updates when data items are added or removed
 - Recalculates page count when page size changes
-- Adjusts the current page if it becomes invalid after data changes
+- Adjusts current page if it becomes invalid after data changes
 
-With pagination, you can build tables that efficiently handle large datasets while providing an intuitive browsing experience.
+## API Reference
+
+For complete property and method documentation, see the [reactivePagination API reference](/docs/api/reactive-pagination).

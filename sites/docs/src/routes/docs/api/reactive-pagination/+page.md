@@ -23,7 +23,7 @@ layout: docPage
 
 # reactivePagination
 
-The `reactivePagination` function creates a pagination plugin for Svelte Reactive Table, enabling navigation through large datasets by dividing them into manageable pages.
+The `reactivePagination` function creates a pagination plugin for table instances, enabling efficient navigation through large datasets by dividing data into manageable pages.
 
 ## Signature
 
@@ -120,13 +120,13 @@ These methods are available on the pagination plugin state:
 
 ```svelte
 <div class="pagination">
-	<button click={() => pagination.goToPreviousPage()} disabled={!pagination.hasPreviousPage}>
+	<button onclick={() => pagination.goToPreviousPage()} disabled={!pagination.hasPreviousPage}>
 		Previous
 	</button>
 
 	<span>Page {pagination.page + 1} of {pagination.pageCount}</span>
 
-	<button click={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}> Next </button>
+	<button onclick={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}> Next </button>
 
 	<select bind:value={pagination.pageSize}>
 		<option value={5}>5 per page</option>
@@ -134,6 +134,29 @@ These methods are available on the pagination plugin state:
 		<option value={25}>25 per page</option>
 	</select>
 </div>
+```
+
+## Navigation Examples
+
+```svelte
+<script>
+	// Navigate to next page with error handling
+	function handleNextPage() {
+		if (!pagination.goToNextPage()) {
+			console.log('Already on last page');
+		}
+	}
+
+	// Jump to specific page
+	function jumpToPage(pageNumber) {
+		pagination.setPage(pageNumber - 1); // Convert to 0-based
+	}
+
+	// Change page size and maintain position when possible
+	function changePageSize(newSize) {
+		pagination.setPageSize(newSize, false); // Don't reset to first page
+	}
+</script>
 ```
 
 ## TypeScript Support

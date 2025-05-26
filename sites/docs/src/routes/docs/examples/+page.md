@@ -40,7 +40,7 @@ layout: docPage
         },
         {
             title: 'Full Featured Table',
-            description: 'A comprehensive example combining all available features with modern UI components and accessibility.',
+            description: 'A comprehensive example combining all available plugins with modern UI components and accessibility.',
             icon: Sparkles,
             href: '/docs/examples/full-featured-table',
             features: ['All features', 'Modern UI', 'Responsive', 'Accessible']
@@ -50,7 +50,7 @@ layout: docPage
 
 # Examples
 
-Ready to see Svelte Reactive Table in action? These examples show you exactly how to implement different features, from basic tables to full-featured data grids.
+Ready to see Svelte Reactive Table in action? These examples show you exactly how to implement different plugins, from basic tables to full-featured data grids.
 
 ## Start Here: See It Working
 
@@ -61,7 +61,7 @@ Each example includes:
 - ✅ **Step-by-Step Explanations** - Understand how it works
 - ✅ **Styling Examples** - Modern, accessible UI components
 
-## Table Features
+## Table Plugins
 
 Whether you're building your first table or adding advanced features, these examples have you covered:
 

@@ -34,7 +34,13 @@ export const data = {
 				{
 					title: 'Column Definition',
 					url: '/docs/column-definition'
-				},
+				}
+			]
+		},
+		{
+			title: 'Plugins',
+			url: '/docs/plugins',
+			items: [
 				{
 					title: 'Column Visibility',
 					url: '/docs/column-visibility'
@@ -46,32 +52,6 @@ export const data = {
 				{
 					title: 'Sorting',
 					url: '/docs/sorting'
-				}
-			]
-		},
-		{
-			title: 'API Reference',
-			url: '/docs/api',
-			items: [
-				{
-					title: 'reactiveTable',
-					url: '/docs/api/reactive-table'
-				},
-				{
-					title: 'reactivePagination',
-					url: '/docs/api/reactive-pagination'
-				},
-				{
-					title: 'reactiveColumnVisibility',
-					url: '/docs/api/reactive-column-visibility'
-				},
-				{
-					title: 'reactiveSorting',
-					url: '/docs/api/reactive-sorting'
-				},
-				{
-					title: 'Types',
-					url: '/docs/api/types'
 				}
 			]
 		},
@@ -102,13 +82,29 @@ export const data = {
 			]
 		},
 		{
-			title: 'Help',
-			url: '/docs/help',
+			title: 'API Reference',
+			url: '/docs/api',
 			items: [
 				{
-					title: 'Troubleshooting',
-					url: '/docs/troubleshooting'
-				}
+					title: 'reactiveTable',
+					url: '/docs/api/reactive-table'
+				},
+				{
+					title: 'reactivePagination',
+					url: '/docs/api/reactive-pagination'
+				},
+				{
+					title: 'reactiveColumnVisibility',
+					url: '/docs/api/reactive-column-visibility'
+				},
+				{
+					title: 'reactiveSorting',
+					url: '/docs/api/reactive-sorting'
+				},
+				// {
+				// 	title: 'Types',
+				// 	url: '/docs/api/types'
+				// }
 			]
 		}
 	]

@@ -29,16 +29,16 @@ slug: introduction
 
 ## What is Svelte Reactive Table?
 
-Svelte Reactive Table is a headless, fully reactive table library built specifically for Svelte applications. It provides essential table functionality with a clean, straightforward API that lets you focus on building great user experiences rather than managing complex table state.
+Svelte Reactive Table is a headless, fully reactive table library built specifically for Svelte applications. It provides essential table functionality with a clean API that lets you focus on building great user experiences rather than managing complex table state.
 
-What makes this library different is its "headless" approach - it handles all the complex state management and table logic behind the scenes while giving you complete freedom to design your tables exactly how you want them to look and behave.
+The library uses a "headless" approach - it handles all the table logic and state management while giving you complete control over styling and presentation.
 
 ## Powered by Svelte's Reactivity
 
-The library leverages Svelte's powerful reactivity system (including Svelte 5 runes) to create tables that automatically update when your data changes. This means:
+The library leverages Svelte's reactivity system (including Svelte 5 runes) to create tables that automatically update when your data changes:
 
-- Add, remove, or modify data items, and your table instantly reflects these changes
-- Toggle column visibility and see immediate UI updates
+- Add, remove, or modify data and your table instantly reflects these changes
+- Toggle column visibility with immediate UI updates
 - Change pagination settings with real-time page recalculation
 
 All of this happens automatically without you having to write extra code to sync your UI with your data state.
