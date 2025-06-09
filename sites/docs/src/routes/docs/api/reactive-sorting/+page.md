@@ -172,12 +172,12 @@ Multi-column sorting allows sorting by multiple columns with precedence:
 	);
 
 	const { sorting } = table.plugins;
-	
+
 	// Display active sorts
 	function getActiveSorts() {
-		return sorting.columnSortings.map((sort, index) => 
-			`${index + 1}. ${sort.key} (${sort.direction})`
-		).join(', ');
+		return sorting.columnSortings
+			.map((sort, index) => `${index + 1}. ${sort.key} (${sort.direction})`)
+			.join(', ');
 	}
 </script>
 
@@ -197,10 +197,7 @@ Multi-column sorting allows sorting by multiple columns with precedence:
 <thead>
 	<tr>
 		{#each table.columns as column}
-			<th 
-				onclick={() => sorting.toggleSort(column.accessor)}
-				class="sortable-header"
-			>
+			<th onclick={() => sorting.toggleSort(column.accessor)} class="sortable-header">
 				{column.header}
 				{#if sorting.getSortDirection(column.accessor) !== 'none'}
 					<span class="sort-indicator">
@@ -217,7 +214,7 @@ Multi-column sorting allows sorting by multiple columns with precedence:
 		cursor: pointer;
 		user-select: none;
 	}
-	
+
 	.sort-indicator {
 		margin-left: 4px;
 		opacity: 0.7;

@@ -126,7 +126,9 @@ These methods are available on the pagination plugin state:
 
 	<span>Page {pagination.page + 1} of {pagination.pageCount}</span>
 
-	<button onclick={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}> Next </button>
+	<button onclick={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}>
+		Next
+	</button>
 
 	<select bind:value={pagination.pageSize}>
 		<option value={5}>5 per page</option>

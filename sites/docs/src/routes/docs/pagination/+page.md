@@ -150,13 +150,9 @@ Complete pagination interface implementation:
 		Page {pagination.page + 1} of {pagination.pageCount}
 	</span>
 
-	<button click={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}> 
-		Next 
-	</button>
+	<button click={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}> Next </button>
 
-	<button click={() => pagination.goToLastPage()} disabled={pagination.isLastPage}> 
-		Last 
-	</button>
+	<button click={() => pagination.goToLastPage()} disabled={pagination.isLastPage}> Last </button>
 
 	<!-- Page size selector -->
 	<select bind:value={pagination.pageSize}>
