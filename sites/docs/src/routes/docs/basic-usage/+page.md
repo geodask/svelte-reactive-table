@@ -156,7 +156,7 @@ The table automatically updates when your data changes. Here's how to add and re
 				</td>
 			</tr>
 		{/each}
-		</tbody>
+	</tbody>
 </table>
 ```
 

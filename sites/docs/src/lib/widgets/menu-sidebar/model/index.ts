@@ -100,7 +100,7 @@ export const data = {
 				{
 					title: 'reactiveSorting',
 					url: '/docs/api/reactive-sorting'
-				},
+				}
 				// {
 				// 	title: 'Types',
 				// 	url: '/docs/api/types'

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { ScrollArea as ScrollAreaPrimitive, type WithoutChild } from 'bits-ui';
+	import { cn, type WithoutChild } from '$lib/shared/lib/shadcn.js';
+	import { ScrollArea as ScrollAreaPrimitive } from 'bits-ui';
 	import { Scrollbar } from './index.js';
-	import { cn } from '$lib/shared/lib/shadcn.js';
 
 	let {
 		ref = $bindable(null),
@@ -20,8 +20,17 @@
 	} = $props();
 </script>
 
-<ScrollAreaPrimitive.Root bind:ref {...restProps} class={cn('relative overflow-hidden', className)}>
-	<ScrollAreaPrimitive.Viewport bind:ref={viewportRef} class="h-full w-full rounded-[inherit]">
+<ScrollAreaPrimitive.Root
+	bind:ref
+	data-slot="scroll-area"
+	class={cn('relative', className)}
+	{...restProps}
+>
+	<ScrollAreaPrimitive.Viewport
+		bind:ref={viewportRef}
+		data-slot="scroll-area-viewport"
+		class="ring-ring/10 dark:ring-ring/20 dark:outline-ring/40 outline-ring/50 size-full rounded-[inherit] transition-[color,box-shadow] focus-visible:outline-1 focus-visible:ring-4"
+	>
 		{@render children?.()}
 	</ScrollAreaPrimitive.Viewport>
 	{#if orientation === 'vertical' || orientation === 'both'}

@@ -195,7 +195,7 @@
 
 {#snippet RoadmapCard(title: string, features: string[], ready: boolean)}
 	<Card.Root
-		class={cn('border-l-4 p-0', {
+		class={cn('border-l-4', {
 			'border-l-muted-foreground': !ready,
 			'border-l-primary': ready
 		})}

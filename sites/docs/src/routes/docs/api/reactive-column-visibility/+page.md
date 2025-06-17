@@ -160,11 +160,9 @@ Complete implementation of a column visibility selector:
 			</label>
 		{/each}
 	</div>
-	
+
 	<div class="column-actions">
-		<button onclick={columnVisibility.resetVisibility}>
-			Show All
-		</button>
+		<button onclick={columnVisibility.resetVisibility}> Show All </button>
 		<button onclick={() => columnVisibility.hideColumns(['age', 'email'])}>
 			Hide Personal Info
 		</button>
@@ -178,21 +176,21 @@ Complete implementation of a column visibility selector:
 		border-radius: 0.5rem;
 		background: #f8fafc;
 	}
-	
+
 	.column-checkboxes {
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
 		margin: 1rem 0;
 	}
-	
+
 	.column-toggle {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
 		cursor: pointer;
 	}
-	
+
 	.column-actions {
 		display: flex;
 		gap: 0.5rem;
@@ -210,17 +208,17 @@ Complete implementation of a column visibility selector:
 		work: ['department', 'position', 'salary'],
 		contact: ['email', 'phone', 'address']
 	};
-	
+
 	function showGroup(groupName) {
 		const columns = columnGroups[groupName];
 		columnVisibility.showColumns(columns);
 	}
-	
+
 	function hideGroup(groupName) {
 		const columns = columnGroups[groupName];
 		columnVisibility.hideColumns(columns);
 	}
-	
+
 	function showOnlyGroup(groupName) {
 		const columns = columnGroups[groupName];
 		columnVisibility.setVisibleColumns(columns);

@@ -1,7 +1,6 @@
 <script lang="ts">
-	import type { WithElementRef } from 'bits-ui';
 	import type { HTMLAttributes } from 'svelte/elements';
-	import { cn } from '$lib/shared/lib/shadcn.js';
+	import { cn, type WithElementRef } from '$lib/shared/lib/shadcn.js';
 
 	let {
 		ref = $bindable(null),
@@ -13,7 +12,11 @@
 
 <div
 	bind:this={ref}
-	class={cn('bg-card text-card-foreground rounded-xl border shadow', className)}
+	data-slot="card"
+	class={cn(
+		'bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm',
+		className
+	)}
 	{...restProps}
 >
 	{@render children?.()}
