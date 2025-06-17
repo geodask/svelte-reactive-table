@@ -14,10 +14,9 @@
 		{ accessor: 'age', header: 'Age' },
 		{ accessor: 'city', header: 'City' }
 	])
-		// Chain plugins with a fluent API
 		.use(
 			reactiveColumnVisibility({
-				hiddenColumns: [] // No hidden columns by default
+				hiddenColumns: []
 			})
 		)
 		.use(

@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 	import Sorting from './components/Sorting.svelte';
 	import FullFeaturedTable from './components/FullFeaturedTable.svelte';
+	import Filtering from './components/Filtering.svelte';
 
 	let activeTab = 'basic';
 
@@ -12,7 +13,7 @@
 		// Check if there's a hash in the URL to set the active tab
 		if (window.location.hash) {
 			const hash = window.location.hash.substring(1);
-			if (['basic', 'columns', 'pagination', 'sorting', 'full', 'plugin'].includes(hash)) {
+			if (['basic', 'columns', 'pagination', 'sorting', 'filtering', 'full'].includes(hash)) {
 				activeTab = hash;
 			}
 		}
@@ -75,6 +76,15 @@
 
 						<button
 							class="px-4 py-2 text-sm font-medium rounded-md transition-colors
+							{activeTab === 'filtering'
+								? 'bg-white text-emerald-700 shadow-sm'
+								: 'text-gray-700 hover:text-gray-900'}"
+							onclick={() => setActiveTab('filtering')}
+						>
+							Filtering
+						</button>
+						<button
+							class="px-4 py-2 text-sm font-medium rounded-md transition-colors
 							{activeTab === 'full'
 								? 'bg-white text-emerald-700 shadow-sm'
 								: 'text-gray-700 hover:text-gray-900'}"
@@ -103,6 +113,10 @@
 				{:else if activeTab === 'sorting'}
 					<div id="sorting">
 						<Sorting />
+					</div>
+				{:else if activeTab === 'filtering'}
+					<div id="plugin">
+						<Filtering />
 					</div>
 				{:else if activeTab === 'full'}
 					<div id="full">
