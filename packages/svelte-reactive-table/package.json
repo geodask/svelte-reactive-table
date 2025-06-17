@@ -1,6 +1,6 @@
 {
 	"name": "svelte-reactive-table",
-	"version": "0.5.0",
+	"version": "0.6.0",
 	"description": "A headless, fully reactive table library for Svelte applications",
 	"scripts": {
 		"dev": "vite dev",
