@@ -58,25 +58,26 @@ Enhance your tables with plugins for specific features:
 - **Pagination Plugin**: Navigate through large datasets with page size controls and navigation
 - **Column Visibility Plugin**: Show or hide columns dynamically
 - **Sorting Plugin**: Sort data with single or multi-column capabilities
-- **More Coming Soon**: Additional plugins for filtering, row selection, and other capabilities are planned
+- **Filtering Plugin**: Filter data with exact matches, arrays, predicate functions, and built-in helpers
+- **More Coming Soon**: Additional plugins for row selection and other capabilities are planned
 
 This plugin-based approach keeps your bundle size small and your tables fast by only including what your application actually uses. Plugins can be added easily with a fluent API:
 
 ```js
 const table = reactiveTable(data, columns)
+	.use(reactiveFiltering())
+	.use(reactiveSorting({ multiSort: true }))
 	.use(reactivePagination({ pageSize: 10 }))
-	.use(reactiveColumnVisibility())
-	.use(reactiveSorting({ multiSort: true }));
+	.use(reactiveColumnVisibility());
 
 // Access plugin functionality
-const { pagination, columnVisibility, sorting } = table.plugins;
+const { filtering, sorting, pagination, columnVisibility } = table.plugins;
 ```
 
 ### 3. Future Extensions
 
 We're actively developing additional features to make Svelte Reactive Table even more powerful:
 
-- **Advanced Filtering**: Multi-criteria filtering with custom filter functions
 - **Row Selection**: Single and multi-select capabilities
 - **Server-Side Operations**: Support for server-driven pagination, sorting, and filtering
 - **Virtual Scrolling**: Efficiently handle thousands of rows

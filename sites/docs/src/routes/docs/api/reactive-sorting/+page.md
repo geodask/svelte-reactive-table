@@ -245,3 +245,29 @@ const table = reactiveTable<User>(users, columns).use(
 // TypeScript will infer the correct sorting state type
 const { sorting } = table.plugins;
 ```
+
+## Integration with Other Plugins
+
+Sorting works seamlessly with other plugins and is applied in a specific order:
+
+```ts
+const table = reactiveTable(data, columns)
+	.use(reactiveFiltering())       // 1. Filter data first
+	.use(reactiveSorting({ multiSort: true }))  // 2. Sort filtered data
+	.use(reactivePagination({ pageSize: 10 })); // 3. Paginate sorted, filtered data
+
+// Sorting is applied to filtered results
+// Pagination divides the sorted results into pages
+```
+
+When combined with other plugins:
+- Sorting is applied to filtered results (if filtering is enabled)
+- Pagination divides sorted results into pages
+- All plugins work together automatically
+
+## Related
+
+- [Sorting Guide](/docs/sorting) - Comprehensive guide with examples
+- [Sorting Example](/docs/examples/sorting) - Interactive examples
+- [reactiveFiltering](/docs/api/reactive-filtering) - Filtering plugin
+- [reactivePagination](/docs/api/reactive-pagination) - Pagination plugin

@@ -83,6 +83,7 @@ Once installed, importing the library is straightforward:
 
 	// Optional: Import plugins as needed
 	import {
+		reactiveFiltering,
 		reactivePagination,
 		reactiveColumnVisibility,
 		reactiveSorting
@@ -97,6 +98,6 @@ Once installed, importing the library is straightforward:
 That's it - you're ready to build reactive tables! The installation gives you access to:
 
 - Core table functionality
-- All available plugins (pagination, sorting, column visibility)
+- All available plugins (filtering, pagination, sorting, column visibility)
 - Full TypeScript support
 - Comprehensive API for customization

@@ -151,6 +151,38 @@ const hiddenColumns = columnVisibility.hiddenColumns;
 const visibleColumnCount = $derived(table.columns.length);
 ```
 
+## Integration with Other Plugins
+
+Column visibility works seamlessly with all other plugins:
+
+```svelte
+<script>
+	import {
+		reactiveTable,
+		reactiveColumnVisibility,
+		reactiveFiltering,
+		reactiveSorting,
+		reactivePagination
+	} from 'svelte-reactive-table';
+
+	const table = reactiveTable(data, columns)
+		.use(reactiveColumnVisibility({ hiddenColumns: ['email'] }))
+		.use(reactiveFiltering())
+		.use(reactiveSorting())
+		.use(reactivePagination({ pageSize: 10 }));
+
+	// Column visibility affects all plugins:
+	// - Hidden columns are not sortable
+	// - Hidden columns are not included in table.rows cells
+	// - All other plugins work with visible columns only
+</script>
+```
+
 ## API Reference
 
 For complete property and method documentation, see the [reactiveColumnVisibility API reference](/docs/api/reactive-column-visibility).
+
+## Related
+
+- [Column Definition](/docs/column-definition) - Learn about column configuration
+- [Column Visibility Example](/docs/examples/column-visibility) - Interactive example

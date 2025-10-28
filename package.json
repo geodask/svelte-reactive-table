@@ -1,5 +1,5 @@
 {
-	"name": "svelte-reactive-table",
+	"name": "svelte-reactive-table-monorepo",
 	"version": "1.0.0",
 	"description": "Monorepo for svelte-reactive-table",
 	"main": "index.js",

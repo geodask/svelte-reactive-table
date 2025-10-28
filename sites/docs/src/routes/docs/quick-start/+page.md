@@ -269,6 +269,83 @@ Let users organize data by adding sorting capabilities:
 
 Click any column header to sort, click again to reverse the order, and once more to remove sorting.
 
+## Adding Data Filtering
+
+Enable users to search and filter data with the filtering plugin:
+
+```svelte
+<script lang="ts">
+	import { reactiveTable, reactiveFiltering, filterHelpers } from 'svelte-reactive-table';
+
+	// Same data and columns as above
+
+	// Create a table with filtering plugin
+	const table = reactiveTable(data, columns).use(reactiveFiltering());
+
+	// Access the filtering API through table.plugins
+	const { filtering } = table.plugins;
+
+	// Form state for filters
+	let nameSearch = $state('');
+	let minAge = $state<number | undefined>();
+	let maxAge = $state<number | undefined>();
+
+	// Sync filters with form state using effects
+	$effect(() => {
+		filtering.setFilter('name', nameSearch.trim());
+	});
+
+	$effect(() => {
+		filtering.setFilter('age', filterHelpers.range(minAge, maxAge));
+	});
+</script>
+
+<!-- Filter controls -->
+<div class="filters">
+	<input
+		type="text"
+		bind:value={nameSearch}
+		placeholder="Search names..."
+	/>
+
+	<input
+		type="number"
+		bind:value={minAge}
+		placeholder="Min age"
+	/>
+
+	<input
+		type="number"
+		bind:value={maxAge}
+		placeholder="Max age"
+	/>
+
+	{#if filtering.hasActiveFilters}
+		<button onclick={() => {
+			filtering.clearFilters();
+			nameSearch = '';
+			minAge = undefined;
+			maxAge = undefined;
+		}}>
+			Clear Filters ({filtering.count})
+		</button>
+	{/if}
+
+	<p>Showing {table.rows.length} of {table.allRows.length} results</p>
+</div>
+
+<table>
+	<!-- Table as before -->
+</table>
+```
+
+The filtering plugin supports:
+- **Exact matches**: `filtering.setFilter('city', 'New York')`
+- **Array filters (IN)**: `filtering.setFilter('city', ['New York', 'Los Angeles'])`
+- **Predicate functions**: `filtering.setFilter('age', (age) => age >= 25)`
+- **Filter helpers**: `filterHelpers.range()`, `filterHelpers.startsWith()`, etc.
+- **Case-insensitive string search** by default (substring matching)
+
 ## Combining Multiple Features
 
 The real power comes from combining multiple features. Here's a fully-featured table:
@@ -278,6 +355,7 @@ The real power comes from combining multiple features. Here's a fully-featured t
 	import {
 		reactiveTable,
 		reactiveColumnVisibility,
+		reactiveFiltering,
 		reactivePagination,
 		reactiveSorting
 	} from 'svelte-reactive-table';
@@ -287,6 +365,7 @@ The real power comes from combining multiple features. Here's a fully-featured t
 	// Create a table with multiple plugins
 	const table = reactiveTable(data, columns)
 		.use(reactiveColumnVisibility())
+		.use(reactiveFiltering())
 		.use(
 			reactiveSorting({
 				multiSort: true
@@ -299,14 +378,20 @@ The real power comes from combining multiple features. Here's a fully-featured t
 		);
 
 	// Access all plugin APIs
-	const { columnVisibility, sorting, pagination } = table.plugins;
+	const { columnVisibility, filtering, sorting, pagination } = table.plugins;
 </script>
 
 <!-- Include controls for all features -->
 <!-- Render the table -->
 ```
 
-Now you have a table with column visibility controls, multi-column sorting, and pagination - all working together seamlessly!
+Now you have a table with column visibility controls, data filtering, multi-column sorting, and pagination - all working together seamlessly!
+
+The plugins work together intelligently:
+- Filtering is applied first to narrow down the dataset
+- Sorting is applied to the filtered results
+- Pagination divides the filtered and sorted results into pages
+- Column visibility affects which columns are displayed throughout
 
 ## Utilizing TypeScript Support
 
@@ -360,6 +445,7 @@ You've just learned the fundamentals of Svelte Reactive Table! You now know how 
 - Implement pagination
 - Handle data updates reactively
 - Add sorting functionality
+- Add data filtering with multiple filter types
 - Combine multiple features
 
 ## Summary

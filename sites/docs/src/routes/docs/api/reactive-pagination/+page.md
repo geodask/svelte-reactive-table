@@ -177,3 +177,29 @@ const table = reactiveTable<User>(users, columns).use(reactivePagination({ pageS
 // TypeScript will infer the correct pagination state type
 const { pagination } = table.plugins;
 ```
+
+## Integration with Other Plugins
+
+Pagination works seamlessly with other plugins. The order of plugin application matters:
+
+```ts
+const table = reactiveTable(data, columns)
+	.use(reactiveFiltering())       // 1. Filter data first
+	.use(reactiveSorting())         // 2. Sort filtered data
+	.use(reactivePagination({ pageSize: 10 })); // 3. Paginate sorted, filtered data
+
+// table.rows contains the current page of filtered and sorted results
+// table.allRows contains all data before any transformations
+```
+
+When combined with filtering:
+- Pagination automatically resets to page 0 when filters change
+- Page counts are based on filtered results
+- Use `table.allRows.length` to show the total unfiltered count
+
+## Related
+
+- [Pagination Guide](/docs/pagination) - Comprehensive guide with examples
+- [Pagination Example](/docs/examples/pagination) - Interactive example
+- [reactiveFiltering](/docs/api/reactive-filtering) - Filtering plugin
+- [reactiveSorting](/docs/api/reactive-sorting) - Sorting plugin

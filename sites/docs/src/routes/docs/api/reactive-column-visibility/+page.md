@@ -258,3 +258,31 @@ const table = reactiveTable<User>(users, columns).use(
 // TypeScript will infer the correct column visibility state type
 const { columnVisibility } = table.plugins;
 ```
+
+## Integration with Other Plugins
+
+Column visibility works seamlessly with all other plugins:
+
+```ts
+const table = reactiveTable(data, columns)
+	.use(reactiveColumnVisibility({ hiddenColumns: ['email'] }))
+	.use(reactiveFiltering())
+	.use(reactiveSorting())
+	.use(reactivePagination({ pageSize: 10 }));
+
+// Column visibility affects all plugins:
+// - Hidden columns are not sortable
+// - Hidden columns are not included in table.rows cells
+// - All other plugins work with visible columns only
+```
+
+When combined with other plugins:
+- Hidden columns are excluded from all plugin operations
+- Only visible columns appear in `table.columns` and `table.headers`
+- Hidden columns remain in `table.allColumns` for reference
+
+## Related
+
+- [Column Visibility Guide](/docs/column-visibility) - Comprehensive guide with examples
+- [Column Visibility Example](/docs/examples/column-visibility) - Interactive example
+- [Column Definition](/docs/column-definition) - Learn about column configuration

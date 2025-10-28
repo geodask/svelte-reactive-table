@@ -171,6 +171,38 @@ The pagination system automatically:
 - Recalculates page count when page size changes
 - Adjusts current page if it becomes invalid after data changes
 
+## Integration with Other Plugins
+
+Pagination works seamlessly with other plugins:
+
+```svelte
+<script>
+	import {
+		reactiveTable,
+		reactiveFiltering,
+		reactiveSorting,
+		reactivePagination
+	} from 'svelte-reactive-table';
+
+	// Plugins are applied in order: filter → sort → paginate
+	const table = reactiveTable(data, columns)
+		.use(reactiveFiltering())
+		.use(reactiveSorting())
+		.use(reactivePagination({ pageSize: 10 }));
+</script>
+```
+
+When combined with filtering or sorting:
+- Pagination automatically resets to page 0 when filters change
+- Page counts update based on filtered results
+- Use `table.allRows.length` to show the total unfiltered count
+
 ## API Reference
 
 For complete property and method documentation, see the [reactivePagination API reference](/docs/api/reactive-pagination).
+
+## Related
+
+- [Filtering](/docs/filtering) - Filter data before pagination
+- [Sorting](/docs/sorting) - Sort data before pagination
+- [Pagination Example](/docs/examples/pagination) - Interactive example

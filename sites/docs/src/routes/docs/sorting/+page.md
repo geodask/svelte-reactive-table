@@ -169,8 +169,43 @@ The sorting system automatically:
 
 - Re-sorts when data items change
 - Re-sorts when sort configurations change
-- Works seamlessly with other plugins like pagination
+- Works seamlessly with other plugins like pagination and filtering
+
+## Integration with Other Plugins
+
+Sorting works seamlessly with other plugins and is applied in a specific order:
+
+```svelte
+<script>
+	import {
+		reactiveTable,
+		reactiveFiltering,
+		reactiveSorting,
+		reactivePagination
+	} from 'svelte-reactive-table';
+
+	// Order: filter → sort → paginate
+	const table = reactiveTable(data, columns)
+		.use(reactiveFiltering())
+		.use(reactiveSorting({ multiSort: true }))
+		.use(reactivePagination({ pageSize: 10 }));
+
+	// Sorting is applied to filtered results
+	// Pagination shows sorted, filtered results
+</script>
+```
+
+When combined with other plugins:
+- Sorting is applied to filtered results (if filtering is enabled)
+- Pagination divides the sorted results into pages
+- All plugins work together automatically
 
 ## API Reference
 
 For complete property and method documentation, see the [reactiveSorting API reference](/docs/api/reactive-sorting).
+
+## Related
+
+- [Filtering](/docs/filtering) - Filter data before sorting
+- [Pagination](/docs/pagination) - Paginate sorted results
+- [Sorting Example](/docs/examples/sorting) - Interactive examples

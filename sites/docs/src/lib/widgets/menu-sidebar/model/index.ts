@@ -46,6 +46,10 @@ export const data = {
 					url: '/docs/column-visibility'
 				},
 				{
+					title: 'Filtering',
+					url: '/docs/filtering'
+				},
+				{
 					title: 'Pagination',
 					url: '/docs/pagination'
 				},
@@ -66,6 +70,10 @@ export const data = {
 				{
 					title: 'Column Visibility',
 					url: '/docs/examples/column-visibility'
+				},
+				{
+					title: 'Filtering',
+					url: '/docs/examples/filtering'
 				},
 				{
 					title: 'Pagination',
@@ -90,12 +98,16 @@ export const data = {
 					url: '/docs/api/reactive-table'
 				},
 				{
-					title: 'reactivePagination',
-					url: '/docs/api/reactive-pagination'
-				},
-				{
 					title: 'reactiveColumnVisibility',
 					url: '/docs/api/reactive-column-visibility'
+				},
+				{
+					title: 'reactiveFiltering',
+					url: '/docs/api/reactive-filtering'
+				},
+				{
+					title: 'reactivePagination',
+					url: '/docs/api/reactive-pagination'
 				},
 				{
 					title: 'reactiveSorting',
