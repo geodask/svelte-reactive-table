@@ -11,10 +11,12 @@
 		ChevronRight,
 		ChevronsLeft,
 		ChevronsRight,
+		Search,
 		SlidersHorizontal
 	} from '@lucide/svelte';
 	import {
 		reactiveColumnVisibility,
+		reactiveFiltering,
 		reactivePagination,
 		reactiveSorting,
 		reactiveTable
@@ -34,6 +36,8 @@
 				hiddenColumns: [] // No hidden columns by default
 			})
 		)
+		// Add filtering plugin
+		.use(reactiveFiltering())
 		.use(
 			reactivePagination({
 				pageSize: 5, // Default page size
@@ -48,6 +52,12 @@
 				multiSort: true
 			})
 		);
+
+	// Access the filtering API
+	const { filtering } = table.plugins;
+
+	// Reactive state for name search
+	let nameSearch = $state('');
 
 	// Page size options
 	const pageSizeOptions = [3, 5, 10];
@@ -74,6 +84,11 @@
 		const { sorting } = table.plugins;
 		return sorting.getSortDirection(accessor);
 	}
+
+	// Sync name search with filtering
+	$effect(() => {
+		filtering.setFilter('name', nameSearch.trim());
+	});
 </script>
 
 <!-- Table Component with Integrated Controls -->
@@ -82,9 +97,25 @@
 	<div class="px-4 py-4 bg-muted/30 border-b flex flex-wrap justify-between items-center gap-3">
 		<div class="flex items-center gap-2">
 			<h2 class="text-sm font-medium">Svelte Reactive Table</h2>
+			{#if filtering.hasActiveFilters}
+				<span class="text-xs text-muted-foreground">
+					({table.rows.length} of {table.allRows.length} shown)
+				</span>
+			{/if}
 		</div>
 
 		<div class="flex items-center gap-2">
+			<!-- Search Input -->
+			<div class="relative">
+				<Search class="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+				<input
+					type="text"
+					bind:value={nameSearch}
+					placeholder="Search names..."
+					class="h-8 w-[200px] rounded-md border border-input bg-background pl-8 pr-3 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+				/>
+			</div>
+
 			<!-- Column Visibility Dropdown -->
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger>

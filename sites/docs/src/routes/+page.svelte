@@ -56,11 +56,11 @@
 		'Row and cell generation',
 		'Column visibility toggling',
 		'Pagination (page size, navigation, reactive state)',
-		'Column sorting (single and multi-column)'
+		'Column sorting (single and multi-column)',
+		'Filtering (global and column-based)'
 	];
 
 	const comingSoon = [
-		'Filtering (global and column-based)',
 		'Row selection (single, multi, range)',
 		'Column resizing and reordering',
 		'Custom cell and header rendering',

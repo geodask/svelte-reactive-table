@@ -9,6 +9,9 @@ node_modules
 /build
 /.velite
 
+# Generated files
+src/lib/shared/config/version.ts
+
 # OS
 .DS_Store
 Thumbs.db
