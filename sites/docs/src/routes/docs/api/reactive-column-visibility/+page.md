@@ -277,6 +277,7 @@ const table = reactiveTable(data, columns)
 ```
 
 When combined with other plugins:
+
 - Hidden columns are excluded from all plugin operations
 - Only visible columns appear in `table.columns` and `table.headers`
 - Hidden columns remain in `table.allColumns` for reference

@@ -27,7 +27,15 @@
 	let minAge = $state<number | undefined>();
 	let maxAge = $state<number | undefined>();
 
-	const cities = ['Gotham City', 'Metropolis', 'Themyscira', 'Central City', 'Coast City', 'Atlantis', 'Jump City'];
+	const cities = [
+		'Gotham City',
+		'Metropolis',
+		'Themyscira',
+		'Central City',
+		'Coast City',
+		'Atlantis',
+		'Jump City'
+	];
 	const statuses: NonNullable<Person['status']>[] = ['active', 'inactive', 'pending'];
 
 	// Sync filters with form state
@@ -77,9 +85,7 @@
 			<Card.Root class="sticky top-4">
 				<Card.Header>
 					<Card.Title class="text-lg">Filters</Card.Title>
-					<Card.Description>
-						Filter the data by multiple criteria
-					</Card.Description>
+					<Card.Description>Filter the data by multiple criteria</Card.Description>
 				</Card.Header>
 				<Card.Content class="space-y-4">
 					<!-- Filter Status -->
@@ -89,12 +95,7 @@
 								<span class="text-sm font-medium">Active Filters</span>
 								<Badge variant="secondary">{filtering.count}</Badge>
 							</div>
-							<Button
-								onclick={clearAllFilters}
-								variant="outline"
-								size="sm"
-								class="w-full"
-							>
+							<Button onclick={clearAllFilters} variant="outline" size="sm" class="w-full">
 								<FilterX class="mr-2 h-4 w-4" />
 								Clear All
 							</Button>
@@ -116,19 +117,9 @@
 					<div class="space-y-2">
 						<Label>Age Range</Label>
 						<div class="flex gap-2">
-							<Input
-								type="number"
-								bind:value={minAge}
-								placeholder="Min"
-								class="w-20"
-							/>
+							<Input type="number" bind:value={minAge} placeholder="Min" class="w-20" />
 							<span class="self-center text-muted-foreground">to</span>
-							<Input
-								type="number"
-								bind:value={maxAge}
-								placeholder="Max"
-								class="w-20"
-							/>
+							<Input type="number" bind:value={maxAge} placeholder="Max" class="w-20" />
 						</div>
 					</div>
 
@@ -145,14 +136,11 @@
 											if (checked) {
 												selectedCities = [...selectedCities, city];
 											} else {
-												selectedCities = selectedCities.filter(c => c !== city);
+												selectedCities = selectedCities.filter((c) => c !== city);
 											}
 										}}
 									/>
-									<Label
-										for={`city-${city}`}
-										class="text-sm font-normal cursor-pointer"
-									>
+									<Label for={`city-${city}`} class="text-sm font-normal cursor-pointer">
 										{city}
 									</Label>
 								</div>
@@ -173,7 +161,7 @@
 											if (checked) {
 												selectedStatuses = [...selectedStatuses, status];
 											} else {
-												selectedStatuses = selectedStatuses.filter(s => s !== status);
+												selectedStatuses = selectedStatuses.filter((s) => s !== status);
 											}
 										}}
 									/>
@@ -223,10 +211,7 @@
 										{#each row.cells as cell}
 											<Table.Cell>
 												{#if cell.key === 'status'}
-													<Badge
-														variant="outline"
-														class={getStatusColor(cell.value)}
-													>
+													<Badge variant="outline" class={getStatusColor(cell.value)}>
 														{cell.value || 'N/A'}
 													</Badge>
 												{:else}
@@ -238,18 +223,11 @@
 								{/each}
 								{#if table.rows.length === 0}
 									<Table.Row>
-										<Table.Cell
-											colspan={table.headers.length}
-											class="h-32 text-center"
-										>
+										<Table.Cell colspan={table.headers.length} class="h-32 text-center">
 											<div class="flex flex-col items-center justify-center text-muted-foreground">
 												{#if filtering.hasActiveFilters}
 													<p class="mb-2">No results match your current filters.</p>
-													<Button
-														variant="link"
-														size="sm"
-														onclick={clearAllFilters}
-													>
+													<Button variant="link" size="sm" onclick={clearAllFilters}>
 														Clear filters
 													</Button>
 												{:else}

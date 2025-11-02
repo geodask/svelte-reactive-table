@@ -193,6 +193,7 @@ Pagination works seamlessly with other plugins:
 ```
 
 When combined with filtering or sorting:
+
 - Pagination automatically resets to page 0 when filters change
 - Page counts update based on filtered results
 - Use `table.allRows.length` to show the total unfiltered count

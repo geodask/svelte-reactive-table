@@ -252,8 +252,8 @@ Sorting works seamlessly with other plugins and is applied in a specific order:
 
 ```ts
 const table = reactiveTable(data, columns)
-	.use(reactiveFiltering())       // 1. Filter data first
-	.use(reactiveSorting({ multiSort: true }))  // 2. Sort filtered data
+	.use(reactiveFiltering()) // 1. Filter data first
+	.use(reactiveSorting({ multiSort: true })) // 2. Sort filtered data
 	.use(reactivePagination({ pageSize: 10 })); // 3. Paginate sorted, filtered data
 
 // Sorting is applied to filtered results
@@ -261,6 +261,7 @@ const table = reactiveTable(data, columns)
 ```
 
 When combined with other plugins:
+
 - Sorting is applied to filtered results (if filtering is enabled)
 - Pagination divides sorted results into pages
 - All plugins work together automatically

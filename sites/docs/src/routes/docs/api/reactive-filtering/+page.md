@@ -41,10 +41,10 @@ function reactiveFiltering<T>(
 
 ### FilteringOptions
 
-| Property         | Type          | Default | Description                                            |
-| ---------------- | ------------- | ------- | ------------------------------------------------------ |
-| `initialFilters` | `Filters<T>`  | `{}`    | Initial filters to apply when the table is created     |
-| `caseSensitive`  | `boolean`     | `false` | Whether string comparisons should be case-sensitive    |
+| Property         | Type         | Default | Description                                         |
+| ---------------- | ------------ | ------- | --------------------------------------------------- |
+| `initialFilters` | `Filters<T>` | `{}`    | Initial filters to apply when the table is created  |
+| `caseSensitive`  | `boolean`    | `false` | Whether string comparisons should be case-sensitive |
 
 ### Filters Type
 
@@ -61,6 +61,7 @@ type FilterValue<T> = T | T[] | ((value: T) => boolean);
 ```
 
 Filter values can be:
+
 - A single value for exact match (or substring for strings)
 - An array of values for "IN" filtering
 - A predicate function for custom logic
@@ -120,23 +121,23 @@ Returns a TablePlugin that adds filtering functionality when passed to the `use`
 
 When filtering plugin is used, these reactive properties are available:
 
-| Property              | Type         | Description                                  |
-| --------------------- | ------------ | -------------------------------------------- |
-| `filtering.filters`   | `Filters<T>` | Current active filters (read-only)           |
-| `filtering.count`     | `number`     | Number of active filters                     |
-| `filtering.hasActiveFilters` | `boolean` | Whether any filters are currently active |
+| Property                     | Type         | Description                              |
+| ---------------------------- | ------------ | ---------------------------------------- |
+| `filtering.filters`          | `Filters<T>` | Current active filters (read-only)       |
+| `filtering.count`            | `number`     | Number of active filters                 |
+| `filtering.hasActiveFilters` | `boolean`    | Whether any filters are currently active |
 
 ## Filtering Methods
 
 These methods are available on the filtering plugin state:
 
-| Method                                                          | Return Type | Description                           |
-| --------------------------------------------------------------- | ----------- | ------------------------------------- |
-| `setFilter<K extends keyof T>(key: K, value: FilterValue<T[K]> \| undefined)` | `void` | Set a filter for a specific column |
-| `setFilters(filters: Partial<Filters<T>>)`                     | `void`      | Set multiple filters at once          |
-| `removeFilter<K extends keyof T>(key: K)`                      | `void`      | Remove a specific filter              |
-| `clearFilters()`                                                | `void`      | Remove all filters                    |
-| `getFilter<K extends keyof T>(key: K)`                         | `FilterValue<T[K]> \| undefined` | Get current filter value for a column |
+| Method                                                                        | Return Type                      | Description                           |
+| ----------------------------------------------------------------------------- | -------------------------------- | ------------------------------------- |
+| `setFilter<K extends keyof T>(key: K, value: FilterValue<T[K]> \| undefined)` | `void`                           | Set a filter for a specific column    |
+| `setFilters(filters: Partial<Filters<T>>)`                                    | `void`                           | Set multiple filters at once          |
+| `removeFilter<K extends keyof T>(key: K)`                                     | `void`                           | Remove a specific filter              |
+| `clearFilters()`                                                              | `void`                           | Remove all filters                    |
+| `getFilter<K extends keyof T>(key: K)`                                        | `FilterValue<T[K]> \| undefined` | Get current filter value for a column |
 
 ## Filter Methods Examples
 
@@ -222,10 +223,7 @@ The library exports `filterHelpers` with utility functions for common filtering 
 Create a range filter for numbers or dates:
 
 ```ts
-function range<T extends number | Date>(
-	min?: T,
-	max?: T
-): ((value: T) => boolean) | undefined
+function range<T extends number | Date>(min?: T, max?: T): ((value: T) => boolean) | undefined;
 ```
 
 ```svelte
@@ -237,10 +235,10 @@ function range<T extends number | Date>(
 	filtering.setFilter('age', filterHelpers.range(25, undefined));
 
 	// Date range
-	filtering.setFilter('createdAt', filterHelpers.range(
-		new Date('2024-01-01'),
-		new Date('2024-12-31')
-	));
+	filtering.setFilter(
+		'createdAt',
+		filterHelpers.range(new Date('2024-01-01'), new Date('2024-12-31'))
+	);
 </script>
 ```
 
@@ -249,7 +247,7 @@ function range<T extends number | Date>(
 Create exact text match filter (case-sensitive):
 
 ```ts
-function exactText(text: string): (value: string) => boolean
+function exactText(text: string): (value: string) => boolean;
 ```
 
 ```svelte
@@ -264,10 +262,7 @@ function exactText(text: string): (value: string) => boolean
 Create a starts-with filter:
 
 ```ts
-function startsWith(
-	prefix: string,
-	caseSensitive?: boolean
-): (value: string) => boolean
+function startsWith(prefix: string, caseSensitive?: boolean): (value: string) => boolean;
 ```
 
 ```svelte
@@ -285,10 +280,7 @@ function startsWith(
 Create an ends-with filter:
 
 ```ts
-function endsWith(
-	suffix: string,
-	caseSensitive?: boolean
-): (value: string) => boolean
+function endsWith(suffix: string, caseSensitive?: boolean): (value: string) => boolean;
 ```
 
 ```svelte
@@ -306,7 +298,7 @@ function endsWith(
 Invert any filter condition:
 
 ```ts
-function not<T>(filterValue: FilterValue<T>): (value: T) => boolean
+function not<T>(filterValue: FilterValue<T>): (value: T) => boolean;
 ```
 
 ```svelte
@@ -334,9 +326,7 @@ String filters perform **substring matching** (contains) by default:
 	filtering.setFilter('name', 'alice');
 
 	// Case-sensitive matching
-	const table = reactiveTable(data, columns).use(
-		reactiveFiltering({ caseSensitive: true })
-	);
+	const table = reactiveTable(data, columns).use(reactiveFiltering({ caseSensitive: true }));
 	// Now 'alice' won't match 'Alice'
 </script>
 ```
@@ -406,11 +396,7 @@ Multiple filters use AND logic - rows must match all filters:
 
 <!-- Filter controls -->
 <div class="filters">
-	<input
-		type="text"
-		bind:value={nameSearch}
-		placeholder="Search names..."
-	/>
+	<input type="text" bind:value={nameSearch} placeholder="Search names..." />
 
 	<div>
 		{#each ['New York', 'Los Angeles', 'Chicago'] as city}
@@ -425,13 +411,15 @@ Multiple filters use AND logic - rows must match all filters:
 	<input type="number" bind:value={maxAge} placeholder="Max age" />
 
 	{#if filtering.hasActiveFilters}
-		<button onclick={() => {
-			filtering.clearFilters();
-			nameSearch = '';
-			selectedCities = [];
-			minAge = undefined;
-			maxAge = undefined;
-		}}>
+		<button
+			onclick={() => {
+				filtering.clearFilters();
+				nameSearch = '';
+				selectedCities = [];
+				minAge = undefined;
+				maxAge = undefined;
+			}}
+		>
 			Clear All Filters ({filtering.count})
 		</button>
 	{/if}
@@ -535,6 +523,7 @@ Filtering works seamlessly with other plugins. The order of plugin application m
 ```
 
 When combined with pagination:
+
 - Pagination resets to page 0 when filters change
 - Page counts are based on filtered results
 - Use `table.allRows.length` to show total record count

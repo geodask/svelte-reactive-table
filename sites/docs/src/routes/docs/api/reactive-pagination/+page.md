@@ -184,8 +184,8 @@ Pagination works seamlessly with other plugins. The order of plugin application 
 
 ```ts
 const table = reactiveTable(data, columns)
-	.use(reactiveFiltering())       // 1. Filter data first
-	.use(reactiveSorting())         // 2. Sort filtered data
+	.use(reactiveFiltering()) // 1. Filter data first
+	.use(reactiveSorting()) // 2. Sort filtered data
 	.use(reactivePagination({ pageSize: 10 })); // 3. Paginate sorted, filtered data
 
 // table.rows contains the current page of filtered and sorted results
@@ -193,6 +193,7 @@ const table = reactiveTable(data, columns)
 ```
 
 When combined with filtering:
+
 - Pagination automatically resets to page 0 when filters change
 - Page counts are based on filtered results
 - Use `table.allRows.length` to show the total unfiltered count

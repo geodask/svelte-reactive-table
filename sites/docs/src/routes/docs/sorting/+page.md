@@ -196,6 +196,7 @@ Sorting works seamlessly with other plugins and is applied in a specific order:
 ```
 
 When combined with other plugins:
+
 - Sorting is applied to filtered results (if filtering is enabled)
 - Pagination divides the sorted results into pages
 - All plugins work together automatically

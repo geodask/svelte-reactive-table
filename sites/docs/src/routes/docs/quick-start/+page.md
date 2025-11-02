@@ -302,31 +302,21 @@ Enable users to search and filter data with the filtering plugin:
 
 <!-- Filter controls -->
 <div class="filters">
-	<input
-		type="text"
-		bind:value={nameSearch}
-		placeholder="Search names..."
-	/>
+	<input type="text" bind:value={nameSearch} placeholder="Search names..." />
 
-	<input
-		type="number"
-		bind:value={minAge}
-		placeholder="Min age"
-	/>
+	<input type="number" bind:value={minAge} placeholder="Min age" />
 
-	<input
-		type="number"
-		bind:value={maxAge}
-		placeholder="Max age"
-	/>
+	<input type="number" bind:value={maxAge} placeholder="Max age" />
 
 	{#if filtering.hasActiveFilters}
-		<button onclick={() => {
-			filtering.clearFilters();
-			nameSearch = '';
-			minAge = undefined;
-			maxAge = undefined;
-		}}>
+		<button
+			onclick={() => {
+				filtering.clearFilters();
+				nameSearch = '';
+				minAge = undefined;
+				maxAge = undefined;
+			}}
+		>
 			Clear Filters ({filtering.count})
 		</button>
 	{/if}
@@ -340,6 +330,7 @@ Enable users to search and filter data with the filtering plugin:
 ```
 
 The filtering plugin supports:
+
 - **Exact matches**: `filtering.setFilter('city', 'New York')`
 - **Array filters (IN)**: `filtering.setFilter('city', ['New York', 'Los Angeles'])`
 - **Predicate functions**: `filtering.setFilter('age', (age) => age >= 25)`
@@ -388,6 +379,7 @@ The real power comes from combining multiple features. Here's a fully-featured t
 Now you have a table with column visibility controls, data filtering, multi-column sorting, and pagination - all working together seamlessly!
 
 The plugins work together intelligently:
+
 - Filtering is applied first to narrow down the dataset
 - Sorting is applied to the filtered results
 - Pagination divides the filtered and sorted results into pages

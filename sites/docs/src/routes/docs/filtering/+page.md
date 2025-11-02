@@ -162,10 +162,10 @@ Perfect for numbers, dates, or any comparable values:
 	filtering.setFilter('age', filterHelpers.range(undefined, 35));
 
 	// Date range
-	filtering.setFilter('createdAt', filterHelpers.range(
-		new Date('2024-01-01'),
-		new Date('2024-12-31')
-	));
+	filtering.setFilter(
+		'createdAt',
+		filterHelpers.range(new Date('2024-01-01'), new Date('2024-12-31'))
+	);
 </script>
 ```
 
@@ -330,20 +330,12 @@ Here's a practical example combining multiple filter types:
 
 <!-- Filter Controls -->
 <div class="filters">
-	<input
-		type="text"
-		bind:value={nameSearch}
-		placeholder="Search names..."
-	/>
+	<input type="text" bind:value={nameSearch} placeholder="Search names..." />
 
 	<div>
 		{#each cities as city}
 			<label>
-				<input
-					type="checkbox"
-					value={city}
-					bind:group={selectedCities}
-				/>
+				<input type="checkbox" value={city} bind:group={selectedCities} />
 				{city}
 			</label>
 		{/each}
@@ -353,13 +345,15 @@ Here's a practical example combining multiple filter types:
 	<input type="number" bind:value={maxAge} placeholder="Max age" />
 
 	{#if filtering.hasActiveFilters}
-		<button onclick={() => {
-			filtering.clearFilters();
-			nameSearch = '';
-			selectedCities = [];
-			minAge = undefined;
-			maxAge = undefined;
-		}}>
+		<button
+			onclick={() => {
+				filtering.clearFilters();
+				nameSearch = '';
+				selectedCities = [];
+				minAge = undefined;
+				maxAge = undefined;
+			}}
+		>
 			Clear Filters ({filtering.count})
 		</button>
 	{/if}
@@ -385,9 +379,7 @@ Here's a practical example combining multiple filter types:
 		{/each}
 		{#if table.rows.length === 0 && filtering.hasActiveFilters}
 			<tr>
-				<td colspan={table.columns.length}>
-					No results match your filters
-				</td>
+				<td colspan={table.columns.length}> No results match your filters </td>
 			</tr>
 		{/if}
 	</tbody>
@@ -419,6 +411,7 @@ Filtering works seamlessly with other plugins:
 ```
 
 When combined with pagination:
+
 - Pagination automatically resets to page 0 when filters change
 - Page counts update based on filtered results
 - `table.rows` shows the current page of filtered results

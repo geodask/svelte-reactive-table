@@ -1,22 +1,22 @@
 <script lang="ts">
-	import { cn, type WithoutChild } from '$lib/shared/lib/shadcn.js';
 	import { ScrollArea as ScrollAreaPrimitive } from 'bits-ui';
 	import { Scrollbar } from './index.js';
+	import { cn, type WithoutChild } from '$lib/shared/lib/shadcn.js';
 
 	let {
 		ref = $bindable(null),
+		viewportRef = $bindable(null),
 		class: className,
 		orientation = 'vertical',
 		scrollbarXClasses = '',
 		scrollbarYClasses = '',
-		viewportRef = $bindable(null),
 		children,
 		...restProps
 	}: WithoutChild<ScrollAreaPrimitive.RootProps> & {
 		orientation?: 'vertical' | 'horizontal' | 'both' | undefined;
 		scrollbarXClasses?: string | undefined;
 		scrollbarYClasses?: string | undefined;
-		viewportRef?: HTMLDivElement | null;
+		viewportRef?: HTMLElement | null;
 	} = $props();
 </script>
 

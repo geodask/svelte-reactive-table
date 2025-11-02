@@ -130,9 +130,7 @@ This example shows comprehensive filtering functionality:
 			<Card.Root class="sticky top-4">
 				<Card.Header>
 					<Card.Title class="text-lg">Filters</Card.Title>
-					<Card.Description>
-						Filter the data by multiple criteria
-					</Card.Description>
+					<Card.Description>Filter the data by multiple criteria</Card.Description>
 				</Card.Header>
 				<Card.Content class="space-y-4">
 					<!-- Filter Status -->
@@ -142,12 +140,7 @@ This example shows comprehensive filtering functionality:
 								<span class="text-sm font-medium">Active Filters</span>
 								<Badge variant="secondary">{filtering.count}</Badge>
 							</div>
-							<Button
-								onclick={clearAllFilters}
-								variant="outline"
-								size="sm"
-								class="w-full"
-							>
+							<Button onclick={clearAllFilters} variant="outline" size="sm" class="w-full">
 								<FilterX class="mr-2 h-4 w-4" />
 								Clear All
 							</Button>
@@ -169,19 +162,9 @@ This example shows comprehensive filtering functionality:
 					<div class="space-y-2">
 						<Label>Age Range</Label>
 						<div class="flex gap-2">
-							<Input
-								type="number"
-								bind:value={minAge}
-								placeholder="Min"
-								class="w-20"
-							/>
+							<Input type="number" bind:value={minAge} placeholder="Min" class="w-20" />
 							<span class="self-center text-muted-foreground">to</span>
-							<Input
-								type="number"
-								bind:value={maxAge}
-								placeholder="Max"
-								class="w-20"
-							/>
+							<Input type="number" bind:value={maxAge} placeholder="Max" class="w-20" />
 						</div>
 					</div>
 
@@ -198,14 +181,11 @@ This example shows comprehensive filtering functionality:
 											if (checked) {
 												selectedCities = [...selectedCities, city];
 											} else {
-												selectedCities = selectedCities.filter(c => c !== city);
+												selectedCities = selectedCities.filter((c) => c !== city);
 											}
 										}}
 									/>
-									<Label
-										for={`city-${city}`}
-										class="text-sm font-normal cursor-pointer"
-									>
+									<Label for={`city-${city}`} class="text-sm font-normal cursor-pointer">
 										{city}
 									</Label>
 								</div>
@@ -226,7 +206,7 @@ This example shows comprehensive filtering functionality:
 											if (checked) {
 												selectedStatuses = [...selectedStatuses, status];
 											} else {
-												selectedStatuses = selectedStatuses.filter(s => s !== status);
+												selectedStatuses = selectedStatuses.filter((s) => s !== status);
 											}
 										}}
 									/>
@@ -276,10 +256,7 @@ This example shows comprehensive filtering functionality:
 										{#each row.cells as cell}
 											<Table.Cell>
 												{#if cell.key === 'status'}
-													<Badge
-														variant="outline"
-														class={getStatusColor(String(cell.value))}
-													>
+													<Badge variant="outline" class={getStatusColor(String(cell.value))}>
 														{cell.value}
 													</Badge>
 												{:else}
@@ -291,18 +268,11 @@ This example shows comprehensive filtering functionality:
 								{/each}
 								{#if table.rows.length === 0}
 									<Table.Row>
-										<Table.Cell
-											colspan={table.headers.length}
-											class="h-32 text-center"
-										>
+										<Table.Cell colspan={table.headers.length} class="h-32 text-center">
 											<div class="flex flex-col items-center justify-center text-muted-foreground">
 												{#if filtering.hasActiveFilters}
 													<p class="mb-2">No results match your current filters.</p>
-													<Button
-														variant="link"
-														size="sm"
-														onclick={clearAllFilters}
-													>
+													<Button variant="link" size="sm" onclick={clearAllFilters}>
 														Clear filters
 													</Button>
 												{:else}
@@ -333,6 +303,7 @@ This example shows comprehensive filtering functionality:
 ## Key Features Demonstrated
 
 ### Text Search
+
 The name filter uses substring matching (contains) with case-insensitive comparison by default:
 
 ```ts
@@ -341,6 +312,7 @@ filtering.setFilter('name', nameSearch.trim());
 ```
 
 ### Range Filtering
+
 The age filter uses the `range` helper for numeric range filtering:
 
 ```ts
@@ -349,6 +321,7 @@ filtering.setFilter('age', filterHelpers.range(minAge, maxAge));
 ```
 
 ### Array Filtering (IN Operation)
+
 City and status filters use arrays for "IN" style filtering:
 
 ```ts
@@ -357,6 +330,7 @@ filtering.setFilter('city', selectedCities);
 ```
 
 ### Multiple Filters (AND Logic)
+
 All filters are combined with AND logic - rows must match all active filters:
 
 ```ts
@@ -369,20 +343,22 @@ filtering.setFilters({
 ```
 
 ### Reactive State
+
 The filtering plugin provides reactive properties to monitor filter state:
 
 ```ts
-filtering.count           // Number of active filters
-filtering.hasActiveFilters // Boolean indicating if any filters are active
-filtering.filters         // Read-only copy of all current filters
+filtering.count; // Number of active filters
+filtering.hasActiveFilters; // Boolean indicating if any filters are active
+filtering.filters; // Read-only copy of all current filters
 ```
 
 ### Empty Value Handling
+
 Filters are automatically removed when set to empty values:
 
 ```ts
-filtering.setFilter('city', '');        // Removes filter
-filtering.setFilter('city', []);        // Removes filter
+filtering.setFilter('city', ''); // Removes filter
+filtering.setFilter('city', []); // Removes filter
 filtering.setFilter('city', undefined); // Removes filter
 ```
 
