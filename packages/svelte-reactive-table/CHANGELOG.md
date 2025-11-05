@@ -1,5 +1,11 @@
 # svelte-reactive-table
 
+## 0.6.1
+
+### Patch Changes
+
+- 70b932a: chore: update packages
+
 ## 0.6.0
 
 ### Minor Changes
@@ -9,7 +15,6 @@
   This update introduces a flexible and easy-to-use filtering system that supports multiple filter types and intelligent value matching.
 
   Key features:
-
   - New `reactiveFiltering` plugin for flexible data filtering
   - Intelligent filter matching: exact values, arrays for IN operations, and custom predicate functions
   - Built-in string filtering with case-insensitive contains matching by default
@@ -29,14 +34,12 @@
   This update redesigns how table features work by introducing a standardized plugin system. Features like pagination, sorting, and column visibility are now implemented as plugins with a consistent interface.
 
   Improvements include:
-
   - New plugin system with `table.use(plugin)` method
   - Enhanced pagination state with `hasNextPage`, `hasPreviousPage`, `isFirstPage`, `isLastPage`, and `pageItemRange`
   - Better TypeScript types for improved type safety
   - Standardized plugin lifecycle with init and cleanup methods
 
   BREAKING CHANGES:
-
   - Plugins must now be attached to tables using `table.use(plugin)`
   - Plugin state is accessed through `table.plugins.[pluginId].state`
   - Navigation methods are now renamed to `goToNextPage`, `goToPreviousPage`, `goToFirstPage`, `goToLastPage`
@@ -62,7 +65,6 @@
 ### Minor Changes
 
 - 8df363c: feat: add column visibility as an opt-in feature
-
   - Introduced new `reactiveColumnVisibility` function
   - Added ability to manage column visibility (when enabled) through the table's `columnVisibility` property with methods for toggling, showing, and hiding columns
 
@@ -73,7 +75,6 @@
   This refactoring improves the pagination API by moving row management from the pagination component into the core table. Instead of accessing rows through `table.pagination.rows`, users now consistently use `table.rows` regardless of active features.
 
   Key changes:
-
   - Refactored internal pagination architecture to better separate concerns
   - Created a more unified and intuitive API for accessing table rows
   - Maintained all pagination functionality and state management
@@ -98,7 +99,6 @@
 ### Minor Changes
 
 - bd6bb1b: refactor: make pagination optional with improved TypeScript API
-
   - Make pagination completely optional through a new options-based API
   - Add TypeScript generics to provide proper type safety with or without pagination
   - Introduce `TableOptions` interface for configuring table features
@@ -109,7 +109,6 @@
   BREAKING CHANGE: Introduced new options-based API for table configuration that changes how tables are initialized and configured.
 
 - f4ba175: feat: add modular pagination support
-
   - Add new `reactivePagination` API for configurable table pagination
   - Change table API to use composition pattern for pagination
   - Export pagination types and functions in public API
@@ -128,7 +127,6 @@
 ### Minor Changes
 
 - d1ce4bd: feat: enhance table with pagination and column visibility
-
   - Add pagination with flexible page size controls
   - Add column visibility toggling
   - Implement row identification with ID tracking
@@ -148,18 +146,15 @@
 - 0e5b8ac: Initial release of svelte-reactive-table
 
   WHAT:
-
   - First public release of the headless, fully reactive table library for Svelte applications
   - Core table functionality with TypeScript support
   - Svelte 5 compatibility
 
   WHY:
-
   - Providing a modern, type-safe table solution for Svelte applications
   - Offering a headless approach for maximum styling flexibility
 
   HOW TO USE:
-
   - Install using: pnpm add svelte-reactive-table
   - Follow the documentation for implementation details
 
