@@ -1,6 +1,8 @@
 ---
 layout: docPage
-breadcrumb: ["API Reference", "reactiveTable"]
+breadcrumb: ['API Reference', 'reactiveTable']
+prev: { title: 'Full Featured Table', href: '/docs/examples/full-featured-table' }
+next: { title: 'reactiveColumnVisibility', href: '/docs/api/reactive-column-visibility' }
 ---
 
 <script lang="ts">

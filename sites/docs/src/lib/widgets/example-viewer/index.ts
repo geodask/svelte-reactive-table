@@ -1,1 +1,1 @@
-export { default as ExampleViewer } from './ui/ExampleViewer.svelte';
+export { default as ExampleViewer } from './ui/example-viewer.svelte';

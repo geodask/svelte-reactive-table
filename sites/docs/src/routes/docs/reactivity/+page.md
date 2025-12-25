@@ -1,6 +1,8 @@
 ---
 layout: docPage
-breadcrumb: ["Core Concepts", "Reactivity"]
+breadcrumb: ['Core Concepts', 'Reactivity']
+prev: { title: 'Basic Usage', href: '/docs/basic-usage' }
+next: { title: 'Column Definition', href: '/docs/column-definition' }
 ---
 
 # Reactivity

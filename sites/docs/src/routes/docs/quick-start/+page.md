@@ -1,6 +1,8 @@
 ---
 layout: docPage
-breadcrumb: ["Getting Started", "Quick Start"]
+breadcrumb: ['Getting Started', 'Quick Start']
+prev: { title: 'Installation', href: '/docs/installation' }
+next: { title: 'Basic Usage', href: '/docs/basic-usage' }
 ---
 
 # Quick Start
@@ -144,7 +146,9 @@ For large datasets, pagination is essential. Here's how to add it:
 		Page {pagination.page + 1} of {pagination.pageCount}
 	</span>
 
-	<button onclick={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}> Next </button>
+	<button onclick={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}>
+		Next
+	</button>
 
 	<button onclick={() => pagination.goToLastPage()} disabled={pagination.isLastPage}> Last </button>
 

@@ -1,6 +1,8 @@
 ---
 layout: docPage
-breadcrumb: ["Plugins", "Column Visibility"]
+breadcrumb: ['Plugins', 'Column Visibility']
+prev: { title: 'Column Definition', href: '/docs/column-definition' }
+next: { title: 'Filtering', href: '/docs/filtering' }
 ---
 
 # Column Visibility

@@ -1,6 +1,8 @@
 ---
 layout: docPage
-breadcrumb: ["Examples", "Column Visibility"]
+breadcrumb: ['Examples', 'Column Visibility']
+prev: { title: 'Basic Table Example', href: '/docs/examples/basic-table' }
+next: { title: 'Filtering Example', href: '/docs/examples/filtering' }
 ---
 
 <script lang="ts">
@@ -20,7 +22,7 @@ The column visibility feature provides:
 - Automatic table adjustment when toggling columns
 
 <ExampleViewer source={page.data.doc?.examples?.[0]?.source ?? ''} title="Column Visibility">
-	{#snippet preview()}
-		<Example />
-	{/snippet}
+{#snippet preview()}
+<Example />
+{/snippet}
 </ExampleViewer>

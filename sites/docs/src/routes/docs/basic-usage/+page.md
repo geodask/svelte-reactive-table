@@ -1,6 +1,8 @@
 ---
 layout: docPage
-breadcrumb: ["Core Concepts", "Basic Usage"]
+breadcrumb: ['Core Concepts', 'Basic Usage']
+prev: { title: 'Quick Start', href: '/docs/quick-start' }
+next: { title: 'Reactivity', href: '/docs/reactivity' }
 ---
 
 # Basic Usage

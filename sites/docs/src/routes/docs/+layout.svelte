@@ -2,18 +2,16 @@
 	import { page } from '$app/state';
 	import { setupReactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte';
 	import { reactiveToc } from '$shared/lib/toc/toc.svelte';
-	import * as Sidebar from '$shared/ui/shadcn/sidebar';
+	import BackgroundPattern from '$shared/ui/layouts/background-pattern.svelte';
+	import { Footer } from '$widgets/footer';
 	import { Header } from '$widgets/header';
 	import { MenuSidebar } from '$widgets/menu-sidebar';
-	import { TableOfContents } from '$widgets/table-of-contents';
-	import Footer from '../components/footer.svelte';
+	import { MobileToc, TableOfContents } from '$widgets/table-of-contents';
 
 	const { children, data } = $props();
 
-	// State management
-	let content: HTMLDivElement | null = $state(null);
+	let content: HTMLElement | null = $state(null);
 
-	// Initialize TOC state when content is available
 	const tocState = reactiveToc(
 		() => data.toc,
 		() => content,
@@ -25,22 +23,25 @@
 
 	setupReactiveBreadcrumb();
 
-	// Enhanced TOC items ready for rendering
 	const enhancedTocItems = $derived(tocState?.items ?? []);
 </script>
 
-<Sidebar.Provider>
-	<MenuSidebar />
-	<Sidebar.Inset class="contain-inline-size sticky top-0">
+<div class="flex min-h-screen bg-background relative isolate">
+	<BackgroundPattern />
+	<div class="flex-1 flex flex-col min-w-0">
 		<Header />
-		<div class="p-8 relative">
+
+		<div class="flex flex-1 gap-12 pt-6 lg:pt-10 mx-auto container px-4 md:px-6 lg:px-8">
+			<MenuSidebar />
+
 			{#key page.route.id}
-				<div bind:this={content} class="basis-4/5 grow min-w-0 lg:pr-72">
+				<main bind:this={content} class="flex-1 min-w-0">
+					<MobileToc items={enhancedTocItems} />
 					{@render children()}
-				</div>
+					<Footer />
+				</main>
 			{/key}
 			<TableOfContents items={enhancedTocItems} />
 		</div>
-		<Footer />
-	</Sidebar.Inset>
-</Sidebar.Provider>
+	</div>
+</div>

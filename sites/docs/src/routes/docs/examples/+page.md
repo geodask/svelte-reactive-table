@@ -1,6 +1,6 @@
 ---
 layout: docPage
-breadcrumb: ["Examples"]
+breadcrumb: ['Examples']
 ---
 
 <script lang="ts">

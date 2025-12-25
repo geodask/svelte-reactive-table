@@ -1,6 +1,6 @@
 ---
 layout: docPage
-breadcrumb: ["API Reference", "Types"]
+breadcrumb: ['API Reference', 'Types']
 ---
 
 # Types

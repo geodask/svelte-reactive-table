@@ -1,6 +1,8 @@
 ---
 layout: docPage
-breadcrumb: ["Plugins", "Sorting"]
+breadcrumb: ['Plugins', 'Sorting']
+prev: { title: 'Pagination', href: '/docs/pagination' }
+next: { title: 'Basic Table Example', href: '/docs/examples/basic-table' }
 ---
 
 # Sorting

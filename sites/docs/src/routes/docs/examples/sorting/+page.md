@@ -1,6 +1,8 @@
 ---
 layout: docPage
-breadcrumb: ["Examples", "Sorting"]
+breadcrumb: ['Examples', 'Sorting']
+prev: { title: 'Pagination Example', href: '/docs/examples/pagination' }
+next: { title: 'Full Featured Table', href: '/docs/examples/full-featured-table' }
 ---
 
 <script lang="ts">

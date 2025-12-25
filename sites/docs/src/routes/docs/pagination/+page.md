@@ -1,6 +1,8 @@
 ---
 layout: docPage
-breadcrumb: ["Plugins", "Pagination"]
+breadcrumb: ['Plugins', 'Pagination']
+prev: { title: 'Filtering', href: '/docs/filtering' }
+next: { title: 'Sorting', href: '/docs/sorting' }
 ---
 
 # Pagination
@@ -132,7 +134,9 @@ Complete pagination interface implementation:
 		Page {pagination.page + 1} of {pagination.pageCount}
 	</span>
 
-	<button onclick={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}> Next </button>
+	<button onclick={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}>
+		Next
+	</button>
 
 	<button onclick={() => pagination.goToLastPage()} disabled={pagination.isLastPage}> Last </button>
 

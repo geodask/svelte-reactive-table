@@ -1,6 +1,8 @@
 ---
 layout: docPage
-breadcrumb: ["Getting Started", "Installation"]
+breadcrumb: ['Getting Started', 'Installation']
+prev: { title: 'Introduction', href: '/docs/introduction' }
+next: { title: 'Quick Start', href: '/docs/quick-start' }
 ---
 
 <script lang="ts">

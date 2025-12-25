@@ -1,6 +1,8 @@
 ---
 layout: docPage
-breadcrumb: ["Examples", "Full Featured Table"]
+breadcrumb: ['Examples', 'Full Featured Table']
+prev: { title: 'Sorting Example', href: '/docs/examples/sorting' }
+next: { title: 'reactiveTable API', href: '/docs/api/reactive-table' }
 ---
 
 <script lang="ts">
@@ -22,7 +24,7 @@ The full-featured table includes:
 - All plugins working together seamlessly
 
 <ExampleViewer source={page.data.doc?.examples?.[0]?.source ?? ''} title="Full Featured Table">
-	{#snippet preview()}
-		<Example />
-	{/snippet}
+{#snippet preview()}
+<Example />
+{/snippet}
 </ExampleViewer>

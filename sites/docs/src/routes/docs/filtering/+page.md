@@ -1,6 +1,8 @@
 ---
 layout: docPage
-breadcrumb: ["Plugins", "Filtering"]
+breadcrumb: ['Plugins', 'Filtering']
+prev: { title: 'Column Visibility', href: '/docs/column-visibility' }
+next: { title: 'Pagination', href: '/docs/pagination' }
 ---
 
 # Filtering

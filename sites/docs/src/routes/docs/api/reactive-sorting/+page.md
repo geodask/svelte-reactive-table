@@ -1,6 +1,7 @@
 ---
 layout: docPage
-breadcrumb: ["API Reference", "reactiveSorting"]
+breadcrumb: ['API Reference', 'reactiveSorting']
+prev: { title: 'reactivePagination', href: '/docs/api/reactive-pagination' }
 ---
 
 # reactiveSorting

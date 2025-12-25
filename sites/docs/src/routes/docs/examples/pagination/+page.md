@@ -1,6 +1,8 @@
 ---
 layout: docPage
-breadcrumb: ["Examples", "Pagination"]
+breadcrumb: ['Examples', 'Pagination']
+prev: { title: 'Filtering Example', href: '/docs/examples/filtering' }
+next: { title: 'Sorting Example', href: '/docs/examples/sorting' }
 ---
 
 <script lang="ts">
@@ -21,7 +23,7 @@ The pagination feature provides:
 - Row count indicators
 
 <ExampleViewer source={page.data.doc?.examples?.[0]?.source ?? ''} title="Pagination">
-	{#snippet preview()}
-		<Example />
-	{/snippet}
+{#snippet preview()}
+<Example />
+{/snippet}
 </ExampleViewer>

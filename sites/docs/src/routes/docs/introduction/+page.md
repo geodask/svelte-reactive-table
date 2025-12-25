@@ -1,15 +1,10 @@
 ---
 layout: docPage
-breadcrumb: ["Getting Started", "Introduction"]
+breadcrumb: ['Getting Started', 'Introduction']
+next: { title: 'Installation', href: '/docs/installation' }
 ---
 
-<script lang="ts">
-  import EarlyReleaseAlert from '$widgets/early-release-alert/ui/early-release-alert.svelte';
-</script>
-
 # Introduction to Svelte Reactive Table
-
-<EarlyReleaseAlert/>
 
 ## What is Svelte Reactive Table?
 

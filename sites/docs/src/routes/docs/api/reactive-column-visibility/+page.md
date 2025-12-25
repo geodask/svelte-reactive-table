@@ -1,6 +1,8 @@
 ---
 layout: docPage
-breadcrumb: ["API Reference", "reactiveColumnVisibility"]
+breadcrumb: ['API Reference', 'reactiveColumnVisibility']
+prev: { title: 'reactiveTable', href: '/docs/api/reactive-table' }
+next: { title: 'reactiveFiltering', href: '/docs/api/reactive-filtering' }
 ---
 
 # reactiveColumnVisibility

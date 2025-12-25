@@ -1,6 +1,8 @@
 ---
 layout: docPage
-breadcrumb: ["Examples", "Basic Table"]
+breadcrumb: ['Examples', 'Basic Table']
+prev: { title: 'Sorting', href: '/docs/sorting' }
+next: { title: 'Column Visibility Example', href: '/docs/examples/column-visibility' }
 ---
 
 <script lang="ts">
@@ -21,7 +23,7 @@ The basic table provides core functionality including:
 - Empty state handling
 
 <ExampleViewer source={page.data.doc?.examples?.[0]?.source ?? ''} title="Basic Table">
-	{#snippet preview()}
-		<Example />
-	{/snippet}
+{#snippet preview()}
+<Example />
+{/snippet}
 </ExampleViewer>

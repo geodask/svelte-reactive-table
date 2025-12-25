@@ -6,15 +6,23 @@
 	import { type BreadcrumbItem } from '$shared/lib/breadcrumb.svelte';
 	import { cn } from '$shared/lib/shadcn';
 	import * as Breadcrumb from '$shared/ui/shadcn/breadcrumb';
+	import PageNavigation from '$shared/ui/page-navigation.svelte';
 	import { BookOpen } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
+
+	interface NavLink {
+		title: string;
+		href: string;
+	}
 
 	interface Props {
 		children: Snippet;
 		breadcrumb?: string[];
+		prev?: NavLink;
+		next?: NavLink;
 	}
 
-	const { children, breadcrumb: breadcrumbPath = [] }: Props = $props();
+	const { children, breadcrumb: breadcrumbPath = [], prev, next }: Props = $props();
 
 	const frontmatterItems: BreadcrumbItem[] = $derived(
 		breadcrumbPath.length > 0
@@ -64,3 +72,5 @@
 <div class="prose prose-base max-w-none dark:prose-invert relative pb-10">
 	{@render children()}
 </div>
+
+<PageNavigation {prev} {next} />

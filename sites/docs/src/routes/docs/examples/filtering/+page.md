@@ -1,6 +1,8 @@
 ---
 layout: docPage
-breadcrumb: ["Examples", "Filtering"]
+breadcrumb: ['Examples', 'Filtering']
+prev: { title: 'Column Visibility Example', href: '/docs/examples/column-visibility' }
+next: { title: 'Pagination Example', href: '/docs/examples/pagination' }
 ---
 
 <script lang="ts">
@@ -26,9 +28,9 @@ This example shows comprehensive filtering functionality:
 - "No results" message when filters exclude all data
 
 <ExampleViewer source={page.data.doc?.examples?.[0]?.source ?? ''} title="Filtering Demo">
-	{#snippet preview()}
-		<Example />
-	{/snippet}
+{#snippet preview()}
+<Example />
+{/snippet}
 </ExampleViewer>
 
 ## Key Features Demonstrated
