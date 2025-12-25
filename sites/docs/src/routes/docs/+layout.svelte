@@ -12,9 +12,6 @@
 
 	// State management
 	let content: HTMLDivElement | null = $state(null);
-	let root: HTMLDivElement | null = $state(null);
-
-	console.log(data.toc);
 
 	// Initialize TOC state when content is available
 	const tocState = reactiveToc(
@@ -36,7 +33,7 @@
 	<MenuSidebar />
 	<Sidebar.Inset class="contain-inline-size sticky top-0">
 		<Header />
-		<div bind:this={root} class="p-8 relative">
+		<div class="p-8 relative">
 			{#key page.route.id}
 				<div bind:this={content} class="basis-4/5 grow min-w-0 lg:pr-72">
 					{@render children()}

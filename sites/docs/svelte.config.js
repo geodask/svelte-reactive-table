@@ -1,24 +1,22 @@
-import { transformerNotationHighlight } from '@shikijs/transformers';
+import rehypeSectionize from '@hbsnow/rehype-sectionize';
 import adapter from '@sveltejs/adapter-auto';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { escapeSvelte, mdsvex } from 'mdsvex';
 import path from 'path';
-import { createHighlighter } from 'shiki';
-import { fileURLToPath } from 'url';
 import rehypeSlug from 'rehype-slug';
-import rehypeSectionize from '@hbsnow/rehype-sectionize';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const highlighter = await createHighlighter({
-	themes: ['github-dark', 'github-light'],
-	langs: ['javascript', 'typescript', 'svelte', 'bash']
-});
-
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	extensions: ['.svelte', '.md'],
+	compilerOptions: {
+		experimental: {
+			async: true
+		}
+	},
 	preprocess: [
 		vitePreprocess(),
 		mdsvex({
@@ -28,20 +26,11 @@ const config = {
 				docPage: path.join(__dirname, './src/lib/shared/ui/layouts/doc-page.svelte')
 			},
 			highlight: {
-				highlighter: async (code, lang) => {
-					const html = escapeSvelte(
-						highlighter.codeToHtml(code, {
-							lang,
-							themes: {
-								light: 'github-light',
-								dark: 'github-dark'
-							},
-							transformers: [transformerNotationHighlight()]
-						})
-					);
-					// Remove pre tags from the html string
-					const formattedHtml = html.replace(/^<pre.*?>/, '').replace(/<\/pre>$/, '');
-					return `<Components.pre>{@html \`${formattedHtml.trim()}\`}</Components.pre>`;
+				highlighter: async (code, lang, meta) => {
+					const titleMatch = meta?.match(/title="([^"]+)"/);
+					const title = titleMatch ? titleMatch[1] : '';
+					const escapedCode = escapeSvelte(code);
+					return `<Components.pre title="${title}" lang="${lang}" code={\`${escapedCode}\`} />`;
 				}
 			}
 		})

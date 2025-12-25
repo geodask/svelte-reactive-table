@@ -3,10 +3,10 @@
 	import * as Table from '$shared/ui/shadcn/table';
 	import { ArrowDown, ArrowUp, ArrowUpDown, RotateCcw } from '@lucide/svelte';
 	import { reactiveSorting, reactiveTable, type ColumnSorting } from 'svelte-reactive-table';
-	import { initialData } from '../data';
+	import { initialData } from '../../data';
 
-	// Sorting example with multiSort disabled
-	const singleSortTable = reactiveTable(initialData, [
+	// Sorting example with multiSort enabled
+	const multiSortTable = reactiveTable(initialData, [
 		{ accessor: 'id', header: 'ID', isIdentifier: true },
 		{ accessor: 'name', header: 'Name' },
 		{ accessor: 'age', header: 'Age' },
@@ -14,18 +14,17 @@
 	]).use(
 		reactiveSorting({
 			// Optional: Set initial sorting
-			columnSortings: [{ key: 'age', direction: 'desc' }],
-			// Disable multi-column sorting
-			multiSort: false
+			columnSortings: [{ key: 'name', direction: 'asc' }],
+			// Enable multi-column sorting
+			multiSort: true
 		})
 	);
 
-	const { sorting } = singleSortTable.plugins;
+	const { sorting } = multiSortTable.plugins;
 
-	function clearSingleSorting() {
+	function clearMultiSorting() {
 		sorting.clearSort();
 	}
-
 	// Helper function to determine the current sort direction for a column
 	function getSortDirection(accessor: string) {
 		const columnSorting = sorting.columnSortings.find((s: ColumnSorting) => s.key === accessor);
@@ -36,23 +35,23 @@
 <div class="not-prose">
 	<div class="mb-4 flex flex-wrap items-center justify-between gap-4">
 		<p class="text-sm text-muted-foreground">
-			Click on column headers to sort. Only one column can be sorted at a time.
+			Click on column headers to sort. Multiple columns can be sorted simultaneously.
 		</p>
-		<Button variant="outline" size="sm" onclick={clearSingleSorting} class="shadow-sm">
+		<Button variant="outline" size="sm" onclick={clearMultiSorting} class="shadow-sm">
 			<RotateCcw class="mr-2 h-4 w-4" />
-			Clear Sorting
+			Clear All Sorting
 		</Button>
 	</div>
 
 	<div class="rounded-md border shadow-sm overflow-hidden">
 		<Table.Root>
-			<Table.Header class="bg-muted/50 ">
+			<Table.Header class="bg-muted/50">
 				<Table.Row>
-					{#each singleSortTable.allColumns as column}
-						<Table.Head class="p-2">
+					{#each multiSortTable.allColumns as column}
+						<Table.Head class="py-2">
 							<Button
 								onclick={() => {
-									const { sorting } = singleSortTable.plugins;
+									const { sorting } = multiSortTable.plugins;
 									sorting.toggleSort(column.accessor);
 								}}
 								size="sm"
@@ -74,16 +73,16 @@
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
-				{#each singleSortTable.rows as row}
+				{#each multiSortTable.rows as row}
 					<Table.Row class="hover:bg-muted/20 transition-colors">
 						{#each row.cells as cell}
 							<Table.Cell class="p-4">{cell.value}</Table.Cell>
 						{/each}
 					</Table.Row>
 				{/each}
-				{#if singleSortTable.rows.length === 0}
+				{#if multiSortTable.rows.length === 0}
 					<Table.Row>
-						<Table.Cell class="h-24 text-center p-4" colspan={singleSortTable.headers.length}>
+						<Table.Cell class="h-24 text-center p-4" colspan={multiSortTable.headers.length}>
 							<div class="flex flex-col items-center justify-center text-muted-foreground">
 								<span>No data available</span>
 							</div>
