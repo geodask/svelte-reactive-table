@@ -1,25 +1,7 @@
 ---
 layout: docPage
+breadcrumb: ["Getting Started", "Quick Start"]
 ---
-
-<script lang="ts">
-	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
-	import { BookOpen } from '@lucide/svelte';
-
-	const breadcrumb = reactiveBreadcrumb();
-	breadcrumb.setItems([
-		{
-			icon: BookOpen, 
-			href: '/docs/introduction'
-		},
-		{
-			title: 'Getting Started',
-		},
-		{
-			title: 'Quick Start'
-		}
-	])
-</script>
 
 # Quick Start
 
@@ -150,11 +132,11 @@ For large datasets, pagination is essential. Here's how to add it:
 
 <!-- Pagination controls -->
 <div class="pagination-controls">
-	<button click={() => pagination.goToFirstPage()} disabled={pagination.isFirstPage}>
+	<button onclick={() => pagination.goToFirstPage()} disabled={pagination.isFirstPage}>
 		First
 	</button>
 
-	<button click={() => pagination.goToPreviousPage()} disabled={!pagination.hasPreviousPage}>
+	<button onclick={() => pagination.goToPreviousPage()} disabled={!pagination.hasPreviousPage}>
 		Previous
 	</button>
 
@@ -162,9 +144,9 @@ For large datasets, pagination is essential. Here's how to add it:
 		Page {pagination.page + 1} of {pagination.pageCount}
 	</span>
 
-	<button click={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}> Next </button>
+	<button onclick={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}> Next </button>
 
-	<button click={() => pagination.goToLastPage()} disabled={pagination.isLastPage}> Last </button>
+	<button onclick={() => pagination.goToLastPage()} disabled={pagination.isLastPage}> Last </button>
 
 	<!-- Page size selector -->
 	<div>
@@ -204,7 +186,7 @@ One of the most powerful features is automatic reactivity. Your table updates in
 	}
 </script>
 
-<button click={addNewRow}>Add New Row</button>
+<button onclick={addNewRow}>Add New Row</button>
 
 <!-- Table as before, but with delete buttons -->
 <table>
@@ -216,7 +198,7 @@ One of the most powerful features is automatic reactivity. Your table updates in
 					<td>{cell.value}</td>
 				{/each}
 				<td>
-					<button click={() => removeRow(row.id)}>Remove</button>
+					<button onclick={() => removeRow(row.id)}>Remove</button>
 				</td>
 			</tr>
 		{/each}
@@ -252,7 +234,7 @@ Let users organize data by adding sorting capabilities:
 	<thead>
 		<tr>
 			{#each table.columns as column}
-				<th click={() => sorting.toggleSort(column.accessor)}>
+				<th onclick={() => sorting.toggleSort(column.accessor)}>
 					{column.header}
 					{#if sorting.getSortDirection(column.accessor) !== 'none'}
 						{sorting.getSortDirection(column.accessor) === 'asc' ? '↑' : '↓'}
@@ -440,6 +422,10 @@ You've just learned the fundamentals of Svelte Reactive Table! You now know how 
 - Add data filtering with multiple filter types
 - Combine multiple features
 
-## Summary
+## What's Next?
 
-This guide covers the basics of using Svelte Reactive Table. Explore the library's capabilities by checking the other documentation sections and API references, or by looking at the example components in the codebase.
+Continue exploring Svelte Reactive Table:
+
+- **[Examples](/docs/examples)** - See complete, interactive implementations
+- **[Filtering Guide](/docs/filtering)** - Deep dive into filter patterns and helpers
+- **[API Reference](/docs/api/reactive-table)** - Complete property and method documentation

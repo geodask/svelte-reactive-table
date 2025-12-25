@@ -1,5 +1,6 @@
 ---
 layout: docPage
+breadcrumb: ["Examples", "Pagination"]
 ---
 
 <script lang="ts">

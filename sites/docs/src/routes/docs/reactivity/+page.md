@@ -1,25 +1,7 @@
 ---
 layout: docPage
+breadcrumb: ["Core Concepts", "Reactivity"]
 ---
-
-<script lang="ts">
-	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
-	import { BookOpen } from '@lucide/svelte';
-
-	const breadcrumb = reactiveBreadcrumb();
-	breadcrumb.setItems([
-		{
-			icon: BookOpen, 
-			href: '/docs/introduction'
-		},
-		{
-			title: 'Core Concepts',
-		},
-		{
-			title: 'Reactivity'
-		}
-	])
-</script>
 
 # Reactivity
 
@@ -168,3 +150,9 @@ Effective patterns for reactive tables:
 ```
 
 Svelte Reactive Table leverages Svelte's reactivity system to keep your UI synchronized with your data automatically.
+
+## What's Next?
+
+- **[Column Definition](/docs/column-definition)** - Configure columns for different data types
+- **[Quick Start](/docs/quick-start)** - Add plugins for sorting, filtering, and pagination
+- **[Basic Table Example](/docs/examples/basic-table)** - See reactivity in action

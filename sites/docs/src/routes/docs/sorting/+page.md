@@ -1,25 +1,7 @@
 ---
 layout: docPage
+breadcrumb: ["Plugins", "Sorting"]
 ---
-
-<script lang="ts">
-	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
-	import { BookOpen } from '@lucide/svelte';
-
-	const breadcrumb = reactiveBreadcrumb();
-	breadcrumb.setItems([
-		{
-			icon: BookOpen, 
-			href: '/docs/introduction'
-		},
-		{
-			title: 'Plugins',
-		},
-		{
-			title: 'Sorting'
-		}
-	])
-</script>
 
 # Sorting
 
@@ -109,7 +91,7 @@ Example implementation of sortable column headers:
 <thead>
 	<tr>
 		{#each table.columns as column}
-			<th click={() => sorting.toggleSort(column.accessor)}>
+			<th onclick={() => sorting.toggleSort(column.accessor)}>
 				{column.header}
 				{#if sorting.getSortDirection(column.accessor) !== 'none'}
 					{sorting.getSortDirection(column.accessor) === 'asc' ? '↑' : '↓'}

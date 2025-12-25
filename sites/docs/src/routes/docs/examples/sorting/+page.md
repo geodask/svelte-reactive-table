@@ -1,5 +1,6 @@
 ---
 layout: docPage
+breadcrumb: ["Examples", "Sorting"]
 ---
 
 <script lang="ts">

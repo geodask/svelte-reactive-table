@@ -1,25 +1,7 @@
 ---
 layout: docPage
+breadcrumb: ["Core Concepts", "Basic Usage"]
 ---
-
-<script lang="ts">
-	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
-	import { BookOpen } from '@lucide/svelte';
-
-	const breadcrumb = reactiveBreadcrumb();
-	breadcrumb.setItems([
-		{
-			icon: BookOpen, 
-			href: '/docs/introduction'
-		},
-		{
-			title: 'Core Concepts',
-		},
-		{
-			title: 'Basic Usage'
-		}
-	])
-</script>
 
 # Basic Usage
 
@@ -225,3 +207,11 @@ Don't forget to handle the case when there's no data:
 	</div>
 {/if}
 ```
+
+## What's Next?
+
+Now that you know the basics, explore more features:
+
+- **[Reactivity](/docs/reactivity)** - Understand how automatic updates work
+- **[Column Definition](/docs/column-definition)** - Configure columns in depth
+- **[Quick Start](/docs/quick-start)** - Add plugins for pagination, sorting, and filtering

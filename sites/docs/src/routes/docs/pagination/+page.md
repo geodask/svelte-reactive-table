@@ -1,25 +1,7 @@
 ---
 layout: docPage
+breadcrumb: ["Plugins", "Pagination"]
 ---
-
-<script lang="ts">
-	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
-	import { BookOpen } from '@lucide/svelte';
-
-	const breadcrumb = reactiveBreadcrumb();
-	breadcrumb.setItems([
-		{
-			icon: BookOpen, 
-			href: '/docs/introduction'
-		},
-		{
-			title: 'Plugins',
-		},
-		{
-			title: 'Pagination'
-		}
-	])
-</script>
 
 # Pagination
 
@@ -138,11 +120,11 @@ Complete pagination interface implementation:
 ```svelte
 <div class="pagination">
 	<!-- Navigation buttons -->
-	<button click={() => pagination.goToFirstPage()} disabled={pagination.isFirstPage}>
+	<button onclick={() => pagination.goToFirstPage()} disabled={pagination.isFirstPage}>
 		First
 	</button>
 
-	<button click={() => pagination.goToPreviousPage()} disabled={!pagination.hasPreviousPage}>
+	<button onclick={() => pagination.goToPreviousPage()} disabled={!pagination.hasPreviousPage}>
 		Previous
 	</button>
 
@@ -150,9 +132,9 @@ Complete pagination interface implementation:
 		Page {pagination.page + 1} of {pagination.pageCount}
 	</span>
 
-	<button click={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}> Next </button>
+	<button onclick={() => pagination.goToNextPage()} disabled={!pagination.hasNextPage}> Next </button>
 
-	<button click={() => pagination.goToLastPage()} disabled={pagination.isLastPage}> Last </button>
+	<button onclick={() => pagination.goToLastPage()} disabled={pagination.isLastPage}> Last </button>
 
 	<!-- Page size selector -->
 	<select bind:value={pagination.pageSize}>

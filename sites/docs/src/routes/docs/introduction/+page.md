@@ -1,26 +1,10 @@
 ---
 layout: docPage
-slug: introduction
+breadcrumb: ["Getting Started", "Introduction"]
 ---
 
 <script lang="ts">
   import EarlyReleaseAlert from '$widgets/early-release-alert/ui/early-release-alert.svelte';
-  import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
-	import { BookOpen } from '@lucide/svelte';
-
-	const breadcrumb = reactiveBreadcrumb();
-	breadcrumb.setItems([
-		{
-			icon: BookOpen, 
-			href: '/docs/introduction'
-		},
-		{
-			title: 'Getting Started',
-		},
-		{
-			title: 'Introduction'
-		}
-	])
 </script>
 
 # Introduction to Svelte Reactive Table

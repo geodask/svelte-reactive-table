@@ -1,29 +1,13 @@
 ---
 layout: docPage
-slug: installation
+breadcrumb: ["Getting Started", "Installation"]
 ---
 
 <script lang="ts">
   import Tabs from '$shared/ui/tabs.svelte';
   import TabItem from '$shared/ui/tab-item.svelte';
-  import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
-	import { BookOpen } from '@lucide/svelte';
 
   const items = ['npm', 'pnpm', 'yarn', 'bun'];
-
-	const breadcrumb = reactiveBreadcrumb();
-	breadcrumb.setItems([
-		{
-			icon: BookOpen, 
-			href: '/docs/introduction'
-		},
-		{
-			title: 'Getting Started',
-		},
-		{
-			title: 'Installation'
-		}
-	])
 </script>
 
 # Installation
@@ -101,3 +85,9 @@ That's it - you're ready to build reactive tables! The installation gives you ac
 - All available plugins (filtering, pagination, sorting, column visibility)
 - Full TypeScript support
 - Comprehensive API for customization
+
+## What's Next?
+
+- **[Quick Start](/docs/quick-start)** - Build your first reactive table with plugins
+- **[Basic Usage](/docs/basic-usage)** - Learn the fundamentals
+- **[Examples](/docs/examples)** - See real implementations in action

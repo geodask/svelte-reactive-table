@@ -1,5 +1,6 @@
 ---
 layout: docPage
+breadcrumb: ["Examples", "Full Featured Table"]
 ---
 
 <script lang="ts">

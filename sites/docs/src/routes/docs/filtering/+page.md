@@ -1,25 +1,7 @@
 ---
 layout: docPage
+breadcrumb: ["Plugins", "Filtering"]
 ---
-
-<script lang="ts">
-	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
-	import { BookOpen } from '@lucide/svelte';
-
-	const breadcrumb = reactiveBreadcrumb();
-	breadcrumb.setItems([
-		{
-			icon: BookOpen,
-			href: '/docs/introduction'
-		},
-		{
-			title: 'Plugins',
-		},
-		{
-			title: 'Filtering'
-		}
-	])
-</script>
 
 # Filtering
 

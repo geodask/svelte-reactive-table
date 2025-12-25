@@ -1,26 +1,10 @@
 ---
 layout: docPage
+breadcrumb: ["API Reference", "reactiveTable"]
 ---
 
 <script lang="ts">
-	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
-	import WhatsNext from '$widgets/whats-next/whats-next.svelte'
-	import { BookOpen } from '@lucide/svelte';
-
-	const breadcrumb = reactiveBreadcrumb();
-	breadcrumb.setItems([
-		{
-			icon: BookOpen, 
-			href: '/docs/introduction'
-		},
-		{
-			title: 'API Reference',
-		},
-		{
-			title: 'reactiveTable',
-			route: '/docs/api/reactive-table'
-		}
-	])
+	import WhatsNext from '$widgets/whats-next/whats-next.svelte';
 </script>
 
 # reactiveTable

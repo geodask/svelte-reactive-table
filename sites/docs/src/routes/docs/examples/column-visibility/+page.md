@@ -1,5 +1,6 @@
 ---
 layout: docPage
+breadcrumb: ["Examples", "Column Visibility"]
 ---
 
 <script lang="ts">

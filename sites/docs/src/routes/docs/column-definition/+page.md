@@ -1,25 +1,7 @@
 ---
 layout: docPage
+breadcrumb: ["Core Concepts", "Column Definition"]
 ---
-
-<script lang="ts">
-	import { reactiveBreadcrumb } from '$shared/lib/breadcrumb.svelte'
-	import { BookOpen } from '@lucide/svelte';
-
-	const breadcrumb = reactiveBreadcrumb();
-	breadcrumb.setItems([
-		{
-			icon: BookOpen, 
-			href: '/docs/introduction'
-		},
-		{
-			title: 'Core Concepts',
-		},
-		{
-			title: 'Column Definition'
-		}
-	])
-</script>
 
 # Column Definition
 
