@@ -6,10 +6,25 @@
 	import { Separator } from '$shared/ui/shadcn/separator';
 	import { Grid2x2Check, Moon, Search, Sun } from '@lucide/svelte';
 	import { mode, toggleMode } from 'mode-watcher';
+	let isScrolled = $state(false);
+
+	$effect(() => {
+		const viewport = document.querySelector('[data-slot="scroll-area-viewport"]');
+		if (!viewport) return;
+
+		const handleScroll = () => {
+			isScrolled = viewport.scrollTop > 50;
+		};
+
+		viewport.addEventListener('scroll', handleScroll);
+		return () => viewport.removeEventListener('scroll', handleScroll);
+	});
 </script>
 
 <header
-	class="sticky top-0 z-20 w-full bg-background/60 backdrop-blur-xl supports-backdrop-filter:bg-background/60 transition-all duration-200"
+	class="sticky top-0 z-20 w-full transition-all duration-200 {isScrolled
+		? 'bg-background/60 backdrop-blur-xl supports-backdrop-filter:bg-background/60 border-b border-border/40'
+		: 'bg-transparent border-transparent'}"
 >
 	<div class="container flex h-14 items-center gap-2 justify-between mx-auto px-4 md:px-6 lg:px-8">
 		<a href="/" class="flex items-center gap-2.5 group">

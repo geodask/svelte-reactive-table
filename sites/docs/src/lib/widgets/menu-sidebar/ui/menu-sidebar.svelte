@@ -7,7 +7,7 @@
 	const currentYear = new Date().getFullYear();
 </script>
 
-<aside class="sticky top-24 h-screen bg-background hidden lg:block shrink-0">
+<aside class="sticky top-24 h-screen bg-transparent hidden lg:block shrink-0">
 	<div class="max-h-[calc(100vh-10rem)] overflow-y-auto px-4">
 		<nav class="space-y-6">
 			{#each data.navMain as group (group.title)}

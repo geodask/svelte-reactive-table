@@ -9,20 +9,30 @@
 	import { mode, toggleMode } from 'mode-watcher';
 
 	let isMenuOpen = $state(false);
-	let scrollY = $state(0);
+	let isScrolled = $state(false);
 	const isMobile = new IsMobile();
 
 	function toggleMenu() {
 		isMenuOpen = !isMenuOpen;
 	}
-</script>
 
-<svelte:window bind:scrollY />
+	$effect(() => {
+		const viewport = document.querySelector('[data-slot="scroll-area-viewport"]');
+		if (!viewport) return;
+
+		const handleScroll = () => {
+			isScrolled = viewport.scrollTop > 120;
+		};
+
+		viewport.addEventListener('scroll', handleScroll);
+		return () => viewport.removeEventListener('scroll', handleScroll);
+	});
+</script>
 
 <header
 	class={cn(
-		'sticky top-0 z-50 w-full transition-all duration-300',
-		scrollY > 20
+		'sticky top-0 z-50 w-full transition-all duration-200',
+		isScrolled
 			? 'bg-background/80 backdrop-blur-xl backdrop-saturate-150'
 			: 'bg-transparent border-transparent'
 	)}
