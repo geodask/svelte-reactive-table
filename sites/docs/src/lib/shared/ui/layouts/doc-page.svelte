@@ -9,6 +9,7 @@
 	import PageNavigation from '$shared/ui/page-navigation.svelte';
 	import { BookOpen } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
+	import { page } from '$app/state';
 
 	interface NavLink {
 		title: string;
@@ -34,7 +35,18 @@
 	);
 
 	const items = $derived(frontmatterItems);
+
+	const pageTitle = $derived(breadcrumbPath.length > 0 ? breadcrumbPath[breadcrumbPath.length - 1] : '');
+	const fullTitle = $derived(pageTitle ? `${pageTitle} - Svelte Reactive Table` : 'Svelte Reactive Table');
+	const canonicalUrl = $derived(`https://svelte-reactive-table.vercel.app${page.url.pathname}`);
 </script>
+
+<svelte:head>
+	<title>{fullTitle}</title>
+	<meta property="og:title" content={fullTitle} />
+	<meta property="og:url" content={canonicalUrl} />
+	<link rel="canonical" href={canonicalUrl} />
+</svelte:head>
 
 {#snippet BreacrumbContent(item: BreadcrumbItem)}
 	{#if item.icon}

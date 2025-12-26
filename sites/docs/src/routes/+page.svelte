@@ -74,6 +74,13 @@
 	const clipboard = useClipboard();
 </script>
 
+<svelte:head>
+	<title>Svelte Reactive Table</title>
+	<meta property="og:title" content="Svelte Reactive Table" />
+	<meta property="og:url" content="https://svelte-reactive-table.vercel.app/" />
+	<link rel="canonical" href="https://svelte-reactive-table.vercel.app/" />
+</svelte:head>
+
 <Header />
 
 <BackgroundPattern />
